@@ -1,9 +1,4 @@
-#model=bolam mask=YYYYMMDDHH_bolam.nc var=T,u,v path=/home/rorik/data/bolam  
-model=reanalysis path=/home/rorik/data/reanalysis varUname=uwnd mask=uwnd.YYYY.nc var=u
-model=reanalysis path=/home/rorik/data/reanalysis varVname=vwnd mask=vwnd.YYYY.nc var=v
-model=reanalysis2 path=/home/rorik/data/reanalysis varUname=uwnd mask=uwnd.YYYY.orig.nc var=u
-model=reanalysis2 path=/home/rorik/data/reanalysis varVname=vwnd mask=vwnd.YYYY.orig.nc var=v
-dem=gtopo30 path=../data/gtopo30
-model=puff mask=YYYYMMDDHH_avn-U.cdf var=u path=/home/rorik/projects/puff/source/puff/data
-model=puff mask=YYYYMMDDHH_avn-V.cdf var=v path=/home/rorik/projects/puff/source/puff/data
+# use absolute paths; relative paths are used here only for testing
+model=avn mask=YYYYMMDDHH_avn-U.cdf var=u path=../data
+model=avn mask=YYYYMMDDHH_avn-V.cdf var=v path=../data
 
