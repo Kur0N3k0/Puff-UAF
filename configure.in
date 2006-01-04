@@ -1,0 +1,277 @@
+AC_INIT([puff],[2.1.5],[rorik@gi.alaska.edu],[puff-uaf])
+
+# print GNU copyright in configure script
+AC_COPYRIGHT
+
+# put autotools-generated files here
+AC_CONFIG_AUX_DIR(auto)
+
+# get build system parameters, need config.guess and config.sub to use these
+AC_CANONICAL_BUILD
+AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
+
+AC_DEFINE_UNQUOTED(BUILD_OS,$build,Autoconf-generated architecture)
+
+AM_INIT_AUTOMAKE
+
+# put all the preprocessor symbols in config.h
+AM_CONFIG_HEADER(config.h)
+
+# make the default install directory this one
+AC_PREFIX_DEFAULT(`pwd`)
+
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_INSTALL
+#AC_PROG_RANLIB
+AC_PROG_LIBTOOL
+
+# disable maintainer-only options in generated Makefiles unless the flag
+# --enable-maintainer-mode is given at configure time
+AM_MAINTAINER_MODE
+
+#AC_HEADER_STDC
+
+PUFF_FIND_NETCDF
+AC_C_BIGENDIAN
+AC_LANG(C++)
+AC_CHECK_HEADERS(algorithm cmath cstdlib ctime fstream list iomanip iostream sstream strstream string vector)
+AC_CHECK_HEADERS(cmapf.h dirent.h getopt.h sys/types.h sys/stat.h)
+
+dnl hold off looking for these since the generated script seems to not
+dnl conform to what the c++ compiler wants, although some functions are there
+dnl AC_LANG_PUSH(C)
+AC_CHECK_FUNCS(atoi cbrt exp10 sscanf printf)
+dnl AC_LANG_POP(C)
+AC_CHECK_FUNCS(toupper setenv putenv)
+
+dnl mini_httpd needs these on Solaris
+AC_CHECK_LIB(socket, socket)
+AC_CHECK_LIB(dmapf, stlmbr)
+AC_CHECK_LIB(dmapf, stlmbr,,puff_need_libdmapf="yes")
+AM_CONDITIONAL(PUFF_NEED_LIBDMAPF, test "$puff_need_libdmapf" == "yes")
+
+AC_CHECK_LIB(crypt, crypt)
+
+#############################################
+dnl ashxp checks
+
+AC_CHECK_HEADERS(cmapf.h jpeglib.h unistd.h libgen.h)
+AC_CHECK_LIB(m, sin)
+dnl find libjpeg, else build our own
+AC_CHECK_LIB(jpeg, jpeg_std_error,,[
+AC_MSG_WARN([cannot find 'libjpeg'; will build version 6b from source])
+echo "*** configuring jpeg-6b ***"
+puff_this_dir=`pwd`
+cd src/ashxp/jpeg-6b && ./configure CC=$CC && cd $puff_this_dir
+echo "*** done configuring jpeg-6b ***"
+ashxp_need_libjpeg="yes"
+])
+AC_CHECK_FUNCS([basename ceil ceilf floor floorf logf mkstemp tmpnam])
+dnl find correct location to put default background file
+if test "$prefix" != "NONE"; then
+AC_DEFINE_UNQUOTED([ASHXP_BG_FILE_LOCATION],"$prefix/etc/images/",location of default background file)
+AC_DEFINE_UNQUOTED([ASHXP_FONTFILE],"$prefix/etc/fonts/FreeMonoBold.ttf",location of default default font)
+else
+AC_DEFINE_UNQUOTED([ASHXP_BG_FILE_LOCATION],"$ac_default_prefix/etc/images/",location of default background file)
+AC_DEFINE_UNQUOTED([ASHXP_FONTFILE],"$ac_default_prefix/etc/fonts/FreeMonoBold.ttf",location of default font)
+fi
+dnl build our own jpeg library if one was not found
+AM_CONDITIONAL(ASHXP_BUILD_LIBJPEG, test "$ashxp_need_libjpeg" = "yes")
+#if test "$ashxp_need_libjpeg" = "yes"; then
+#  AC_CONFIG_SUBDIRS([jpeg-6b])
+#  LDFLAGS="$LDFLAGS -Ljpeg-6b"
+#  LIBS="$LIBS -ljpeg"
+#fi
+
+#############################################
+# check for libnetcdf_c++ Isn't there a macro that will do this?
+
+AC_CHECK_HEADERS(netcdf.h netcdfcpp.h)
+dnl do this initial check so the library gets added to the link list
+AC_CHECK_LIB(netcdf, ncopen)
+dnl redo this check (it was cached) so we can exit if it is not found
+AC_CHECK_LIB(netcdf, ncopen,,puff_have_libnetcdf=no)
+
+dnl Store the old libraries to restore later.  We want to test for netcdf_c++
+dnl but not add it to the link list because c-compiled programs (mini_httpd)
+dnl will choke.  The src/Makefile will add it where it is necessary.
+AC_MSG_CHECKING(for NcFile in libnetcdf_c++)
+puff_old_libs=$LIBS
+LIBS="-lnetcdf_c++ $LIBS"
+AC_TRY_LINK([#include <netcdfcpp.h>],
+  [NcFile   nc("file");],[puff_have_libnetcdf_cxx="yes"],[puff_have_libnetcdf_cxx="no"])
+if test $puff_have_libnetcdf_cxx == "yes"; then
+  echo "yes"
+  AC_DEFINE(HAVE_LIBNETCDF_CXX,1,define to 1 if you have libnetcdf_c++)
+  # supress deprecated warnings from libnetcdf_c++ when using g++
+  AX_CXXFLAGS_GCC_OPTION(-Wno-deprecated)
+else
+  echo "no"
+  echo "****************************"
+  echo "You need Unidata's netcdf and netcdf_c++ libraries in order to build"
+  echo " this version of Puff.  You can download it directly from Unidata at"
+  echo "http://www.unidata.ucar.edu/packages/netcdf"
+  echo "or from the Puff download page at"
+  echo "http://puff.images.alaska.edu/download"
+  echo "See the Puff documentation for help if you have difficulty."
+  echo "****************************"
+  AC_MSG_ERROR() 
+fi
+dnl restore old libraries so c compiling does not choke on -lnetcdf_c++
+LIBS=$puff_old_libs
+#############################################
+
+# check for unidata's UDUNITS library and data files
+if test "x$NETCDF_INC" = "x"; then
+  puff_udunits_dat="/usr/local/etc/udunits.dat"
+else
+  puff_udunits_dat="$NETCDF_INC/../etc/udunits.dat"
+fi
+dnl on MacOS X, we need libudport which has threaded functions
+AC_CHECK_FUNC(tdelete,,AC_CHECK_LIB([udport],[tdelete]))
+dnl do this initial check so the library gets added to the link list
+#AC_CHECK_LIB([udunits], [utInit],,,$puff_libudport)
+dnl now add libudport if need be
+#LIBS="$LIBS $puff_libudport"
+dnl redo this check (it will be cached) so we can exit if it is not found
+AC_CHECK_LIB([udunits], [utInit],,puff_have_libudunits=no)
+dnl this must be DEFINE_UNQUOTED and then a quoted string so the quotes get
+dnl substituted into the source file correctly
+AC_CHECK_FILE([$puff_udunits_dat],[AC_DEFINE_UNQUOTED([UDUNITS_DAT],["$puff_udunits_dat"],[location of udunits data file])])
+AC_CHECK_HEADERS([udunits.h])
+if test "x$puff_have_libudunits" = xno; then
+  echo "****************************"
+  echo "You need Unidata's UDUnits library in order to build this version of"
+  echo "Puff.  You can download it directly from Unidata at "
+  echo "http://www.unidata.ucar.edu/packages/udunits"
+  echo "or from the Puff download page at"
+  echo "http://puff.images.alaska.edu/download"
+  echo "See the Puff documentation for help if you have difficulty."
+  echo "****************************"
+  AC_MSG_ERROR() 
+fi
+
+#############################################
+AC_PATH_PROG(WGET,wget,,)
+AC_ARG_VAR(WGET,path to wget)
+
+AC_PATH_PROG(PERL,perl,,)
+AC_ARG_VAR(PERL,path to perl)
+
+#AC_PATH_PROG(NCGEN,ncgen,,)
+#AC_ARG_VAR(NCGEN,path to ncgen)
+
+AC_PATH_PROG(WGRIB,wgrib,,)
+AC_ARG_VAR(WGRIB,path to wgrib)
+
+dnl programs for ashgmt
+if test "x$GMTHOME" != "x"; then
+	PATH="$PATH:$GMTHOME/bin"
+fi
+
+AC_PATH_PROG(CONVERT,convert,,)
+AC_ARG_VAR(CONVERT,path to convert)
+
+AC_PATH_PROG(GMTSET,gmtset,,)
+#AC_ARG_VAR(GMTSET,path to gmtset)
+
+AC_PATH_PROG(PSCOAST,pscoast,,)
+#AC_ARG_VAR(PSCOAST,path to pscoast)
+
+AC_PATH_PROG(PSBASEMAP,psbasemap,,)
+#AC_ARG_VAR(PSBASEMAP,path to psbasemap)
+
+AC_PATH_PROG(PSXY,psxy,,)
+#AC_ARG_VAR(PSXY,path to psxy)
+
+AC_PATH_PROG(PSTEXT,pstext,,)
+#AC_ARG_VAR(PSTEXT,path to pstext)
+
+AC_PATH_PROG(PSCONTOUR,pscontour,,)
+#AC_ARG_VAR(PSCONTOUR,path to pscontour)
+
+AC_PATH_PROG(MAKECPT,makecpt,,)
+
+AC_PATH_PROG(GIFSICLE, gifsicle,,)
+AC_ARG_VAR(GIFSICLE, path to gifsicle)
+
+dnl cgi's and other web stuff may reside in different places
+AC_ARG_VAR(CGIHOME, [location of CGI's])
+
+dnl set ashdump.pl to the location we build here
+if test "$prefix" != "NONE"; then
+AC_SUBST(ASHDUMP,"${prefix}/bin/ashdump.pl")
+AC_SUBST(PATH_TO_WEBPUFF,"${prefix}/web")
+AC_SUBST(INSTALL_DIR,"${prefix}")
+else
+AC_SUBST(ASHDUMP,"${ac_default_prefix}/bin/ashdump.pl")
+AC_SUBST(PATH_TO_WEBPUFF,"${ac_default_prefix}/web")
+AC_SUBST(INSTALL_DIR,"${ac_default_prefix}")
+fi
+
+dnl build our own jpeg library if one was not found
+AM_CONDITIONAL(ASHXP_BUILD_LIBJPEG, test "$ashxp_need_libjpeg" = "yes")
+
+dnl check for getopt_long, and compile my version if it is not there
+AC_CHECK_FUNCS([getopt getopt_long])
+AC_CHECK_FUNC(getopt_long, , [puff_need_getopt_long="yes"] )
+AM_CONDITIONAL(PUFF_NEED_GETOPT_LONG, test "$puff_need_getopt_long" = "yes")
+#############################################
+# if --with-freetype, check and add compiler flags
+AC_ARG_WITH(freetype,AC_HELP_STRING([--with-freetype],[use freetype fonts (default is no)]))
+if (test "x$withval" = "xyes"); then
+  AC_LANG_PUSH(C)
+  AC_CHECK_LIB(freetype, FT_Init_FreeType,,AC_ERROR([libfreetype not found]))
+  ft_cflags=`freetype-config --cflags`
+  CFLAGS="$CFLAGS $ft_cflags"
+  ft_libs=`freetype-config --libs`
+  LIBS="$LIBS $ft_libs"
+  AC_LANG_POP(C)
+fi
+#############################################
+# if --enable-warnings, add these compiler flags
+AC_ARG_ENABLE(warnings,AC_HELP_STRING([--enable-warnings],[add compiler warnings (default is no)]),enable_warnings=$enableval, enable_warnings=no)
+
+if test "$enable_warnings" = "yes"; then
+  case $CXX in
+    g++) CXXFLAGS="$CXXFLAGS -Wall";;	dnl GNU compiler
+    CC)  CXXFLAGS="CXXFLAGS +w";;	dnl SunWorkShop compiler
+  esac
+fi
+#############################################
+# if --with-statistics, define PUFF_STATISTICS
+AC_ARG_WITH(statistics,AC_HELP_STRING([--with-statistics],[add statistical information(default is no)]),with_statistics=$withval, with_statistics=no)
+
+if test "$with_statistics" = "yes"; then
+  AC_DEFINE(PUFF_STATISTICS,1,make additional statistical information)
+fi
+#############################################
+dnl deal with bugs, my bugs in all likelyhood.
+case $build in
+  powerpc-apple-darwin6.8) AC_DEFINE(BUG_GMTIME,1,[swap localtime for gmtime]);;
+esac
+
+#############################################
+AC_CONFIG_FILES([src/perl/ashdump.pl],[chmod +x src/perl/ashdump.pl])
+AC_CONFIG_FILES([src/perl/grib2pf],[chmod +x src/perl/grib2pf])
+AC_CONFIG_FILES([src/perl/ashgmt],[chmod +x src/perl/ashgmt])
+AC_CONFIG_FILES([test/test00.sh],[chmod +x test/test00.sh])
+AC_CONFIG_FILES([Makefile src/Makefile src/libsrc/Makefile test/Makefile])
+AC_CONFIG_FILES([doc/Makefile src/perl/Makefile web/Makefile])
+AC_CONFIG_FILES([web/mini_httpd/Makefile])
+AC_CONFIG_FILES([src/libsrc/dmapf-c/Makefile])
+AC_CONFIG_FILES([src/ashxp/Makefile])
+AC_CONFIG_FILES([src/ashxp/jpeg-6b/Makefile])
+dnl the perl scripts for the web interface
+AC_CONFIG_FILES([web/ashxpOptions.pl],[chmod +x web/ashxpOptions.pl])
+AC_CONFIG_FILES([web/runParams.pl],[chmod +x web/runParams.pl])
+AC_CONFIG_FILES([web/main.pl],[chmod +x web/main.pl])
+AC_CONFIG_FILES([web/login.pl],[chmod +x web/login.pl])
+AC_CONFIG_FILES([web/logout.pl],[chmod +x web/logout.pl])
+AC_CONFIG_FILES([web/webpuff.pl],[chmod +x web/webpuff.pl])
+AC_CONFIG_FILES([web/Webpuff.pm])
+dnl manual pages
+AC_CONFIG_FILES([man/Makefile])
+AC_OUTPUT

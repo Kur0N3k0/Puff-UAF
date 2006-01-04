@@ -1,0 +1,7 @@
+<html><head><title>Help -phiDist</title></head>
+<body>
+<h1>&phi; distribution</h1>
+Use this to specify a &phi; distribution of the particle size.  The value &phi; is the negative base 2 log of the particle diameter in millimeters.  To specify a distribution of particles, use the format <font color="red">&phi;1=p1;&phi;2=p2;...</font> where <b>p</b> is the percentage of particles with the corresponding value of &phi;.  Use a semi-colon to separate each specification.  For example, the value of <font color="red">1=25.5;2=50;3=24.5</font> means that 25.5% of the particles have a diameter of 2^(-1)=0.5 mm, 50% have a diameter of 2^(-2)=0.25 mm, and the remaining 24.5% have 2^(-3)=0.125 mm.  If the percentages do not add to 100, they will be normalized.<p>
+This option is exclusive of specifying a <a href="ashLogMean.html">normal distribution.</a>
+
+</body></html>

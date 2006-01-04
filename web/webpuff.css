@@ -1,0 +1,17 @@
+/* helpLink - clickable text for options */
+.helpLink {text-decoration: none; color:#000000; font-family: Arial, Helvetica; font-weight:bold; font-size: 12px}
+/* tableEntry - text inside the textboxes */
+.tableEntry {color:#000000; font-family: Arial, Helvetica; font-size: 12px}
+/* LabelText - labels in the main form, i.e. Volcano, Eruption Date, etc */
+.labelText {color:#000000; font-family: Arial, Helvetica; font-size: 12px}
+/* largeLabel - volcano name label in the mapping frame */
+.largeLabel {color:lightsteelblue; font-family: Arial, Helvetica; font-size:18pt; font-wieght:bold}
+/* loginHeader - header on the login screen */
+.loginHeader {color:lightgray; font-family: Arial, Helvetica; font-size:24pt}
+/* session ID on the main page, upper right */
+.sessionLabel {color:lightgray; font-family: Arial, Helvetica; font-size:10pt}
+/* text on the login screen */
+.loginText {color:lightgray; font-family: Arial, Helvetica; font-size:10pt}
+/* helpButton - the help link */
+.helpButton {color: red; text-decoration: none; font-style: italic; font-family: Arial, Helvetica; font-size:12pt}
+.logText {font-family: Arial; font-size: 8px}

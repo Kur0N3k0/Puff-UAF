@@ -1,0 +1,48 @@
+
+06-14-2004
+version 1.1.2
+freetype font support
+variable sized colorbar
+* * * * * * * * * *   
+04-02-2004
+version 1.1.1
+Fixed y offset in projection mode
+faster reading of background file
+no longer print ash particles outside the bounds of the projection grid
+* * * * * * * * * *   
+09-16-2003
+version 1.1.0
+add --projection or -P option to create a projected image
+* * * * * * * * * *   
+07-29-2003
+version 1.0.9
+add --gridlines=NUM[color] option
+* * * * * * * * * *   
+07-24-2003
+version 1.0.8
+add --include-out-of-bounds option
+* * * * * * * * * *   
+05-21-2003
+version 1.0.6
+add isopach mapping
+* * * * * * * * * *   
+05-02-2003
+version 1.0.5
+add time/date stamp, turn off with --no-stamp
+* * * * * * * * * *   
+05-01-2003
+--hgt-range accepts '-' for default value, i.e. --hgt-range=-/2000
+* * * * * * * * * *   
+version 1.0.4
+04-16-2003
+add --grayscale conversion of background image
+* * * * * * * * * *   
+version 1.0.3
+04-14-2003
+added --fallout option for filtering grounded particles
+* * * * * * * * * *   
+version 1.0.2
+04-11-2003 
+fixed colorbar maximum digit to be a ceiling value
+* * * * * * * * * *   
+01-15-2003 changed from GNU argp() to use Sittler's getopt_long

@@ -1,0 +1,126 @@
+.TH ASHXP 1
+.SH NAME
+ashxp - post-processor for Puff-generated ash files
+.SH SYNOPSIS
+ashxp [options] 
+.I input-file(s)
+.SH DESCRIPTION
+.PP
+.B ashxp
+generates JPEG images from puff-generated ashfiles.
+.B ashxp
+uses a background JPEG file and superimposes ash particles on it.  The generated image size depends on the lateral extent of the ash cloud, or may simply be the entire background image ( see 
+.B \-\-whole
+).
+.SH OPTIONS
+.TP
+.B \-\-airborne, \-a
+show only airborne particles.
+.TP
+.B \-\-bgfile=FILE, \-b FILE
+background JPEG file to use.
+.TP
+.B \-\-border=INT, \-B INT
+minimum number of border pixels
+.TP
+.B \-\-color=COLOR, -c COLOR
+coloring scheme for ash cloud
+.TP
+.B \-\-fallout, -f
+only plot ash on the ground
+.TP
+.B \-\-grayscale, -g
+convert background image to grayscale
+.TP
+.B \-\-gridlines=DG[:INT][xDG[:INT]][COLOR]
+put gridlines on the image every DG degrees.  Lines occur at even intervals such that the values of latitude/DG and longitude/DG are integer values.  Optionally, the color may be specified by name.  To specify different values for the x and y direction, use the letter "x" between.  For example, to place 4-pixel gridlines every 10 degrees in the 'x' direction and 3-pixel gridlines every 5 degrees in the 'y' direction in purple, use
+\-\-gridlines=10:4x5:3purple
+.TP
+.B \-\-hgt-range=min/max, -r min/max
+filter ash particles and only show particles within the specified height range.  Default is to show all particles.
+.TP
+.B \-\-include\-out\-of\-bounds
+if ash particles no longer exist because they left the boundary of wind data, plot them anyway at the approximate location where they left.
+.TP
+.B \-\-label=X,Y,STRING, \-L X,Y,STRING
+put the text string STRING at the latitude and longitude location (X,Y).  Be sure to use appropriate quotations if the text string contains illegal characters or spaces.
+.TP
+.B \-\-latlon=lat1/lat2/lon1/lon2, -l ...
+set minimum/maximum longitude/latitude bounding box.
+.TP
+.B \-\-max-height=NUM, \-h NUM
+set maximum height for color coding.  This is useful if some small fraction of ash particles have ascended to extremely high elevations and you want to ignore them in the linear color-coding scheme.
+.TP
+.B \-\-min-size=INT, \-x INT
+explicitely set the minimum number of pixels; final image may be larger.  Use 
+.B \-\-latlon
+to make a region smaller.
+.TP
+.B \-\-no-background, \-X
+do not use a background image.  This speeds things up but will not give any georeferencing information for the location of the ash particles.
+.TP
+.B \-\-no-stamp
+do not print a time/date stamp in the lower, right corner of the image.
+.TP
+.B \-\-output=FILE, \-o FILE
+output the image to FILE.  The default filename is the input file with the extension '.jpg' added, or replacing '.cdf' if present.
+.TP
+.B \-\-pixels=INT, \-p INT
+pixel size for each ash particle.  The default is 3.
+.TP
+.B \-\-projection=PROJ, \-P PROJ
+type of global projection to use, for example 'polar', 'lambert', or 'cylindrical'.  
+.TP
+.B \-\-quiet,  \-q
+Do not produce any output.  
+.TP
+.B \-\-report, -R
+generate a report to standard output
+.TP
+.B \-\-size=min/max, \-S min/max
+Only plot particles in this size range (in millimeters).
+.TP
+.B \-\-sorted, \-s
+flag to sort the particles hy height, default  is not to since it can be slow and newer versions of Puff already sort by height before writing the ash files.  Sorting can look nice since the highest ash particles will always be visible, which appears more realistic.
+.TP
+.B \-\-temp, -t
+create the output file in a temporary location.  You will need to also use
+.B \-\-report 
+in order to determine the full file name and path.
+.TP
+.B \-\-timestamp, \-T
+Print a time/date stamp.
+.TP
+.B \-\-verbose, \-v
+produce verbose output, useful for debugging.
+.TP
+.B \-\-whole, \-w
+do not clip the input image but output the entire image.  This option is useful for passing the produced file to another program such as 
+.I xplanet(1)
+to manipulate the image as a globe.
+.TP
+.B \-\-help, \-?
+show a list of options
+.TP
+.B \-\-usage
+Give a short usage message
+.TP
+.B \-\-version, \-V
+Print the program version
+.SH FILES
+.IR $(install_dir)/etc/images/
+directory that contains planetary background images.
+.SH ENVIRONMENT
+.IP ASHXP_BG_FILE_NAME
+location of the background image for 
+.B ashxp
+to use.
+.SH DIAGNOSTICS
+.SH BUGS
+.SH AUTHOR
+Rorik Peterson, rorik at gi dot alaska dot edu
+.SH SEE ALSO
+.I puff(1)
+.I uni2puff(1)
+.I ashdump(1)
+

@@ -1,0 +1,185 @@
+#!@PERL@
+
+# the login page is arrived at in three ways:
+# (1) with no parameters, this is a new login
+# (2) with newSessionID.  This makes sure the new session does not already 
+# exist, creates the necessary directory, and then redirects to $main_app. If
+# the session exists, an error is given along with the regular login screen
+# (3) with oldSessionID.  This makes sure the old session exists, then redirects
+# to it, like with a new session.  Errors are given for non-existant sessions or
+# bad names, along with the regular login screen
+
+use CGI qw(:all);
+use strict;
+use Webpuff;
+
+#the main application
+my $main_app="main.pl";
+#a unique session name, created later based on user imput
+my $sessionID = "";
+# subdirectory containing all the sessions, helps with housekeeping
+#my $runDir = "run2";
+
+#default relating to errors and how to proceed
+# error: session ID name contains illegal characters
+my $invalidID = 0;
+# error: attempted to create a new session when an old one exists
+my $sessionExists = 0;
+# error: failed to create the session (directory).  Shouldn't happen
+my $sessionCreateFailed = 0;
+# error: attempted to reload a session that does not exist.
+my $sessionIsMissing = 0;
+# go to this session using a redirect
+my $goToNewSession = 0;
+
+my $q = new CGI;
+$|=1;	#set autoflush on 
+
+if ( $q->param('submitNewID') ) {
+  $sessionID = $q->param('sessionID');
+  createSession();
+} elsif ($q->param('submitOldID') ) {
+  $sessionID = $q->param('sessionID');
+#  $sessionID = $q->param('newSessionID');
+  loadOldSession();
+} else {
+  $sessionID = "";
+}
+
+print $q->header;
+if ($goToNewSession) {
+  redirect();
+} else {
+  loginScreen();
+}
+print $q->end_html;
+
+#---------------------
+sub loadOldSession {
+  return if checkID($sessionID);
+  
+  $sessionID = cleanID($sessionID);
+
+  if (-d "$runDir/$sessionID") {
+    $goToNewSession = 1;
+    return;
+  } else {
+    $sessionIsMissing = 1;
+    return;
+  }
+}
+      
+#---------------------
+sub createSession {
+  return if checkID($sessionID);
+  
+  $sessionID = cleanID($sessionID);
+  
+  if (-d "$runDir/$sessionID") {
+    $sessionExists = 1;
+    return;
+    }
+    
+  if ( system("mkdir $runDir/$sessionID") != 0) {
+    $sessionCreateFailed = 1;
+    return;
+    }
+  
+  $goToNewSession = 1;
+  return;
+}
+#---------------------
+sub sessionCreateFailed
+{
+ my $q=shift;
+  $q->h2("Session creation failed.  Try reloading this page.  If problems persist, notify the <a href=\"mailto:rorik\@puff.images.alaska.edu\">system administrator</a>");
+  $q->end_html;
+}
+#---------------------
+sub cleanID {
+  my $str = shift;
+  $str = substr($str,0,40) if (length $str > 40);
+  # replace illegal characters with underscores
+  $str =~ s/\s/_/g;
+  $str =~ s/\"/_/g;
+  $str =~ s/\'/_/g;
+  $str =~ s/\`/_/g;
+  $str =~ s/\(/_/g;
+  $str =~ s/\)/_/g;
+  $str =~ s/#//g;
+  $str =~ s|./||g;
+  
+  return $str;
+  }
+#---------------------
+sub checkID {
+  my $str = shift;
+  my $failed = 0;
+  # don't allow moving up a dir
+  $failed = 1 if ($str =~ m[../]); 
+  # don't allow working in the present directory
+  $failed = 1 if ($str =~ m[./]); 
+  # don't allow an empty name
+  $failed = 1 if (length($str) == 0);
+  if ($failed) {
+    $invalidID = 1;
+    return 1;
+  }
+  return 0;  
+  }
+#---------------------
+sub redirect {
+  print $q->start_html(-title=>"Webpuff Redirect to $sessionID",
+		       -head=>$q->meta({-http_equiv => 'refresh',
+		            -content => "1;URL=\"$main_app?sessionID=$sessionID\""})
+		     );
+  print $q->h1("Going to session \"$sessionID\"");
+
+return;
+}
+#---------------------
+sub loginScreen {
+  print $q->start_html(-title=>'Webpuff Login',
+                       -background=>"pix/puff_bg_dark.jpg",
+		       -head=>Link({-rel=>'stylesheet',
+		                    -type=>'text/css',
+				    -href=>'webpuff.css'})  
+		       );
+  print $q->h1({-class=>'loginHeader'},"Start a WebPuff session");
+  print $q->start_form(-method=>'get');
+
+  print "<table width='400'>";
+  print "<tr><td class='loginText' align='center'>";
+  print "ID:";
+  print $q->textfield(-name=>'sessionID',
+                      -size=>10
+		      );
+  print "</td></tr><tr><td align='center'>>";
+  print $q->submit(-name=>'submitNewID',
+                   -value=>"Start A New Session"
+		   );
+  print "</td></tr><tr><td align='center'>>";
+  print $q->submit(-name=>'submitOldID',
+                   -value=>"Resume an Old Session"
+		   );
+  print "</td></tr>";
+  
+  print "</table>";  
+  print $q->end_form();
+  print "<br/><font color=\"red\">";
+  if ($invalidID) {
+    print "The ID entered is invalid. Please use only alphanumeric characters";
+    }
+  if ($sessionExists) {
+    print "The session ID \"$sessionID\" already exists.  Please use something different";
+    }
+  if ($sessionCreateFailed) {
+    print "An error was encountered when trying to create a session with the ID you entered.  You might try a different ID using only alphanumeric characters.  If this error continues, try notifying the system administrator.";
+    }
+  if ($sessionIsMissing) {
+    print "The session ID \"$sessionID\" could not be found.  Perhaps the spelling is incorrect.  Note that old sessions are removed after a few days, in which case you need to start anew.";
+    }
+  print "</font>";
+  
+  return;
+}

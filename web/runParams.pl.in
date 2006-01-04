@@ -1,0 +1,642 @@
+#!@PERL@ -I.
+
+use CGI qw(:all);
+use Webpuff;
+use File::Basename;
+use strict;
+
+my $q = new CGI;
+
+# set sessionID 
+my $sessionID = $q->param('sessionID');
+my $previous = $q->param('previous');
+
+$|=1;  # autoflush on
+
+# all scroll options are a hash of arrays, see camel book 275
+# this can be generated from .puffrc, I think
+my %scrollOptions = (
+  model      => [],
+  dem        => ["none"],
+  plumeShape => [ "linear", "poisson", "exponential"],
+  restartFile=> ["none"]
+  );
+
+# the labels are an hash of hashes
+my %scrollOptionLabels = (
+  model       =>{ },
+  dem         =>{ },
+  plumeShape  =>{ },
+  restartFile =>{ } 
+  ) ;
+
+read_resource_file();
+
+#read in the possible volcanos
+my (@volc, @lat, @lon, @area, @hgt);
+# the text options, defaults are in the main package, and these get reset from
+# the log file when different runs are selected in the "Previous" menu
+my %puffOption;
+
+volcano_list();
+
+# define some stuff for the javascript that finds the lat/lon pair
+my $numvolcs=scalar @volc;
+my $latstr = "";
+my $lonstr = "";
+my $hgtstr = "";
+my $areastr = "\"";
+foreach (@lat) {$latstr="$latstr$_,";}
+foreach (@lon) {$lonstr="$lonstr$_,";}
+foreach (@hgt) {$hgtstr="$hgtstr$_,";}
+foreach (@area) {$areastr.="$_\",\"";}
+# remove that final comma and quotation mark
+chop $areastr;
+chop $areastr;
+
+#set defaults
+set_defaults();
+
+# reset to defaults by clearing everything by 'sessionID' and 'runDir'
+reset_form() if ($q->param('reset'));
+
+# load values from a previous run into the form  
+parse_previous($q->param('previous'));
+
+print $q->header;
+print $q->start_html(-title=>"WebPUFF",
+                     -bgcolor=>"lightsteelblue",
+		     -head=>Link({-rel=>'stylesheet',
+		                  -type=>'text/css',
+				  -href=>'webpuff.css'}),
+                     -script=>{-language=>'JAVASCRIPT',
+		               -src=>"javascript/webpuff.js"},
+         -onLoad=>"previousDefault(parent.ashxpOptions,'$sessionID','$previous')"
+	             		     );
+
+
+if ($q->param('puffrun')) {
+  process_form($q);
+} else {
+  create_form($q);
+}
+
+#---------------------
+
+sub create_form {
+
+my $q = shift;
+
+# the top line is a table with version on the left and sessionID on the right
+print '<table width="100%" border="0" cellspacing="0" cellpadding="0"><tr>';
+# the version goes upper left
+my $ver = "Version: ";
+$ver .= `$Webpuff::puff_exe --version`;
+print "<td class='sessionLabel' align='left'>$ver</td>";
+# sessionID goes in upper right
+print "<td class=\"sessionLabel\" align=\"right\">";
+print "session ID: $sessionID";
+#end of sessionID and the topline table
+print "</td></tr></table>";
+
+print $q->start_form(-name=>"runParamsForm", 
+                     -method=>"GET"
+		     );
+
+#add hidden form values
+print $q->hidden(-name=>'sessionID',-value=>$sessionID);
+print $q->hidden(-name=>'quiet',-value=>'true');
+
+# main table
+print '<table border="0" cellspacing="0" cellpadding="0">'; 
+print "<tr><td>";
+# run options table within the main table
+print '<table border="0" cellspacing="0" cellpadding="0">'; 
+print "<tr>";
+print '<td><img src="pix/puff_1.gif" width="150" alt="dragon icon"/></td>';
+print "<td><a href=\"#\" onclick=\"openHelp('help/volcano_name.html')\" class=\"helpLink\" title=\"click for option explanation\">Volcano Name</a><br/>";
+#print "<td class=\"labelText\"><b>Volcano Name</b><br/>";
+# list of possible volcanos
+print 
+$q->scrolling_list(-name=>'volc',
+                   -values=>[@volc],
+		   -class=>"tableEntry",
+#		   -labels=>\%ucvolc,
+		  -size=>5,
+		  -onChange=>"getLatLon(parent.runParams.document.runParamsForm,$latstr$lonstr$hgtstr$areastr)"
+		  );
+print "<br/><b>Region:&nbsp;</b>";
+print $q->textfield(-name=>'area',
+                    -disabled=>'disabled',
+		    -size=>16
+		    );
+print "</td><td class=\"labelText\"><b>N. Lat</b><br/>";
+print $q->textfield(-name=>'lat',-size=>7,-maxlength=>6,-onChange=>"makeUnknown(parent.runParams.document.runParamsForm,$numvolcs)");
+print "<br/><b>E. Lon</b><br/>";
+print $q->textfield(-name=>'lon',
+                    -size=>7,
+		    -maxlength=>6,
+  -onChange=>"makeUnknown(parent.runParams.document.runParamsForm,$numvolcs)"
+                    );
+print "</td><td class=\"labelText\"><b>Eruption start UTC:</b><br/>";
+print "YYYY MM DD HH:mm<br/>";
+print $q->textfield(-name=>'eruptDate',
+                    -default=>"",
+		    -size=>16,
+		    -maxlength=>16, 
+		    -onChange=>"checkEruptDate(parent.runParams.document.runParamsForm)", 
+		    -default=>$puffOption{eruptDate}
+		    );
+print '</td><td align="center">';
+# the submit button
+print $q->submit(-name=>"puffrun",-value=>'Run Puff'); 
+# print "<br/>";
+# helpButton();
+print "</td>";
+
+# the previous run list
+my @previousRuns=();
+#print "<td class=\"labelText\">";
+
+foreach (glob("$runDir/$sessionID/*"))
+{
+  
+  if (-d $_)
+  { 
+    push @previousRuns, basename($_);
+  }
+}
+
+if (scalar @previousRuns > 0) {
+  my %previousRunsLabels;
+  foreach (@previousRuns) {
+    (my $name, my $number) = ($_ =~ m/(\D*)(\d*)/);
+    $name = $_ unless ($number);
+    $name .= "($number)" if ($number);
+    $previousRunsLabels{$_} = "$name";
+  }
+  print "<td><a href=\"#\" onclick=\"openHelp('help/previous.html')\" class=\"helpLink\" title=\"click for option explanation\">Previous</a><br/>";  
+#  print "<b>Previous</b><br/>";
+  print $q->scrolling_list(-name=>'previous',
+                           -values=>[@previousRuns],
+  			   -size=>5,
+			   -class=>"tableEntry",
+			   -labels=>\%previousRunsLabels,
+    -onChange=>"seePrevious(parent.runParams,parent.ashxpOptions,'$sessionID')"
+                              );
+}
+
+print "</td>";
+print "</tr>";
+print "</table>";
+print "</td></tr>";
+print "<tr><td>";
+
+# the advanced options table
+print '<table cellspacing="0" cellpadding="1" bgcolor="silver">';
+print "<tr>";
+makeScrollField("model","Wind Model");
+makeTextField("runHours","Simulation hours");
+makeTextField("eruptHours","Eruption hours");
+print "</tr>";
+
+
+print "<tr>";
+makeScrollField("dem","DEM");
+makeTextField("saveHours","Save every [hrs]");
+makeTextField("nAsh","# particles");
+print "</tr>";
+
+print "<tr>";
+makeScrollField("plumeShape","Plume Shape");
+makeTextField("plumeMax","Plume height[m]");
+makeTextField("plumeMin","Plume bottom[m]");
+print "</tr>";
+
+print "<tr>";
+makeScrollField("restartFile", "Restart File");
+makeTextField("ashLogMean","log mean size[m]");
+makeTextField("phiDist","&Phi; distribution");
+print "</tr>";
+
+print "<tr>";
+makeScrollField();
+makeTextField("plumeHwidth","Plume width[km]");
+makeTextField("plumeZwidth","Plume thickness[km]");
+print "</tr>";
+
+print "<tr>";
+makeScrollField();
+makeTextField("diffuseH","Horz. diffusion[m&sup2;/s]");
+makeTextField("diffuseZ","Vert. diffusion[m&sup2;/s]");
+
+print "</table>"; # end of the advanced options table
+# one row table of extra buttons/options
+print "<table width='100%'>";
+print "<tr>";
+print "<td>";print $q->submit(-name=>'reset',-value=>"RESET");print "</td>";
+#print "<td>";print "<a href='#' onclick=\"createCloud('$runDir/$sessionID/$previous' title='click to create a custom cloud'>create cloud</a>"; 
+print "<td>";print "<a href=\"logout.pl\" target=\"_top\" class=\"helpButton\" >logout</a>";print "</td>";
+print helpButton();print "<td></td>";
+print "</tr></table>"; # end of the extra buttons
+
+print "</td></tr>";
+print "</table>"; # end of the entire frame table
+
+print $q->end_form;
+print $q->end_html;
+
+} # end create_form()
+
+#-------------------
+# reset all form values except sessionID
+sub reset_form {
+
+  my $sID=$q->param('sessionID');
+  $q->delete_all();
+  $q->param(-name=>'sessionID',-value=>$sID);
+  return;
+}
+#------------------------
+#replace underscores with spaces and capitalize the first letter 
+sub fixmultiname {
+  my ($name, $ucname);
+
+  my $volc = $_;
+  my $fullname = "";
+  my @names=split('_',$volc);
+  foreach $name (@names) {
+    $ucname = ucfirst($name);
+    $fullname="$fullname $ucname";
+    }
+  return $fullname;
+  }
+#------------------------
+sub process_form {
+  my $q = shift;
+ 
+  my $val = $q->param('volc');
+  # replace spaces with underscores
+  $val=~ s/\s/_/g;
+
+  my $makeNewDirectory = ($q->param('restartFile') eq "none");
+  
+  # create directories name "volcanoXX" where XX is a number
+  my $dir;
+  if ($makeNewDirectory) {
+    $dir=$val; 
+    my $count = 2;
+    while (-d "$runDir/$sessionID/$dir")
+    {
+      $dir="$val$count";
+      $count++;
+    }
+  } else {
+    # use the previous directory for this output as well
+    $dir = $q->param('previous');
+  }
+  
+  # now $dir is where the output goes
+  my $oPath = "$runDir/$sessionID/$dir";
+  
+  #create the command
+  my $command = $Webpuff::puff_exe;
+  #put the output in the directory
+  $command .= "--opath=$oPath ";
+  
+  # there is not a default value for this in the %puffOption hash, so add
+  # it manually
+  # if the volcano is unknown, we need the lat/lon values the user entered
+  my $op_val = $q->param('volc');
+  if (uc($q->param('volc')) =~ m/UNKNOWN/) {
+    my $lon = $q->param('lon');
+    my $lat = $q->param('lat');
+    $command .= "--lonLat $lon/$lat ";
+  } else {
+    $command .= "--volc=\"$op_val\" ";
+  }
+   
+   # concentration clouds
+   $command .= "--gridOutput=0.5x2000 -averageOutput=true -repeat 5 -gridLevels 3 ";
+   
+  #without the environment variable $HOME, we need to specify a resource file.
+  # the web uses the user 'nobody' which has no $HOME, so use the default
+  if (!$ENV{HOME}) {
+    $command .= "--rcfile $Webpuff::home/etc/puffrc ";
+  }
+  
+  # if PUFF_VOLCANO_FILE is set, Puff will use that.  Otherwise, assume we
+  # have a file in "../etc/"
+  if (!$ENV{PUFF_VOLCANO_FILE}) {
+    $command .= "--volcFile $Webpuff::home/etc/volcanos.txt ";
+  }
+  
+  # loop through all the default options.  If the option is empty, do not add
+  # it to the command line.  Some options need quotes, this could be done for
+  # all of them, I guess.
+  foreach (keys %puffOption)
+  {
+    $op_val = $q->param($_);
+    if (defined($op_val) and ($_ =~ /eruptDate/ or $_ =~ /phiDist/)) {
+      $command .= "--$_=\"$op_val\" ";
+     } elsif (defined($op_val)) {
+      $command .= "--$_=$op_val ";
+    }
+  }
+  
+  # create the output directory  
+  system("mkdir $oPath") if ($makeNewDirectory);
+  
+  # write log data in logText format
+  open LOG, ">>$oPath/puff.log";
+  print LOG "$command\n";
+  my $err = "";
+  open PUFF, "$command 2>&1|";
+  while (<PUFF>) {
+    my $text_color = "black";
+    # log everything
+    print LOG $_;
+    if ($_ =~ m/ERROR/) { $text_color = "red"; }
+    print STDOUT "<FONT size = 1 color=$text_color>$_</FONT><br/>";
+    $err = $1 if ($_ =~ m/ERROR:(.*)/);
+  }
+  close PUFF;
+  close LOG;
+
+
+# clean failed folders so they don't show up in the Previous folder
+#    system ("rm -rf $oPath") if (length $err > 0);
+
+########
+print $q->start_form(-name=>"runParamsForm", 
+                     -method=>"GET"
+		     );
+print $q->submit(-name=>"done",-value=>'OK'); 
+
+# these hidden entries are all that gets passed to the script on reload
+$q->delete_all();
+print $q->hidden(-name=>'sessionID',-value=>$sessionID);
+print $q->hidden(-name=>'previous',-value=>$dir) unless ($err);
+print $q->end_form();
+
+print $q->end_html();
+
+# remove folders with errors
+if ($err) { `rm -r $oPath` };
+
+  return $err;
+    
+}
+#---------------------
+sub helpButton {
+  return "<td align=\"right\"><a href=\"#\" onclick=\"openHelp('help/webpuff.html')\" class=\"helpButton\" title=\"Help me use this form!\">Help</a></td>";
+} 
+#---------------------
+# a special field for the -logSize field
+sub makeLogSizeField {
+  my ($param, $string) = @_;
+  print $q->textfield(-name=>"$param",
+                      -size=>3,
+		      -maxLength=>2,
+		      -class=>"tableEntry",
+		      -default=>$puffOption{$param},
+  -onChange=>"adjustOptions(parent.runParams.document.runParamsForm)"
+                     );
+  print "<font class=\"helpLink\">&plusmn;</font>";		     
+  print $q->textfield(-name=>"ashLogSdev",
+                      -size=>1,
+		      -maxLength=>2,
+		      -class=>"tableEntry",
+		      -default=>$puffOption{ashLogSdev},
+  -onChange=>"adjustOptions(parent.runParams.document.runParamsForm)"
+                     );
+  print "<font class=\"helpLink\">&sigma;</font>";
+  return;
+}
+#---------------------
+sub makeTextField {
+  # param is the puff option this corresponds to, i.e. -eruptHours
+  # string is the text field description, ie. "Eruption duration[hrs]"
+  my ($param, $string) = @_;
+
+  my $maxLength = 6;
+  # make a pseudo-switch for maximum entry length
+  SWITCH: {
+    if ($param =~ /phiDist/) { $maxLength = 100; last SWITCH;}
+  }
+   
+  print "<td>";
+  print "<a href=\"#\" onclick=\"openHelp('help/$param.html')\" class=\"helpLink\" title=\"click for option explanation\">$string</a>";
+#  print "<a href=\"#\" onclick=\"window.open('runHours.html')\">$string</a>";
+  print "</td>";
+  print "<td>";
+  # the logMeanSize field is special
+  if ($param =~ /ashLogMean/) {
+    makeLogSizeField($param, $string);
+  } else {
+    print $q->textfield(-name=>"$param",
+                        -size=>7,
+		        -maxLength=>$maxLength,
+		        -class=>"tableEntry",
+		        -default=>$puffOption{$param},
+    -onChange=>"adjustOptions(parent.runParams.document.runParamsForm)"
+#      -onChange=>"setOptions(top.runParams.document.runParamsForm.$param, top.puffOptions.document.puffOptionsForm.$param)"
+                        );
+  }
+  print "</td>";
+}      
+ 
+#---------------------
+# scroll fields are three data fields wide: the label, the option list, and some
+# buffer space
+
+sub makeScrollField {
+
+  my ($param, $string) = @_;
+  
+  # this could be an empty field
+  if (!$param)
+  {
+    print "<td></td><td></td><td></td>";
+    return;
+  }
+  
+  
+  my $labels = $scrollOptionLabels{$param};
+  print "<td>";
+  print "<a href=\"#\" onclick=\"openHelp('help/$param.html')\" class=\"helpLink\" title=\"click for option explanation\">$string</a>";
+  print "</td>";
+  print "<td>";
+  print $q->scrolling_list(-name=>"$param",
+                           -values=>$scrollOptions{$param},
+			   -size=>1,
+			   -labels=>$labels,
+			   -class=>"tableEntry",
+			   -default=>$puffOption{$param},
+  -onChange=>"setOptions(parent.runParams.document.runParamsForm.$param, parent.puffOptions.document.puffOptionsForm.$param)");
+  #offset the scroll lists form the other options with these non-breaking
+  # spaces
+  print "</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>";
+  return;
+}
+
+#---------------------
+sub parse_previous {
+  my $dir = shift;
+  
+  return if (!$dir);
+  
+  # clear default values before loading options
+  foreach (keys %puffOption) { undef $puffOption{$_}; }
+  
+  my $command = "";
+  
+  open LOG, "<$runDir/$sessionID/$dir/puff.log";
+  while (<LOG>) {
+    $command = $_ if ($_=~/$Webpuff::puff_exe/);
+  }
+  close LOG;
+  
+  #pull out --eruptDate="YYYY MM DD HH:mm" because that below won't work
+  if ($command =~ /--eruptDate=\"(.{16})\"/ ){
+    $puffOption{eruptDate} = $1;
+    $command =~s /--eruptDate=.{18}//;
+  }
+  
+  #pull out --phiDist=... also
+  if ($command =~ /--phiDist=\"(\S*)\"/ ){
+    $puffOption{phiDist} = $1;
+    $command =~s /--phiDist=\S*//;
+  }
+  
+  my @tokens = split " ", $command;
+  # remove the executable name
+  shift @tokens;
+  
+  foreach (@tokens) {
+    my ($option, $value) = split /=/;
+    # scan through the possible text options
+    foreach (keys %puffOption) {
+      if ("--$_" eq $option) {
+        $puffOption{$_} = $value;
+      }
+    }
+  }
+  return;
+}
+#---------------------
+# this sub sets the default value for this form to the the global defaults
+# from Webpuff.pm initially.  Later, the log file is read (if appropriate) and
+# the form defaults are set using that.
+sub set_defaults {
+
+  foreach (keys %puffOptionDefault) {
+    $puffOption{$_} = $puffOptionDefault{$_};
+    }
+  return;
+}    
+#---------------------
+sub volcano_list {
+  my $volc_file;
+  # if the environment is set, use that value.
+  if ($ENV{PUFF_VOLCANO_LIST}) {
+    $volc_file = $ENV{PUFF_VOLCANO_LIST};
+  } else {
+    $volc_file ="$Webpuff::home/etc/volcanos.txt";
+  }
+  
+  open PUFF, $volc_file;
+  
+  my %field = ();
+  while (<PUFF>) {
+    # skip first line
+    next if ($_ =~ /Puff Volcano Listing/);
+    # fields are fixed width, get them will all the extra whitespace
+    my @field = split /:/;
+    # skip empty lines
+    next if (scalar @field < 6);
+    
+    # remove leading and trailing white space
+    foreach(@field) {
+      $_=~ s/^\s+//;
+      $_=~ s/\s+$//;
+      }
+    push @volc, ucfirst lc $field[0];
+    push @lon, $field[4];
+    push @lat, $field[2];
+    push @area, $field[1];
+		push @hgt, $field[6];
+  }
+  close PUFF;
+}	
+
+#---------------------
+# read the .puffrc file from the $HOME directory, and all all "model=..." models
+# to the scrollOptions{model} array and "dem=..." to the scrollOptions{dem} arr
+# The map function lets us check whether the model name already exists, so as
+# not to repeat items in the array
+ 
+sub read_resource_file {
+#  return if not $ENV{HOME};
+  open PUFFRC, "<$Webpuff::home/etc/puffrc" or die "no resource file\n";
+  while (<PUFFRC>) {
+    if ($_ =~ m/^model=(\S+)\s/) {
+      push @{$scrollOptions{model} }, $1 if not (map /$1/, @{$scrollOptions{model} } );
+      }
+    if ($_ =~ m/^dem=(\S+)\s/) {
+      push @{$scrollOptions{dem} }, $1 if not (map /$1/, @{$scrollOptions{dem} } );
+    }
+  }
+  #alphabetize the model list
+  @{$scrollOptions{model} } = sort @{$scrollOptions{model} };
+  # do not alphabetize the dem list so "none" is the default
+#  @{$scrollOptions{dem} } = sort @{$scrollOptions{dem} };
+
+  # get a list of possible restart files
+  my $dir = $q->param('previous');
+  foreach (glob "$runDir/$sessionID/$dir/*ash.cdf") {
+    my $file = $_;
+    # make more readable
+    $file =~ m/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/;
+    # make labels and add to a hash
+    $scrollOptionLabels{restartFile}{$file} = "$1 $2 $3 $4:$5";
+    push @{$scrollOptions{restartFile} }, $file;
+  }
+
+  
+  
+  return;
+}
+
+#---------------------
+sub logout {
+  my $pidfile = $Webpuff::pidfile;
+  # the the webpuff process id
+  my $pid = `cat $pidfile` if (-e $pidfile);
+  if ($pid =~ /\d/) {
+    system("kill $pid");
+    system("rm -f $pidfile");
+  } 
+#  else {
+#    print "Failed to get webpuff processID file <FONT color=\"red\">$pidfile</FONT> to properly shut down webpuff.  The http daemon may still be running and should be manually shut down\n";
+#    print "<br/>";
+#  }
+
+  print $q->start_html(-title=>"Exit Webpuff",
+                       -head=>$q->meta({-http_equiv => 'refresh',
+		          -content => "1,URL=\"http://puff.images.alaska.edu\""}),
+                     -script=>{-language=>'JAVASCRIPT',
+		               -src=>"javascript/webpuff.js"},
+                     -onLoad=>"close()"
+ 			);
+
+  print $q->h1("goodbye");
+#   print $q->start_form(-method=>"GET",
+#                        -action=>"login.pl"
+# 		       );
+#   print "Start a new session";
+#   print $q->submit(-name=>"restart",-value=>1);
+#   print $q->end_form();
+  print $q->end_html(); 
+  exit(0);
+} 

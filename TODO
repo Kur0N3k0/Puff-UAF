@@ -1,0 +1,4 @@
+1.allowing -sorted option to have multiple values, i.e. -sorted=lon,no so sorted is done only once by longitude.
+2. allow Stokes settling to be dependent on altitude, maybe by air density.
+3. fix sorting routine, some particles are outlyers.  
+puff -saveAshInit true ... ; ashdump file -z > ash.dat ; octave ; load ash.dat; plot(ash)

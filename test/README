@@ -1,0 +1,1 @@
+This directory contains testing scripts for the Puff-uaf distribution.  To run, simply do 'make check' in this or the top-level directory. Each test can also be run individually.  An error log from each script is written to testXX.err, where XX is the test number.  If the test fails, check the error log.  Empty error logs are removed for successful tests.

@@ -1,0 +1,9 @@
+cmd_line -----|
+pufftk -------|->eruption parameters->|        |--->ashdump----->ascii
+webpuff-------|                       |        |
+                                      |->Puff--|--->ashxp----|
+windfield data                        |        |             |-->images
+(GRIB format) -->grib2pf              |        |--->pufftk---|
+                  |              input files   |--->webpuff--|
+windfield data    |                   ^
+(netCDF format)---|-------------------|

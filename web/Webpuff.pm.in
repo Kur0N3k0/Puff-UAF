@@ -1,0 +1,67 @@
+package Webpuff;
+require Exporter;
+
+use File::Basename;
+
+@ISA = qw(Exporter);
+@EXPORT = qw(%ashxpOptionDefault %puffOptionDefault %puffScrollOptionDefault $runDir);
+
+# assume the top install directory is one above the one we are in and
+# no trailing slash
+$home="@INSTALL_DIR@";
+$pidfile="$home/etc/webpuff.pid";
+$puff_exe="$home/bin/puff ";
+$ashxp_exe="$home/bin/ashxp ";
+$ashgmt_exe="$home/bin/ashgmt --movie=movie.gif ";
+
+# This is the directory in which all sessions are stored, relative to this dir.
+$runDir="run";
+
+# these are all default values exported to the various frames
+$puffOptionDefault{ashLogMean}=-6;
+$puffOptionDefault{ashLogSdev}=1;
+$puffOptionDefault{diffuseH}=20000;
+$puffOptionDefault{diffuseZ}=10;
+$puffOptionDefault{eruptHours}=24;
+$puffOptionDefault{eruptDate}=get_today();
+#$puffOptionDefault{eruptDate}="2002 09 25 00:00";
+$puffOptionDefault{nAsh}=2000;
+$puffOptionDefault{phiDist}="";
+$puffOptionDefault{plumeMin}=0;
+$puffOptionDefault{plumeMax}=16000;
+$puffOptionDefault{plumeHwidth}=0;
+$puffOptionDefault{plumeZwidth}=3;
+$puffOptionDefault{quiet}="true";
+$puffOptionDefault{restartFile}="none";
+$puffOptionDefault{runHours}=24;
+$puffOptionDefault{saveHours}=6;
+
+# setting the default scroll options to "" will default to the first value
+# in the list
+$puffOptionDefault{model}="";
+$puffOptionDefault{dem}="";
+$puffOptionDefault{plumeShape}="";
+
+$ashxpOptionDefault{airborne}=0;
+$ashxpOptionDefault{fallout}=0;
+$ashxpOptionDefault{grayscale}=0;
+$ashxpOptionDefault{gridlines}=10;
+$ashxpOptionDefault{"no-stamp"}=0;
+$ashxpOptionDefault{magnify}=3;
+$ashxpOptionDefault{pixels}=3;
+$ashxpOptionDefault{projection}="mercator";
+
+#---------------------
+sub get_today {
+  my ($mday, $mon, $year);
+  (undef,undef,undef,$mday,$mon,$year,undef,undef,undef)=gmtime;
+  $year += 1900;
+  $mon +=1;
+  $mon = "0$mon" if (length $mon == 1);
+  $mday = "0$mday" if (length $mday == 1);
+  
+  return "$year $mon $mday 00:00";
+}
+
+
+1;

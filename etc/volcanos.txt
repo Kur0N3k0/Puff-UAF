@@ -1,0 +1,1435 @@
+Puff Volcano Listing File - do not remove this header
+ABU                          :Honshu-Japan        :34.50 :N :131.60 :E :  571 
+ACAMARCHI                    :Chile-N             :23.30 :S : 67.62 :W : 6046 
+ACATENANGO                   :Guatemala           :14.501:N : 90.876:W : 3976 
+ACIGOL-NEVSEHIR              :Turkey              :38.57 :N : 34.52 :E : 1689 
+ACOTANGO                     :Chile-N             :18.37 :S : 69.05 :W : 6052 
+ADAGDAK                      :Aleutian Is         :51.98 :N :176.60 :W :  645 
+ADAMS                        :US-Washington       :46.206:N :121.49 :W : 3742 
+ADATARA                      :Honshu-Japan        :37.62 :N :140.28 :E : 1718 
+ADWA                         :Ethiopia            :10.07 :N : 40.84 :E : 1733 
+AFDERA                       :Ethiopia            :13.08 :N : 40.85 :E : 1295 
+AGMAGAN-KARADAG              :Armenia             :40.275:N : 44.75 :E : 3560 
+AGRIGAN                      :Mariana Is-C Pac    :18.77 :N :145.67 :E :  965 
+AGUA                         :Guatemala           :14.465:N : 90.743:W : 3760 
+AGUA DE PAU                  :Azores              :37.77 :N : 25.47 :W :  947 
+AGUAS ZARCAS GROUP           :Costa Rica          :10.42 :N : 84.31 :W :  621 
+AGUILERA                     :Chile-S             :50.17 :S : 73.83 :W :-99999
+AGUNG                        :Lesser Sunda Is     : 8.342:S :115.508:E : 3142 
+AHYI                         :Mariana Is-C Pac    :20.43 :N :145.03 :E :  -70 
+AKADEMIA NAUK                :Kamchatka           :53.98 :N :159.45 :E : 1180 
+AKAGI                        :Honshu-Japan        :36.53 :N :139.18 :E : 1828 
+AKAN                         :Hokkaido-Japan      :43.38 :N :144.02 :E : 1499 
+AKHTANG                      :Kamchatka           :55.43 :N :158.65 :E : 1956 
+AKITA-KOMAGA-TAKE            :Japan               :39.75 :N :140.80 :E : 1637 
+AKITA-YAKE-YAMA              :Honshu-Japan        :39.97 :N :140.77 :E : 1366 
+AKUSEKI-JIMA                 :Ryukyu Is           :29.45 :N :129.60 :E :  586 
+AKUTAN                       :Aleutian Is         :54.13 :N :165.97 :W : 1303 
+ALAID                        :Kurile Is           :50.858:N :155.55 :E : 2339 
+ALAMAGAN                     :Mariana Is-C Pac    :17.60 :N :145.83 :E :  744 
+ALAYTA                       :Ethiopia            :12.88 :N : 40.57 :E : 1501 
+ALBANO, MONTE                :Italy               :41.73 :N : 12.70 :E :  949 
+ALCEDO, VOLCAN               :Galapagos           : 0.43 :S : 91.12 :W : 1130 
+ALE BAGU                     :Ethiopia            :13.52 :N : 40.63 :E : 1031 
+ALID                         :Ethiopia            :14.88 :N : 39.92 :E :  904 
+ALLIGATOR LAKE               :Canada              :60.42 :N :135.42 :W : 2217 
+ALMOLONGA                    :Guatemala           :14.82 :N : 91.48 :W : 3197 
+ALNEY-CHASHAKONDZHA          :Kamchatka           :56.70 :N :159.65 :E : 2598 
+ALNGEY                       :Kamchatka           :57.70 :N :160.40 :E : 1853 
+ALU                          :Ethiopia            :13.82 :N : 40.55 :E :  429 
+ALUCHIN GROUP                :Russia-NE           :66.12 :N :165.63 :E : 1000 
+ALUTU                        :Ethiopia            : 7.77 :N : 38.78 :E : 2335 
+AMAK                         :Aleutian Is         :55.42 :N :163.15 :W :  513 
+AMBALATUNGAN GROUP           :Luzon-Philippines   :17.32 :N :121.10 :E :-99999
+AMBANG                       :Sulawesi-Indonesia  : 0.75 :N :124.42 :E : 1795 
+AMBITLE                      :New Ireland-SW Pac  : 4.08 :S :153.65 :E :  450 
+AMBOY                        :US-California       :34.55 :N :115.78 :W :  288 
+AMBRE-BOBAOMBY               :Madagascar          :12.48 :S : 49.10 :E : 1475 
+AMBRYM                       :Vanuatu-SW Pacific  :16.25 :S :168.12 :E : 1334 
+AMIATA                       :Italy               :42.90 :N : 11.63 :E : 1738 
+AMORONG                      :Luzon-Philippines   :15.828:N :120.805:E :  376 
+AMSTERDAM ISLAND             :Indian O.-S         :37.83 :S : 77.52 :E :  881 
+AMUKTA                       :Aleutian Is         :52.50 :N :171.25 :W : 1066 
+ANALLAJSI, NEVADO            :Bolivia             :17.92 :S : 68.92 :W : 5750 
+ANATAHAN                     :Mariana Is-C Pac    :16.35 :N :145.67 :E :  788 
+ANAUN                        :Kamchatka           :56.32 :N :158.83 :E : 1828 
+ANDAHUA VALLEY               :Peru                :15.42 :S : 72.33 :W : 4713 
+ANDRUS                       :Antarctica          :75.80 :S :132.33 :W : 2978 
+ANEITYUM                     :Vanuatu-SW Pacific  :20.20 :S :169.83 :E :  852 
+ANIAKCHAK                    :Alaska Peninsula    :56.88 :N :158.17 :W : 1341 
+ANJUISKY                     :Russia-NE           :67.17 :N :165.20 :E : 1050 
+ANKAIZINA FIELD              :Madagascar          :14.30 :S : 48.67 :E : 2878 
+ANKARATRA FIELD              :Madagascar          :19.40 :S : 47.20 :E : 2644 
+ANTILLANCA GROUP             :Chile-C             :40.771:S : 72.153:W : 1990 
+ANTIPODES ISLAND             :Pacific-S           :49.68 :S :178.77 :E :  402 
+ANTISANA                     :Ecuador             : 0.481:S : 78.141:W : 5753 
+ANTOFAGASTA DE LA SIERRA     :Argentina           :26.08 :S : 67.50 :W : 4000 
+ANTOFALLA, VOLCAN            :Argentina           :25.53 :S : 68.00 :W : 6100 
+ANTUCO                       :Chile-C             :37.406:S : 71.349:W : 2979 
+ANUNCIACION, CERRO           :Costa Rica          :10.472:N : 85.07 :W :  402 
+AOBA                         :Vanuatu-SW Pacific  :15.40 :S :167.83 :E : 1496 
+AOGA-SHIMA                   :Izu Is-Japan        :32.45 :N :139.77 :E :  423 
+APASTEPEQUE FIELD            :El Salvador         :13.72 :N : 88.77 :W :  700 
+APO                          :Mindanao-Philippines: 6.987:N :125.273:E : 2954 
+APOYEQUE                     :Nicaragua           :12.242:N : 86.342:W :  420 
+APOYO                        :Nicaragua           :11.92 :N : 86.03 :W :  468 
+ARACAR                       :Argentina           :24.27 :S : 67.77 :W : 6082 
+ARAGATS                      :Armenia             :40.55 :N : 44.12 :E : 4090 
+ARARAT, MT.                  :Turkey              :39.70 :N : 44.28 :E : 5165 
+ARAYAT                       :Luzon-Philippines   :15.20 :N :120.742:E : 1026 
+ARDOUKOBA                    :Djibouti            :11.58 :N : 42.47 :E :  298 
+ARENAL                       :Costa Rica          :10.463:N : 84.703:W : 1657 
+ARHAB, HARRA OF              :Arabia-S            :15.63 :N : 44.08 :E : 3100 
+ARINTICA, VOLCAN             :Chile-N             :18.73 :S : 69.05 :W : 5597 
+ARJUNO-WELIRANG              :Java                : 7.725:S :112.58 :E : 3339 
+ASACHA                       :Kamchatka           :52.355:N :157.827:E : 1910 
+ASAMA                        :Honshu-Japan        :36.40 :N :138.53 :E : 2560 
+ASAVYO                       :Ethiopia            :13.07 :N : 41.60 :E : 1200 
+ASCENSION                    :Atlantic-S          : 7.95 :S : 14.37 :W :  858 
+ASKJA                        :Iceland-NE          :65.03 :N : 16.75 :W : 1516 
+ASMARA                       :Ethiopia            :11.27 :N : 41.52 :E :  500 
+ASO                          :Kyushu-Japan        :32.88 :N :131.10 :E : 1592 
+ASSAB VOLC FIELD             :Ethiopia            :12.95 :N : 42.43 :E :  987 
+ASUNCION                     :Mariana Is-C Pac    :19.67 :N :145.40 :E :  857 
+ATACAZO                      :Ecuador             : 0.353:S : 78.617:W : 4463 
+ATITLAN                      :Guatemala           :14.583:N : 91.186:W : 3535 
+ATKA                         :Aleutian Is         :52.38 :N :174.15 :W : 1533 
+ATLASOVA                     :Kamchatka           :57.97 :N :160.65 :E : 1764 
+ATSONUPURI                   :Kurile Is           :44.804:N :147.13 :E : 1205 
+AUCANQUILCHA, CERRO          :Chile-N             :21.22 :S : 68.47 :W : 6176 
+AUCKLAND FIELD               :New Zealand         :36.90 :S :174.87 :E :  260 
+AUGUSTINE                    :Alaska-SW           :59.37 :N :153.42 :W : 1252 
+AVACHINSKY                   :Kamchatka           :53.255:N :158.83 :E : 2741 
+AWU                          :Sangihe Is-Indonesia: 3.67 :N :125.50 :E : 1320 
+AYELU                        :Ethiopia            :10.082:N : 40.702:E : 2145 
+AZUFRAL, VOLCAN              :Colombia            : 1.08 :N : 77.68 :W : 4070 
+AZUFRE, CERRO DEL            :Chile-N             :21.78 :S : 68.23 :W : 5486 
+AZUL, CERRO                  :Galapagos           : 0.90 :S : 91.42 :W : 1690 
+AZUL, CERRO [QUIZAPU]        :Chile-C             :35.653:S : 70.761:W : 3788 
+AZUMA                        :Honshu-Japan        :37.73 :N :140.25 :E : 2024 
+BABUYAN CLARO                :Luzon Is-N of       :19.523:N :121.94 :E : 1180 
+BACHELOR                     :US-Oregon           :43.979:N :121.688:W : 2763 
+BAGANA                       :Bougainville-SW Pac : 6.14 :S :155.195:E : 1750 
+BAITOUSHAN                   :China-E             :41.98 :N :128.08 :E : 2744 
+BAKENIN                      :Kamchatka           :53.905:N :158.07 :E : 2277 
+BAKER                        :US-Washington       :48.786:N :121.82 :W : 3285 
+BAL HAF, HARRA OF            :Arabia-S            :14.05 :N : 48.33 :E :  233 
+BALAGAN-TAS                  :Russia-NE           :66.43 :N :143.73 :E :  993 
+BALATOCAN                    :Mindanao-Philippines: 8.80 :N :124.92 :E : 2300 
+BALBI                        :Bougainville-SW Pac : 5.83 :S :154.98 :E : 2715 
+BALD KNOLL                   :US-Utah             :37.328:N :112.408:W : 2135 
+BALUAN                       :Admiralty Is-SW Pac : 2.57 :S :147.28 :E :  254 
+BALURAN                      :Java                : 7.85 :S :114.37 :E : 1247 
+BALUT                        :Mindanao-Philippines: 5.40 :N :125.375:E :  852 
+BAM                          :New Guinea-NE of    : 3.60 :S :144.85 :E :  685 
+BAMUS                        :New Britain-SW Pac  : 5.20 :S :151.23 :E : 2248 
+BANAHAW                      :Luzon-Philippines   :14.07 :N :121.48 :E : 2177 
+BANDA API                    :Banda Sea           : 4.525:S :129.871:E :  640 
+BANDAI                       :Honshu-Japan        :37.60 :N :140.08 :E : 1819 
+BANUA WUHU                   :Sangihe Is-Indonesia: 3.138:N :125.491:E :   -5 
+BARANSKY                     :Kurile Is           :45.10 :N :148.02 :E : 1132 
+BARCENA                      :Mexico-Is           :19.30 :N :110.82 :W :  332 
+BARDARBUNGA                  :Iceland-NE          :64.63 :N : 17.53 :W : 2000 
+BARKHATNAYA SOPKA            :Kamchatka           :52.823:N :158.27 :E :  870 
+BARREN ISLAND                :Andaman Is-Ind O    :12.292:N : 93.875:E :  305 
+BARRIER, THE                 :Africa-E            : 2.32 :N : 36.57 :E : 1032 
+BARU                         :Panama              : 8.80 :N : 82.558:W : 3477 
+BARVA                        :Costa Rica          :10.135:N : 84.10 :W : 2906 
+BAS DONG NAI                 :SE Asia             :10.80 :N :107.20 :E :  392 
+BATUR                        :Lesser Sunda Is     : 8.242:S :115.375:E : 1717 
+BAYO, CERRO                  :Chile-N             :25.42 :S : 68.58 :W : 5401 
+BAYONNAISE ROCKS             :Izu Is-Japan        :31.92 :N :139.92 :E :   10 
+BAYUDA VOLC FIELD            :Africa-N            :18.33 :N : 32.75 :E :-99999
+BAZMAN                       :Iran                :28.07 :N : 60.00 :E : 3490 
+BELEN'KAYA                   :Kamchatka           :51.75 :N :157.27 :E :  892 
+BELIRANG-BERITI              :Sumatra             : 2.82 :S :102.18 :E : 1958 
+BELKNAP                      :US-Oregon           :44.285:N :121.841:W : 2095 
+BELY                         :Kamchatka           :57.88 :N :160.53 :E : 2080 
+BERLIN                       :Antarctica          :76.05 :S :136.00 :W : 3478 
+BERU                         :Ethiopia            : 8.95 :N : 39.75 :E : 1100 
+BERUTARUBE                   :Kurile Is           :44.47 :N :146.93 :E : 1220 
+BESAR, GUNUNG                :Sumatra             : 4.43 :S :103.67 :E : 1899 
+BEZYMIANNY                   :Kamchatka           :55.978:N :160.587:E : 2882 
+BIG CAVE                     :US-California       :40.955:N :121.365:W : 1259 
+BILATE RIVER FIELD           :Ethiopia            : 7.07 :N : 38.10 :E : 1700 
+BILIRAN                      :Philippines-C       :11.523:N :124.534:E : 1187 
+BILLY MITCHELL               :Bougainville-SW Pac : 6.092:S :155.225:E : 1544 
+BINULUAN                     :Luzon-Philippines   :17.308:N :121.093:E : 2329 
+BIR BORHUT                   :Arabia-S            :15.55 :N : 50.63 :E :-99999
+BISHOFTU FIELD               :Ethiopia            : 8.78 :N : 38.98 :E : 1850 
+BIU PLATEAU                  :Africa-W            :10.75 :N : 12.00 :E :-99999
+BLACK PEAK                   :Alaska Peninsula    :56.53 :N :158.80 :W : 1032 
+BLACK ROCK DESERT            :US-Utah             :38.97 :N :112.50 :W : 1800 
+BLANCA, LOMA                 :Chile-C             :36.286:S : 71.009:W : 2268 
+BLIZNETS                     :Kamchatka           :56.97 :N :159.78 :E : 1244 
+BLUE LAKE CRATER             :US-Oregon           :44.42 :N :121.77 :W : 1230 
+BLUE, VOLCAN                 :Nicaragua           :12.68 :N : 83.92 :W :  150 
+BLUP BLUP                    :New Guinea-NE of    : 3.508:S :144.62 :E :  402 
+BOBROF                       :Aleutian Is         :51.90 :N :177.43 :W :  738 
+BOGATYR RIDGE                :Kurile Is           :44.83 :N :147.37 :E : 1634 
+BOGOSLOF                     :Aleutian Is         :53.93 :N :168.03 :W :  101 
+BOINA                        :Djibouti            :11.25 :N : 41.83 :E :  300 
+BOISA                        :New Guinea-NE of    : 3.994:S :144.963:E :  240 
+BOLA                         :New Britain-SW Pac  : 5.15 :S :150.03 :E : 1155 
+BOLSHE-BANNAYA               :Kamchatka           :52.90 :N :157.78 :E : 1200 
+BOLSHOI SEMIACHIK            :Kamchatka           :54.32 :N :160.02 :E : 1720 
+BOLSHOY PAYALPAN             :Kamchatka           :55.88 :N :157.78 :E : 1906 
+BOLSHOY-KEKUKNAYSKY          :Kamchatka           :56.47 :N :157.80 :E : 1401 
+BOMBALAI                     :Borneo              : 4.40 :N :117.88 :E :  531 
+BONA-CHURCHILL               :Alaska-E            :61.38 :N :141.75 :W : 5005 
+BORA-BERICCIO COMPLEX        :Ethiopia            : 8.27 :N : 39.03 :E : 2285 
+BORALE ALE                   :Ethiopia            :13.725:N : 40.60 :E :  668 
+BORAWLI                      :Ethiopia            :13.30 :N : 40.98 :E :  812 
+BORAWLI COMPLEX              :Ethiopia            :11.63 :N : 41.45 :E :  875 
+BOSET-BERICHA                :Ethiopia            : 8.558:N : 39.475:E : 2447 
+BOUVET                       :Atlantic-S          :54.42 :S :  3.35 :E :  780 
+BRATAN                       :Lesser Sunda Is     : 8.28 :S :115.13 :E : 2276 
+BRAVA                        :Cape Verde Is       :14.85 :N : 24.72 :W :  900 
+BRAVO, CERRO                 :Colombia            : 5.092:N : 75.30 :W : 4000 
+BRENNISTEINSFJOLL            :Iceland-SW          :63.92 :N : 21.83 :W :  626 
+BRIDGE RIVER CONES           :Canada              :50.80 :N :123.40 :W : 2500 
+BRIDGEMAN ISLAND             :Antarctica          :62.05 :S : 56.75 :W :  240 
+BRIMSTONE ISLAND             :Kermadec Is         :30.23 :S :178.92 :W :-2000 
+BRISTOL ISLAND               :Antarctica          :59.03 :S : 26.58 :W : 1100 
+BRUSHY BUTTE                 :US-California       :41.178:N :121.443:W : 1174 
+BUAL BUALI                   :Sumatra             : 1.57 :N : 99.25 :E : 1819 
+BUCKLE ISLAND                :Antarctica          :66.80 :S :163.25 :E : 1239 
+BUD DAJO                     :Sulu Is-Philippines : 5.95 :N :121.07 :E :  440 
+BUFUMBIRA                    :Africa-C            : 1.23 :S : 29.72 :E : 2440 
+BULDIR                       :Aleutian Is         :52.37 :N :175.98 :E :  656 
+BULUSAN                      :Luzon-Philippines   :12.77 :N :124.05 :E : 1565 
+BUNYARUGURU FIELD            :Africa-C            : 0.20 :S : 30.08 :E : 1554 
+BURNEY, MONTE                :Chile-S             :52.33 :S : 73.40 :W : 1758 
+BUS-OBO                      :Mongolia            :47.12 :N :109.08 :E : 1162 
+BUTAJIRI-SILTI FIELD         :Ethiopia            : 8.05 :N : 38.35 :E : 2281 
+BUZZARD CREEK                :Alaska-E            :64.07 :N :148.42 :W :  830 
+CABALIAN                     :Philippines-C       :10.287:N :125.22 :E :  945 
+CABURGUA                     :Chile-C             :39.20 :S : 71.83 :W :  995 
+CAGUA                        :Luzon-Philippines   :18.222:N :122.123:E : 1133 
+CALABOZOS                    :Chile-C             :35.558:S : 70.496:W : 3508 
+CALAYO                       :Mindanao-Philippines: 7.877:N :125.068:E :  646 
+CALBUCO                      :Chile-S             :41.326:S : 72.614:W : 2003 
+CALLAQUI                     :Chile-C             :37.92 :S : 71.45 :W : 3164 
+CAMEROON, MT.                :Africa-W            : 4.203:N :  9.17 :E : 4095 
+CAMIGUIN DE BABUYANES        :Luzon-N of          :18.83 :N :121.86 :E :  712 
+CAMPI FLEGREI                :Italy               :40.827:N : 14.139:E :  458 
+CAMPI FLEGREI MAR SICILIA    :Italy               :37.10 :N : 12.70 :E :   -8 
+CANDLEMAS ISLAND             :Antarctica          :57.08 :S : 26.72 :W :  550 
+CANLAON                      :Philippines-C       :10.412:N :123.132:E : 2435 
+CARLISLE                     :Aleutian Is         :52.90 :N :170.05 :W : 1620 
+CARRAN-LOS VENADOS           :Chile-C             :40.35 :S : 72.07 :W : 1114 
+CARRIZOZO                    :US-New Mexico       :33.78 :N :105.93 :W : 1731 
+CASIRI, NEVADOS              :Peru                :17.47 :S : 69.82 :W : 5650 
+CATHERINE                    :Ethiopia            :13.92 :N : 40.42 :E :  100 
+CAYAMBE                      :Ecuador             : 0.029:N : 77.986:W : 5790 
+CAYUTE-LA VIGUERIA           :Chile-S             :41.25 :S : 72.27 :W :  506 
+CEBORUCO, VOLCAN             :Mexico              :21.125:N :104.50 :W : 2164 
+CENDRES, ILE DES             :SE Asia             :10.158:N :109.014:E :  -20 
+CENTRAL ISLAND               :Africa-E            : 3.50 :N : 36.042:E :  550 
+CEREME                       :Java                : 6.892:S :108.40 :E : 3078 
+CHACANA                      :Ecuador             : 0.375:S : 78.25 :W : 4643 
+CHACHANI, NEVADO             :Peru                :16.191:S : 71.53 :W : 6057 
+CHAGULAK                     :Aleutian Is         :52.57 :N :171.13 :W : 1142 
+CHAINE DES PUYS              :France              :45.50 :N :  2.75 :E : 1464 
+CHAITEN                      :Chile-S             :42.833:S : 72.646:W :  962 
+CHAO                         :Chile-N             :22.12 :S : 68.15 :W : 5100 
+CHAPULUL, CERRO              :Chile-C             :38.37 :S : 71.08 :W : 2143 
+CHASCON, CERRO               :Bolivia             :21.88 :S : 67.90 :W : 5125 
+CHERNY                       :Kamchatka           :56.82 :N :159.67 :E : 1778 
+CHICHINAUTZIN                :Mexico              :19.08 :N : 99.13 :W : 3930 
+CHICHON, EL                  :Mexico              :17.36 :N : 93.228:W : 1060 
+CHIGINAGAK                   :Alaska Peninsula    :57.13 :N :157.00 :W : 2075 
+CHIKURACHKI                  :Kurile Is           :50.325:N :155.458:E : 1816 
+CHILIQUES                    :Chile-N             :23.58 :S : 67.70 :W : 5778 
+CHILLAN, NEVADOS DE          :Chile-C             :36.863:S : 71.377:W : 3212 
+CHINAMECA                    :El Salvador         :13.48 :N : 88.32 :W : 1228 
+CHINGO VOLC FIELD            :Guatemala           :14.12 :N : 89.73 :W : 1775 
+CHIQUIMULA FIELD             :Guatemala           :14.83 :N : 89.55 :W : 1192 
+CHIRACHA                     :Ethiopia            : 6.65 :N : 38.12 :E : 1650 
+CHIRINKOTAN                  :Kurile Is           :48.98 :N :153.48 :E :  724 
+CHIRIP                       :Kurile Is           :45.38 :N :147.92 :E : 1589 
+CHIRPOI                      :Kurile Is           :46.525:N :150.875:E :  742 
+CHOKAI                       :Honshu-Japan        :39.08 :N :140.03 :E : 2230 
+CH'UGA-RYONG                 :Korea               :38.33 :N :127.33 :E :  452 
+CHYULU HILLS                 :Africa-E            : 2.68 :S : 37.88 :E : 2188 
+CINNAMON BUTTE               :US-Oregon           :43.241:N :122.108:W : 1956 
+CLEAR LAKE                   :US-California       :38.97 :N :122.77 :W : 1439 
+CLEVELAND                    :Aleutian Is         :52.82 :N :169.95 :W : 1730 
+COATEPEQUE CALDERA           :El Salvador         :13.87 :N : 89.55 :W :  746 
+COCHONS, ILE AUX             :Indian O.-S         :46.10 :S : 50.23 :E :  775 
+COLACHI                      :Chile-N             :23.23 :S : 67.65 :W : 5631 
+COLEMAN SEAMOUNT             :Solomon Is-SW Pac   : 8.83 :S :157.17 :E :-99999
+COLIMA VOLC COMPLEX          :Mexico              :19.514:N :103.62 :W : 4100 
+COLLUMA, CERRO               :Bolivia             :18.50 :S : 68.07 :W : 3876 
+COLO [UNA UNA]               :Sulawesi-Indonesia  : 0.17 :S :121.608:E :  507 
+CONCEPCION                   :Nicaragua           :11.538:N : 85.623:W : 1610 
+CONCHAGUA                    :El Salvador         :13.277:N : 87.853:W : 1250 
+CONCHAGUITA                  :El Salvador         :13.22 :N : 87.765:W :  550 
+CONDOR, CERRO EL             :Argentina           :26.62 :S : 68.35 :W : 6532 
+COOK, ISLA                   :Chile-S             :54.95 :S : 70.27 :W :  150 
+COPAHUE                      :Chile-C             :37.85 :S : 71.17 :W : 2965 
+COPIAPO                      :Chile-N             :27.30 :S : 69.13 :W : 6052 
+CORBETTI CALDERA             :Ethiopia            : 7.18 :N : 38.43 :E : 2320 
+CORCOVADO                    :Chile-S             :43.18 :S : 72.80 :W : 2300 
+CORDON CAULLE                :Chile-C             :40.52 :S : 72.20 :W : 1798 
+CORDON CHALVIRI              :Chile-N             :23.85 :S : 67.62 :W : 5623 
+CORDON DE PUNTAS NEGRAS      :Chile-N             :23.75 :S : 67.53 :W : 5852 
+CORDON DEL AZUFRE            :Chile-N             :25.33 :S : 68.52 :W : 5463 
+CORONADO                     :Mexico              :29.08 :N :113.513:W :  460 
+COROPUNA                     :Peru                :15.52 :S : 72.65 :W : 6377 
+COSIGUINA                    :Nicaragua           :12.98 :N : 87.57 :W :  859 
+COSO VOLC FIELD              :US-California       :36.03 :N :117.82 :W : 2400 
+COTOPAXI                     :Ecuador             : 0.677:S : 78.436:W : 5911 
+CRATER FLAT                  :US-Nevada           :36.77 :N :116.55 :W : 1128 
+CRATER LAKE                  :US-Oregon           :42.93 :N :122.12 :W : 2487 
+CRATER MOUNTAIN              :New Guinea          : 6.58 :S :145.08 :E : 3233 
+CRATERS OF THE MOON          :US-Idaho            :43.42 :N :113.50 :W : 2005 
+CROW LAGOON                  :Canada              :54.70 :N :130.23 :W :  335 
+CUICOCHA                     :Ecuador             : 0.308:N : 78.364:W : 3246 
+CUILAPA-BARBARENA            :Guatemala           :14.33 :N : 90.40 :W : 1454 
+CU-LAO RE GROUP              :SE Asia             :15.38 :N :109.12 :E :  181 
+CUMBAL                       :Colombia            : 0.98 :N : 77.88 :W : 4764 
+CURACOA                      :Tonga-SW Pacific    :15.62 :S :173.67 :W :  -33 
+CURTIS ISLAND                :Kermadec Is         :30.542:S :178.561:W :  137 
+DABBAHU                      :Ethiopia            :12.60 :N : 40.48 :E : 1442 
+DABBAYRA                     :Ethiopia            :12.38 :N : 40.07 :E : 1302 
+DACHT-I-NAVAR GROUP          :Afghanistan         :33.95 :N : 67.92 :E : 3800 
+DAGIT-DAGITAN                :Luzon-Philippines   :13.53 :N :121.078:E :  364 
+DAISEN                       :Honshu-Japan        :35.37 :N :133.55 :E : 1731 
+DAISETSU                     :Hokkaido-Japan      :43.68 :N :142.88 :E : 2290 
+DAKATAUA                     :New Britain-SW Pac  : 5.056:S :150.108:E :  400 
+DALAFFILLA                   :Ethiopia            :13.792:N : 40.55 :E :  613 
+DALLOL                       :Ethiopia            :14.242:N : 40.30 :E :  -48 
+DAMA ALI                     :Ethiopia            :11.28 :N : 41.63 :E : 1068 
+DAMAVAND                     :Iran                :35.951:N : 52.109:E : 5670 
+DANA                         :Alaska Peninsula    :55.62 :N :161.22 :W : 1354 
+DANAU COMPLEX                :Java                : 6.20 :S :105.97 :E : 1778 
+DAR-ALAGES                   :Armenia             :39.70 :N : 45.542:E : 3329 
+DARIGANGA VOLC FIELD         :Mongolia            :45.33 :N :114.00 :E : 1778 
+DARWIN, VOLCAN               :Galapagos           : 0.18 :S : 91.28 :W : 1330 
+DATONG                       :China-E             :40.00 :N :113.28 :E : 1882 
+DATUN GROUP                  :Taiwan              :25.17 :N :121.52 :E : 1130 
+DAVIDOF                      :Aleutian Is         :51.97 :N :178.33 :E :  328 
+DAVIS LAKE                   :US-Oregon           :43.57 :N :121.82 :W : 2163 
+DAWSON STRAIT GROUP          :D'Entrecasteaux Is  : 9.62 :S :150.88 :E :  500 
+DECEPTION ISLAND             :Antarctica          :62.97 :S : 60.65 :W :  576 
+DEMON                        :Kurile Is           :45.50 :N :148.85 :E : 1205 
+DEMPO                        :Sumatra             : 4.03 :S :103.13 :E : 3173 
+DENISON                      :Alaska Peninsula    :58.42 :N :154.45 :W : 2318 
+DESCABEZADO GRANDE           :Chile-C             :35.58 :S : 70.75 :W : 3953 
+DEVILS DESK                  :Alaska Peninsula    :58.48 :N :154.30 :W : 1954 
+DEVILS GARDEN                :US-Oregon           :43.512:N :120.861:W : 1698 
+DGIDA BASIN                  :Russia-SE           :50.52 :N :103.25 :E : 1500 
+DHAMAR, HARRAS OF            :Arabia-S            :14.57 :N : 44.67 :E : 3500 
+DIABLE, MORNE AU             :W Indies            :15.62 :N : 61.45 :W :  861 
+DIABLOTINS, MORNE            :W Indies            :15.50 :N : 61.42 :W : 1430 
+DIAMOND CRATERS              :US-Oregon           :43.10 :N :118.75 :W : 1435 
+DIDICAS                      :Luzon Is-N of       :19.077:N :122.202:E :  244 
+DIENG VOLC COMPLEX           :Java                : 7.20 :S :109.92 :E : 2565 
+DOFEN                        :Ethiopia            : 9.35 :N : 40.13 :E : 1151 
+DOMA PEAKS                   :New Guinea          : 5.90 :S :143.15 :E : 3568 
+DOMUYO, VOLCAN               :Argentina           :36.63 :S : 70.42 :W : 4709 
+DON JOAO DE CASTRO BANK      :Azores              :38.23 :N : 26.63 :W :  -14 
+DONA JUANA                   :Colombia            : 1.47 :N : 76.92 :W : 4150 
+DOTSERO                      :US-Colorado         :39.65 :N :107.03 :W : 2250 
+DOUGLAS                      :Alaska Peninsula    :58.87 :N :153.55 :W : 2140 
+DUBBI                        :Ethiopia            :13.58 :N : 41.808:E : 1625 
+DUKONO                       :Halmahera-Indonesia : 1.70 :N :127.87 :E : 1087 
+DUNCAN CANAL                 :Alaska-SE           :56.50 :N :133.10 :W :   15 
+DURANGO VOLC FIELD           :Mexico              :24.15 :N :104.45 :W : 2075 
+DUTTON                       :Alaska Peninsula    :55.18 :N :162.27 :W : 1473 
+DZENZURSKY                   :Kamchatka           :53.637:N :158.922:E : 2155 
+EAGLE LAKE FIELD             :US-California       :40.63 :N :120.83 :W : 1652 
+EAST EPI                     :Vanuatu-SW Pacific  :16.68 :S :168.37 :E :  -34 
+EASTER ISLAND                :Pacific-C           :27.12 :S :109.45 :W :  530 
+EBEKO                        :Kurile Is           :50.68 :N :156.02 :E : 1156 
+EBULOBO                      :Lesser Sunda Is     : 8.808:S :121.18 :E : 2124 
+EBURRU, OL DOINYO            :Africa-E            : 0.63 :S : 36.23 :E : 2856 
+ECUADOR, VOLCAN              :Galapagos           : 0.02 :S : 91.546:W :  790 
+EDGECUMBE                    :Alaska-SE           :57.05 :N :135.75 :W :  976 
+EDZIZA                       :Canada              :57.72 :N :130.63 :W : 2786 
+EGGELLA                      :Kamchatka           :56.57 :N :158.52 :E : 1046 
+EGMONT                       :New Zealand         :39.30 :S :174.07 :E : 2518 
+EGON                         :Lesser Sunda Is     : 8.67 :S :122.45 :E : 1703 
+EKARMA                       :Kurile Is           :48.958:N :153.93 :E : 1170 
+ELBRUS                       :Russia-SW           :43.33 :N : 42.45 :E : 5633 
+ELMENTEITA BADLANDS          :Africa-E            : 0.52 :S : 36.27 :E : 2126 
+ELOVSKY                      :Kamchatka           :57.53 :N :160.53 :E : 1381 
+EMMONS LAKE                  :Alaska Peninsula    :55.33 :N :162.07 :W : 1465 
+EMPEROR OF CHINA             :Banda Sea           : 6.62 :S :124.22 :E :-2850 
+EMURUANGOGOLAK               :Africa-E            : 1.50 :N : 36.33 :E : 1328 
+ERCIYES DAGI                 :Turkey              :38.52 :N : 35.48 :E : 3916 
+EREBUS                       :Antarctica          :77.53 :S :167.17 :E : 3794 
+ERTA ALE                     :Ethiopia            :13.60 :N : 40.67 :E :  613 
+ES SAFA                      :Syria               :33.08 :N : 37.15 :E :-99999
+E-SAN                        :Hokkaido-Japan      :41.80 :N :141.17 :E :  618 
+ESCALA                       :Bolivia             :21.60 :S : 66.88 :W : 4000 
+ESCORIAL, CERRO              :Chile-N             :25.08 :S : 68.37 :W : 5447 
+ESJUFJOLL                    :Iceland-SE          :64.27 :N : 16.65 :W : 1760 
+ESMERALDA BANK               :Mariana Is-C Pac    :15.00 :N :145.25 :E :  -43 
+ESPENBERG                    :Alaska-W            :66.35 :N :164.33 :W :  243 
+ETNA                         :Italy               :37.734:N : 15.004:E : 3350 
+EYJAFJOLL                    :Iceland-S           :63.63 :N : 19.62 :W : 1666 
+FALCON ISLAND                :Tonga-SW Pacific    :20.32 :S :175.42 :W :  145 
+FALSO AZUFRE                 :Chile-N             :26.80 :S : 68.37 :W : 5890 
+FARALLON DE PAJAROS          :Mariana Is-C Pac    :20.53 :N :144.90 :E :  360 
+FAYAL                        :Azores              :38.60 :N : 28.73 :W : 1043 
+FEDOTYCH                     :Kamchatka           :57.13 :N :160.40 :E :  965 
+FENTALE                      :Ethiopia            : 8.975:N : 39.93 :E : 2007 
+FERNANDINA                   :Galapagos           : 0.37 :S : 91.55 :W : 1495 
+FIRURA, NEVADOS              :Peru                :15.23 :S : 72.63 :W : 5498 
+FISHER                       :Aleutian Is         :54.67 :N :164.35 :W : 1094 
+FLOREANA                     :Galapagos           : 1.30 :S : 90.45 :W :  640 
+FLORES                       :Azores              :39.40 :N : 31.17 :W :  915 
+FLORES, VOLCAN DE            :Guatemala           :14.30 :N : 90.00 :W : 1600 
+FOGO                         :Cape Verde Is       :14.95 :N : 24.35 :W : 2829 
+FONUALEI                     :Tonga-SW Pacific    :18.02 :S :174.325:W :  200 
+FORT PORTAL FIELD            :Africa-C            : 0.70 :N : 30.25 :E : 1524 
+FORT SELKIRK                 :Canada              :62.93 :N :137.38 :W : 1239 
+FOUR CRATERS LAVA FIELD      :US-Oregon           :43.361:N :120.669:W : 1501 
+FOURNAISE, PITON DE LA       :Indian O.-W         :21.229:S : 55.713:E : 2631 
+FOURPEAKED                   :Alaska Peninsula    :58.77 :N :153.68 :W : 2104 
+FREMRINAMUR                  :Iceland-NE          :65.43 :N : 16.65 :W :  939 
+FROSTY                       :Alaska Peninsula    :55.07 :N :162.82 :W : 1920 
+FUEGO                        :Guatemala           :14.473:N : 90.88 :W : 3763 
+FUERTEVENTURA                :Canary Is           :28.358:N : 14.02 :W :  529 
+FUJI                         :Honshu-Japan        :35.35 :N :138.73 :E : 3776 
+FUKUJIN                      :Volcano Is-Japan    :21.925:N :143.442:E : -217 
+FURNAS                       :Azores              :37.77 :N : 25.32 :W :  805 
+FUSS PEAK                    :Kurile Is           :50.27 :N :155.25 :E : 1772 
+GABILLEMA                    :Ethiopia            :11.08 :N : 41.27 :E : 1459 
+GADA ALE                     :Ethiopia            :13.975:N : 40.408:E :  287 
+GALAPAGOS RIFT               :Pacific-E           : 0.792:N : 86.15 :W :-2500 
+GALERAS                      :Colombia            : 1.22 :N : 77.37 :W : 4276 
+GALLEGO                      :Solomon Is-SW Pac   : 9.35 :S :159.73 :E : 1000 
+GALUNGGUNG                   :Java                : 7.25 :S :108.05 :E : 2168 
+GAMALAMA                     :Halmahera-Indonesia : 0.80 :N :127.325:E : 1715 
+GAMCHEN                      :Kamchatka           :54.973:N :160.702:E : 2576 
+GAMKONORA                    :Halmahera-Indonesia : 1.375:N :127.52 :E : 1635 
+GARBES                       :Djibouti            :11.42 :N : 42.20 :E : 1000 
+GARBUNA GROUP                :New Britain-SW Pac  : 5.45 :S :150.03 :E :  564 
+GARELOI                      :Aleutian Is         :51.78 :N :178.80 :W : 1573 
+GARIBALDI LAKE               :Canada              :49.92 :N :123.03 :W : 2316 
+GARIBALDI, MT.               :Canada              :49.85 :N :123.00 :W : 2678 
+GAROVE                       :New Britain-SW Pac  : 4.692:S :149.50 :E :  368 
+GARUA HARBOUR                :New Britain-SW Pac  : 5.269:S :150.088:E :  565 
+GAUA                         :Vanuatu-SW Pacific  :14.27 :S :167.50 :E :  797 
+GAYOLESTEN                   :Sumatra             : 3.87 :N : 97.60 :E : 1500 
+GEDAMSA CALDERA              :Ethiopia            : 8.35 :N : 39.18 :E : 1984 
+GEDE                         :Java                : 6.78 :S :106.98 :E : 2958 
+GENOVESA                     :Galapagos           : 0.32 :N : 89.958:W :   64 
+GEODESISTOY                  :Kamchatka           :56.33 :N :158.67 :E : 1170 
+GEUREUDONG, BUR NI           :Sumatra             : 4.82 :N : 96.80 :E : 2590 
+GILIBANTA                    :Lesser Sunda Is     : 8.52 :S :119.35 :E :-99999
+GIREKOL                      :Turkey              :39.17 :N : 43.33 :E :-99999
+GLACIER PEAK                 :US-Washington       :48.112:N :121.113:W : 3213 
+GOLAYA                       :Kamchatka           :52.263:N :157.787:E :  858 
+GOLDEN TROUT CREEK           :US-Calif            :36.358:N :118.32 :W : 2886 
+GOLETS-TORNYI GROUP          :Kurile Is           :45.25 :N :148.35 :E :  442 
+GOLLU DAG                    :Turkey              :38.25 :N : 34.57 :E : 2143 
+GOLOVNIN                     :Kurile Is           :43.85 :N :145.53 :E :  541 
+GOODENOUGH                   :D'Entrecasteaux Is  : 9.48 :S :150.35 :E :  220 
+GORDO, CERRO                 :Mexico              :19.75 :N : 98.808:W : 3046 
+GORDON                       :Alaska-E            :62.13 :N :143.08 :W : 2755 
+GORELY                       :Kamchatka           :52.558:N :158.03 :E : 1829 
+GORIASCHAIA SOPKA            :Kurile Is           :46.83 :N :151.75 :E :  891 
+GORNY INSTITUTE              :Kamchatka           :57.33 :N :160.20 :E : 2125 
+GRACIOSA                     :Azores              :39.02 :N : 27.97 :W :  402 
+GRAN CANARIA                 :Canary Is           :28.00 :N : 15.58 :W : 1950 
+GREAT SITKIN                 :Aleutian Is         :52.08 :N :176.13 :W : 1740 
+GRIGGS                       :Alaska Peninsula    :58.35 :N :155.10 :W : 2317 
+GRILLE, LA                   :Indian O.-W         :11.47 :S : 43.33 :E : 1087 
+GRIMSNES                     :Iceland-SW          :64.03 :N : 20.87 :W :  214 
+GRIMSVOTN                    :Iceland-NE          :64.42 :N : 17.33 :W : 1725 
+GROPPO                       :Ethiopia            :11.73 :N : 40.25 :E :  930 
+GROZNY GROUP                 :Kurile Is           :45.02 :N :147.87 :E : 1211 
+GUADELUPE                    :Mexico              :29.07 :N :118.28 :W : 1100 
+GUAGUA PICHINCHA             :Ecuador             : 0.171:S : 78.598:W : 4784 
+GUALLATIRI                   :Chile-N             :18.42 :S : 69.17 :W : 6071 
+GUAYAQUES                    :Chile-N             :22.88 :S : 67.58 :W : 5598 
+GUAZAPA                      :El Salvador         :13.90 :N : 89.12 :W : 1438 
+GUFA                         :Ethiopia            :12.55 :N : 42.53 :E :  600 
+GUGUAN                       :Mariana Is-C Pac    :17.32 :N :145.85 :E :  287 
+GUNTUR                       :Java                : 7.13 :S :107.83 :E : 2249 
+GUNUNGAPI WETAR              :Banda Sea           : 6.642:S :126.65 :E :  282 
+HACHIJO-JIMA                 :Izu Is-Japan        :33.13 :N :139.77 :E :  854 
+HACHIMANTAI                  :Honshu-Japan        :39.95 :N :140.85 :E : 1614 
+HAKKODA GROUP                :Honshu-Japan        :40.65 :N :140.88 :E : 1585 
+HAKONE                       :Honshu-Japan        :35.22 :N :139.02 :E : 1438 
+HAKU-SAN                     :Honshu-Japan        :36.15 :N :136.78 :E : 2702 
+HALEAKALA                    :Hawaiian Is         :20.708:N :156.25 :W : 3055 
+HALLA                        :Korea               :33.37 :N :126.53 :E : 1950 
+HAMMAN DEMT, JABAL           :Arabia-S            :14.05 :N : 44.75 :E :-99999
+HANGAR                       :Kamchatka           :54.75 :N :157.38 :E : 2000 
+HARARO MANDA                 :Ethiopia            :12.17 :N : 40.82 :E :  600 
+HARGY                        :New Britain-SW Pac  : 5.33 :S :151.10 :E : 1148 
+HARIMKOTAN                   :Kurile Is           :49.12 :N :154.508:E : 1145 
+HARUJ                        :Africa-N            :27.25 :N : 17.50 :E : 1200 
+HARUNA                       :Honshu-Japan        :36.47 :N :138.88 :E : 1449 
+HASAN DAGI                   :Turkey              :38.13 :N : 34.17 :E : 3253 
+HAUT DONG NAI                :SE Asia             :11.60 :N :108.20 :E : 1000 
+HAYES                        :Alaska-SW           :61.62 :N :152.48 :W : 2788 
+HAYLAN, JABAL                :Arabia-S            :15.43 :N : 44.78 :E : 1550 
+HAYLI GUBBI                  :Ethiopia            :13.50 :N : 40.72 :E :  521 
+HEARD                        :Indian O.-S         :53.106:S : 73.513:E : 2745 
+HEART PEAKS                  :Canada              :58.60 :N :131.97 :W : 2012 
+HEKLA                        :Iceland-S           :63.98 :N : 19.70 :W : 1491 
+HELATOBA-TARUTUNG            :Sumatra             : 2.03 :N : 98.93 :E : 1100 
+HELL'S HALF ACRE             :US-Idaho            :43.50 :N :112.45 :W : 1631 
+HENGILL                      :Iceland-SW          :64.18 :N : 21.33 :W :  803 
+HERBERT                      :Aleutian Is         :52.75 :N :170.12 :W : 1290 
+HERTALI                      :Ethiopia            : 9.78 :N : 40.33 :E :  900 
+HIBOK-HIBOK                  :Mindanao-Philippines: 9.203:N :124.673:E : 1332 
+HIERRO                       :Canary Is           :27.73 :N : 18.03 :W : 1500 
+HIJIORI                      :Honshu-Japan        :38.60 :N :140.18 :E :  516 
+HIUCHI                       :Honshu-Japan        :36.95 :N :139.28 :E : 2346 
+HOBICHA CALDERA              :Ethiopia            : 6.78 :N : 37.83 :E : 1800 
+HODSON                       :Antarctica          :56.70 :S : 27.15 :W : 1005 
+HOFSJOKULL                   :Iceland-SW          :64.78 :N : 18.92 :W : 1782 
+HOLOTEPEC                    :Mexico              :19.08 :N : 99.48 :W : 3000 
+HOMA MOUNTAIN                :Africa-E            : 0.38 :S : 34.50 :E : 1751 
+HOME REEF                    :Tonga-SW Pacific    :18.992:S :174.775:W :   -2 
+HONGGEERTU                   :China-E             :41.47 :N :113.00 :E : 1700 
+HOOD                         :US-Oregon           :45.374:N :121.694:W : 3426 
+HOODOO MOUNTAIN              :Canada              :56.78 :N :131.28 :W : 1820 
+HORNITOS, LOS                :Chile-C             :35.725:S : 70.808:W : 2000 
+HORNOPIREN, VOLCAN           :Chile-S             :41.874:S : 72.431:W : 1572 
+HUALALAI                     :Hawaiian Is         :19.692:N :155.87 :W : 2523 
+HUANQUIHUE GROUP             :Argentina           :39.87 :S : 71.55 :W : 1300 
+HUAYNAPUTINA                 :Peru                :16.608:S : 70.85 :W : 4850 
+HUDSON MOUNTAINS             :Antarctica          :74.33 :S : 99.42 :W :  749 
+HUDSON, CERRO                :Chile-S             :45.90 :S : 72.97 :W : 1905 
+HUELEMOLLE                   :Chile-C             :39.30 :S : 71.82 :W :  810 
+HUEQUI                       :Chile-S             :42.377:S : 72.578:W : 1318 
+HUILA                        :Colombia            : 2.92 :N : 76.05 :W : 5365 
+HULUBELU                     :Sumatra             : 5.35 :S :104.60 :E : 1040 
+HUNTER ISLAND                :SW Pacific          :22.40 :S :172.05 :E :  297 
+HUTAPANJANG                  :Sumatra             : 2.27 :S :101.60 :E :-99999
+HYDROGRAPHERS RANGE          :New Guinea          : 9.00 :S :148.37 :E : 1915 
+IAMELELE                     :D'Entrecasteaux Is  : 9.52 :S :150.53 :E :  200 
+IBU                          :Halmahera-Indonesia : 1.48 :N :127.63 :E : 1325 
+IBUSUKI VOLC FIELD           :Kyushu-Japan        :31.22 :N :130.57 :E :  922 
+ICHINSKY                     :Kamchatka           :55.68 :N :157.73 :E : 3621 
+IETTUNUP                     :Kamchatka           :58.40 :N :161.08 :E : 1340 
+IGWISI HILLS                 :Africa-E            : 4.87 :S : 31.92 :E :-99999
+IIZUNA                       :Honshu-Japan        :36.73 :N :138.13 :E : 1917 
+IJEN                         :Java                : 8.058:S :114.242:E : 2386 
+IKTUNUP                      :Kamchatka           :58.08 :N :160.77 :E : 2300 
+ILIAMNA                      :Alaska-SW           :60.03 :N :153.08 :W : 3053 
+ILIBOLENG                    :Lesser Sunda Is     : 8.342:S :123.258:E : 1659 
+ILILABALEKAN                 :Lesser Sunda Is     : 8.53 :S :123.42 :E : 1018 
+ILIMUDA                      :Lesser Sunda Is     : 8.478:S :122.671:E : 1100 
+ILINIZA                      :Ecuador             : 0.659:S : 78.714:W : 5248 
+ILIWERUNG                    :Lesser Sunda Is     : 8.54 :S :123.59 :E : 1018 
+ILOPANGO                     :El Salvador         :13.672:N : 89.053:W :  450 
+ILYINSKY                     :Kamchatka           :51.49 :N :157.20 :E : 1578 
+IMAGINATION PEAK             :US-Oregon           :42.552:N :122.201:W : 1986 
+IMURUK LAKE                  :Alaska-W            :65.60 :N :163.92 :W :  610 
+INDIAN HEAVEN                :US-Washington       :45.93 :N :121.82 :W : 1513 
+INGAKSLUGWAT HILLS           :Alaska-W            :61.43 :N :164.47 :W :  190 
+INIELIKA                     :Lesser Sunda Is     : 8.73 :S :120.98 :E : 1559 
+INIERIE                      :Lesser Sunda Is     : 8.875:S :120.95 :E : 2245 
+INYO CRATERS                 :US-California       :37.692:N :119.02 :W : 2629 
+IPALA VOLC FIELD             :Guatemala           :14.55 :N : 89.63 :W : 1650 
+IRAYA                        :Luzon Is-N of       :20.469:N :122.01 :E : 1009 
+IRAZU                        :Costa Rica          : 9.979:N : 83.853:W : 3432 
+IRIGA                        :Luzon-Philippines   :13.457:N :123.457:E : 1196 
+IRIOMOTE-JIMA                :Ryukyu Is           :24.558:N :124.00 :E : -200 
+IRRUPUTUNCU                  :Chile-N             :20.73 :S : 68.55 :W : 5163 
+ISANOTSKI                    :Aleutian Is         :54.75 :N :163.73 :W : 2446 
+ISAROG                       :Luzon-Philippines   :13.658:N :123.37 :E : 1966 
+ISCHIA                       :Italy               :40.73 :N : 13.898:E :  789 
+ISKUT-UNUK RIVER CONES       :Canada              :56.58 :N :130.55 :W : 1880 
+ISLUGA                       :Chile-N             :19.15 :S : 68.83 :W : 5050 
+ITASY VOLC FIELD             :Madagascar          :19.00 :S : 46.77 :E : 1800 
+ITHNAYN, HARRAT              :Arabia-W            :26.58 :N : 40.20 :E : 1625 
+IULT                         :Kamchatka           :55.23 :N :160.587:E : 1857 
+IVAO GROUP                   :Kurile Is           :45.77 :N :149.68 :E : 1426 
+IWAKI                        :Honshu-Japan        :40.65 :N :140.30 :E : 1625 
+IWAONUPURI                   :Hokkaido-Japan      :42.88 :N :140.63 :E : 1154 
+IWATE                        :Honshu-Japan        :39.85 :N :141.00 :E : 2041 
+IWO-JIMA                     :Volcano Is-Japan    :24.75 :N :141.33 :E :  161 
+IXTEPEQUE, VOLCAN            :Guatemala           :14.42 :N : 89.68 :W : 1292 
+IYA                          :Lesser Sunda Is     : 8.88 :S :121.63 :E :  637 
+IYANG-ARGAPURA               :Java                : 7.97 :S :113.57 :E : 3088 
+IZALCO                       :El Salvador         :13.813:N : 89.633:W : 1950 
+IZTACCIHUATL                 :Mexico              :19.179:N : 98.642:W : 5230 
+IZUMBWE-MPOLI                :Africa-E            : 8.93 :S : 33.40 :E : 1568 
+IZU-TOBU                     :Honshu-Japan        :34.92 :N :139.12 :E : 1406 
+JACKIES BUTTE                :US-Oregon           :43.606:N :117.589:W : 1420 
+JAILOLO                      :Halmahera-Indonesia : 1.17 :N :127.32 :E : 1130 
+JALAJALA                     :Luzon-Philippines   :14.35 :N :121.33 :E :  743 
+JALUA                        :Ethiopia            :15.042:N : 39.82 :E :  713 
+JAN MAYEN                    :Atl-N-Jan Mayen     :71.08 :N :  8.17 :W : 2277 
+JARAQUAY VOLC FIELD          :Mexico              :29.33 :N :114.50 :W :  960 
+JEFFERSON                    :US-Oregon           :44.692:N :121.80 :W : 3199 
+JINGPOHU                     :China-E             :44.08 :N :128.83 :E :  500 
+JOCOTITLAN                   :Mexico              :19.724:N : 99.757:W : 3950 
+JORDAN CRATERS               :US-Oregon           :43.03 :N :117.42 :W : 1473 
+KABA                         :Sumatra             : 3.52 :S :102.62 :E : 1952 
+KABARGIN OTH GROUP           :Georgia             :42.55 :N : 44.00 :E : 3650 
+KADOVAR                      :New Guinea-NE of    : 3.62 :S :144.62 :E :  365 
+KAGAMIL                      :Aleutian Is         :52.97 :N :169.72 :W :  893 
+KAGUYAK                      :Alaska Peninsula    :58.62 :N :154.05 :W :  901 
+KAHOOLAWE                    :Hawaiian Is         :20.57 :N :156.57 :W :  450 
+KAIKOHE-BAY OF ISLANDS       :New Z               :35.30 :S :173.90 :E :  388 
+KAILENEY                     :Kamchatka           :57.80 :N :160.67 :E : 1582 
+KAITOKU SEAMOUNT             :Volcano Is-Japan    :26.122:N :141.102:E :  -10 
+KALATUNGAN                   :Mindanao-Philippines: 7.95 :N :124.80 :E : 2824 
+KAMBALNY                     :Kamchatka           :51.30 :N :156.87 :E : 2156 
+KAMEN                        :Kamchatka           :56.02 :N :160.593:E : 4585 
+KANA KEOKI                   :Solomon Is-SW Pac   : 8.75 :S :157.03 :E : -700 
+KANAGA                       :Aleutian Is         :51.92 :N :177.17 :W : 1307 
+KANNABE                      :Honshu-Japan        :35.50 :N :134.68 :E :  460 
+KANPU                        :Honshu-Japan        :39.93 :N :139.88 :E :  355 
+KARACALIDAG                  :Turkey              :37.67 :N : 39.83 :E : 1957 
+KARANG                       :Java                : 6.27 :S :106.042:E : 1778 
+KARANGETANG [API SIAU]       :Sangihe             : 2.78 :N :125.48 :E : 1784 
+KARAPINAR FIELD              :Turkey              :37.67 :N : 33.65 :E : 1302 
+KARISIMBI                    :Africa-C            : 1.50 :S : 29.45 :E : 4507 
+KARKAR                       :New Guinea-NE of    : 4.649:S :145.964:E : 1839 
+KARPINSKY GROUP              :Kurile Is           :50.13 :N :155.37 :E : 1345 
+KARS PLATEAU                 :Turkey              :40.75 :N : 42.90 :E : 3000 
+KARTHALA                     :Indian O.-W         :11.75 :S : 43.38 :E : 2361 
+KARYMSKY                     :Kamchatka           :54.05 :N :159.43 :E : 1486 
+KASATOCHI                    :Aleutian Is         :52.18 :N :175.50 :W :  314 
+KASBEK                       :Georgia             :42.70 :N : 44.50 :E : 5050 
+KASUGA SEAMOUNT              :Volcano Is-Japan    :21.77 :N :143.72 :E : -558 
+KATLA                        :Iceland-S           :63.63 :N : 19.05 :W : 1512 
+KATMAI                       :Alaska Peninsula    :58.27 :N :154.98 :W : 2047 
+KATUNGA                      :Africa-C            : 0.47 :S : 30.18 :E : 1707 
+KATWE-KIKORONGO FIELD        :Africa-C            : 0.08 :S : 29.92 :E : 1067 
+KAVACHI                      :Solomon Is-SW Pac   : 9.02 :S :157.95 :E :  -20 
+KAWAHKAMOJANG                :Java                : 7.125:S :107.80 :E : 1730 
+KAWAHKARAHA                  :Java                : 7.17 :S :108.08 :E : 1155 
+KAWAHMANUK                   :Java                : 7.23 :S :107.72 :E : 2608 
+KAWI-BUTAK                   :Java                : 7.92 :S :112.45 :E : 2651 
+KEBENEY                      :Kamchatka           :57.10 :N :159.93 :E : 1527 
+KEKURNY                      :Kamchatka           :56.40 :N :158.85 :E : 1377 
+KELIMUTU                     :Lesser Sunda Is     : 8.758:S :121.83 :E : 1640 
+KELL                         :Kamchatka           :51.65 :N :157.35 :E :  900 
+KELUO GROUP                  :China-E             :49.37 :N :125.92 :E :  670 
+KELUT                        :Java                : 7.93 :S :112.308:E : 1731 
+KERGUELEN ISLANDS            :Indian O.-S         :49.58 :S : 69.50 :E : 1840 
+KERINCI                      :Sumatra             : 1.692:S :101.27 :E : 3805 
+KERLINGARFJOLL               :Iceland-SW          :64.63 :N : 19.32 :W : 1488 
+KETOI                        :Kurile Is           :47.35 :N :152.475:E : 1172 
+KHANUY GOL                   :Mongolia            :48.67 :N :102.75 :E : 1886 
+KHAYBAR, HARRAT              :Arabia-W            :25.00 :N : 39.92 :E : 2093 
+KHODUTKA                     :Kamchatka           :52.063:N :157.703:E : 2090 
+KIALAGVIK                    :Alaska Peninsula    :57.38 :N :156.75 :W : 1575 
+KIARABERES-GAGAK             :Java                : 6.73 :S :106.65 :E : 1511 
+KICK-'EM-JENNY               :W Indies            :12.30 :N : 61.63 :W : -160 
+KIEYO                        :Africa-E            : 9.23 :S : 33.78 :E : 2175 
+KIKAI                        :Ryukyu Is           :30.78 :N :130.28 :E :  717 
+KIKHPINYCH                   :Kamchatka           :54.487:N :160.253:E : 1552 
+KILAUEA                      :Hawaiian Is         :19.425:N :155.292:W : 1222 
+KILIMANJARO                  :Africa-E            : 3.07 :S : 37.35 :E : 5895 
+KIRISHIMA                    :Kyushu-Japan        :31.93 :N :130.87 :E : 1700 
+KISHB, HARRAT                :Arabia-W            :22.80 :N : 41.38 :E : 1475 
+KISKA                        :Aleutian Is         :52.10 :N :177.60 :E : 1220 
+KITA-IWO-JIMA                :Volcano Is-Japan    :25.43 :N :141.23 :E :  792 
+KIZIMEN                      :Kamchatka           :55.13 :N :160.32 :E : 2485 
+KLABAT                       :Sulawesi-Indonesia  : 1.47 :N :125.03 :E : 1995 
+KLIUCHEVSKOI                 :Kamchatka           :56.057:N :160.638:E : 4835 
+KOLBEINSEY RIDGE             :Iceland-N of        :66.67 :N : 18.50 :W :-99999
+KOLKHOZHNY                   :Kamchatka           :55.07 :N :160.77 :E : 2161 
+KOLOB                        :US-Utah             :37.33 :N :113.12 :W : 2727 
+KOLOKOL GROUP                :Kurile Is           :46.042:N :150.05 :E : 1328 
+KOMAGA-TAKE                  :Hokkaido-Japan      :42.07 :N :140.68 :E : 1140 
+KOMAROV                      :Kamchatka           :55.032:N :160.72 :E : 2070 
+KONE                         :Ethiopia            : 8.80 :N : 39.692:E : 1619 
+KONIUJI                      :Aleutian Is         :52.22 :N :175.13 :W :  272 
+KOOKOOLIGIT MOUNTAINS        :Alaska-W            :63.60 :N :170.43 :W :  673 
+KOOLAU                       :Hawaiian Is         :21.37 :N :157.80 :W :  941 
+KORANGA                      :New Guinea          : 7.33 :S :146.708:E :-99999
+KORATH RANGE                 :Ethiopia            : 5.10 :N : 35.88 :E :  912 
+KORO                         :Fiji Is-SW Pacific  :17.32 :S :179.40 :E :  522 
+KOROSI                       :Africa-E            : 0.77 :N : 36.12 :E : 1446 
+KORYAKSKY                    :Kamchatka           :53.32 :N :158.688:E : 3456 
+KOS                          :Greece              :36.829:N : 27.257:E :  430 
+KOSHELEV                     :Kamchatka           :51.357:N :156.75 :E : 1812 
+KOUSSI, EMI                  :Africa-N            :19.80 :N : 18.53 :E : 3415 
+KOZU-SHIMA                   :Izu Is-Japan        :34.22 :N :139.15 :E :  574 
+KOZYREVSKY                   :Kamchatka           :55.58 :N :158.38 :E : 2016 
+KRAFLA                       :Iceland-NE          :65.73 :N : 16.78 :W :  650 
+KRAINY                       :Kamchatka           :56.37 :N :159.03 :E : 1554 
+KRAKATAU                     :Indonesia           : 6.102:S :105.423:E :  813 
+KRASHENINNIKOV               :Kamchatka           :54.593:N :160.273:E : 1856 
+KRISUVIK                     :Iceland-SW          :63.93 :N : 22.10 :W :  379 
+KRONOTSKY                    :Kamchatka           :54.753:N :160.527:E : 3528 
+KSUDACH                      :Kamchatka           :51.80 :N :157.53 :E : 1079 
+KUCHINOERABU-JIMA            :Ryukyu Is           :30.43 :N :130.22 :E :  649 
+KUCHINO-SHIMA                :Ryukyu Is           :29.97 :N :129.93 :E :  627 
+KUEI-SHAN-TAO                :Taiwan              :24.85 :N :121.92 :E :  401 
+KUJU GROUP                   :Kyushu-Japan        :33.08 :N :131.25 :E : 1788 
+KUKAK                        :Alaska Peninsula    :58.47 :N :154.35 :W : 2040 
+KULA                         :Turkey              :38.58 :N : 28.52 :E :  750 
+KULKEV                       :Kamchatka           :56.37 :N :158.37 :E :  915 
+KUNLUN VOLC GROUP            :China-W             :35.52 :N : 80.20 :E : 5808 
+KUNTOMINTAR                  :Kurile Is           :48.77 :N :154.02 :E :  828 
+KUNYIT                       :Sumatra             : 2.592:S :101.63 :E : 2151 
+KUPREANOF                    :Alaska Peninsula    :56.02 :N :159.80 :W : 1895 
+KURIKOMA                     :Honshu-Japan        :38.95 :N :140.78 :E : 1628 
+KUROHIME                     :Honshu-Japan        :36.80 :N :138.13 :E : 2053 
+KUROSE HOLE                  :Izu Is-Japan        :33.40 :N :139.68 :E : -107 
+KURUB                        :Ethiopia            :11.88 :N : 41.208:E :  625 
+KUSATSU-SHIRANE              :Honshu-Japan        :36.62 :N :138.55 :E : 2176 
+KUTALI, TAVANI               :Vanuatu-SW Pacific  :16.73 :S :168.28 :E :  833 
+KUTCHARO                     :Hokkaido-Japan      :43.55 :N :144.43 :E : 1000 
+KUTTARA                      :Hokkaido-Japan      :42.50 :N :141.18 :E :  581 
+KUTUM VOLC FIELD             :Africa-N            :14.50 :N : 25.80 :E :-99999
+KUWAE                        :Vanuatu-SW Pacific  :16.829:S :168.536:E :   -2 
+KVERKFJOLL                   :Iceland-NE          :64.65 :N : 16.72 :W : 1920 
+KYATWA VOLC FIELD            :Africa-C            : 0.45 :N : 30.25 :E : 1430 
+LA PALMA                     :Canary Is           :28.58 :N : 17.83 :W : 2426 
+LABO                         :Luzon-Philippines   :14.02 :N :122.792:E : 1544 
+LAGUNA VOLC FIELD            :Luzon-Philippines   :14.12 :N :121.30 :E :  654 
+LAMINGTON                    :New Guinea          : 8.95 :S :148.15 :E : 1680 
+LAMONGAN                     :Java                : 8.00 :S :113.342:E : 1651 
+LANGILA                      :New Britain-SW Pac  : 5.525:S :148.42 :E : 1330 
+LANGJOKULL                   :Iceland-SW          :64.75 :N : 19.98 :W : 1360 
+LANIN                        :Chile-C             :39.633:S : 71.50 :W : 3747 
+LANZAROTE                    :Canary Is           :29.03 :N : 13.63 :W :  670 
+LARDERELLO                   :Italy               :43.25 :N : 10.87 :E :  500 
+LASCAR                       :Chile-N             :23.37 :S : 67.73 :W : 5592 
+LASSEN VOLC CENTER           :US-Calif            :40.492:N :121.508:W : 3187 
+LASTARRIA                    :Chile-N             :25.17 :S : 68.50 :W : 5697 
+LATE                         :Tonga-SW Pacific    :18.806:S :174.65 :W :  518 
+LATUKAN                      :Mindanao-Philippines: 7.65 :N :124.47 :E : 2158 
+LAUTARO                      :Chile-S             :49.02 :S : 73.55 :W : 3380 
+LAVIC LAKE                   :US-California       :34.75 :N :116.625:W : 1495 
+LAWU                         :Java                : 7.625:S :111.192:E : 3265 
+LEIZHOU BANDAO               :SE Asia             :20.83 :N :109.78 :E :  259 
+LENGAI, OL DOINYO            :Africa-E            : 2.751:S : 35.902:E : 2890 
+LEONARD RANGE                :Mindanao-Philippines: 7.393:N :126.397:E :  800 
+LEREBOLENG                   :Lesser Sunda Is     : 8.358:S :122.842:E : 1117 
+LESKOV ISLAND                :Antarctica          :56.67 :S : 28.13 :W :  190 
+LEUTONGEY                    :Kamchatka           :57.30 :N :159.83 :E : 1333 
+LEVEL MOUNTAIN               :Canada              :58.42 :N :131.35 :W : 2190 
+LEWOTOBI                     :Lesser Sunda Is     : 8.53 :S :122.775:E : 1703 
+LEWOTOLO                     :Lesser Sunda Is     : 8.272:S :123.505:E : 1423 
+LEXONE                       :Chile-N             :17.87 :S : 69.48 :W : 5340 
+LIADO HAYK FIELD             :Ethiopia            : 9.57 :N : 40.28 :E :  878 
+LIAMUIGA                     :W Indies            :17.37 :N : 62.80 :W : 1156 
+LICANCABUR                   :Chile-N             :22.83 :S : 67.88 :W : 5916 
+LIHIR                        :New Ireland-SW Pac  : 3.125:S :152.642:E :  700 
+LIPARI                       :Italy               :38.48 :N : 14.95 :E :  602 
+LITTLE SITKIN                :Aleutian Is         :51.95 :N :178.53 :E : 1188 
+LJOSUFJOLL                   :Iceland-W           :64.87 :N : 22.23 :W :  988 
+LLAIMA                       :Chile-C             :38.692:S : 71.729:W : 3125 
+LLULLAILLACO                 :Chile-N             :24.72 :S : 68.53 :W : 6739 
+LOIHI SEAMOUNT               :Hawaiian Is         :18.92 :N :155.27 :W : -980 
+LOKI-FOGRUFJOLL              :Iceland-NE          :64.48 :N : 17.80 :W : 1570 
+LOKON-EMPUNG                 :Sulawesi-Indonesia  : 1.358:N :124.792:E : 1580 
+LOLO                         :New Britain-SW Pac  : 5.47 :S :150.50 :E :  805 
+LOLOBAU                      :New Britain-SW Pac  : 4.92 :S :151.158:E :  858 
+LOLORU                       :Bougainville-SW Pac : 6.52 :S :155.62 :E : 1887 
+LOMONOSOV GROUP              :Kurile Is           :50.25 :N :155.43 :E : 1681 
+LONG ISLAND                  :New Guinea-NE of    : 5.358:S :147.12 :E : 1280 
+LONG VALLEY                  :US-California       :37.70 :N :118.87 :W : 3390 
+LONGAVI, NEVADO DE           :Chile-C             :36.193:S : 71.161:W : 3242 
+LONGGANG GROUP               :China-E             :42.33 :N :126.50 :E : 1000 
+LONGONOT                     :Africa-E            : 0.92 :S : 36.45 :E : 2776 
+LONQUIMAY                    :Chile-C             :38.377:S : 71.58 :W : 2865 
+LOPEVI                       :Vanuatu-SW Pacific  :16.507:S :168.346:E : 1413 
+LOWER CHINDWIN               :SE Asia             :22.28 :N : 95.10 :E :  385 
+LUMUT BALAI, BUKIT           :Sumatra             : 4.22 :S :103.62 :E : 2055 
+LUMUTDAUN, BUKIT             :Sumatra             : 3.38 :S :102.37 :E : 2467 
+LUNAR CRATER FIELD           :US-Nevada           :38.48 :N :115.97 :W : 2255 
+LUNAYYIR, HARRAT             :Arabia-W            :25.17 :N : 37.75 :E : 1370 
+LURUS                        :Java                : 7.70 :S :113.58 :E :  539 
+LVINAYA PAST                 :Kurile Is           :44.62 :N :147.00 :E :  528 
+LYSUHOLL                     :Iceland-W           :64.87 :N : 23.25 :W :  540 
+MA ALALTA                    :Ethiopia            :13.02 :N : 40.20 :E : 1815 
+MACA                         :Chile-S             :45.10 :S : 73.20 :W : 3078 
+MACAULEY ISLAND              :Kermadec Is         :30.20 :S :178.47 :W :  238 
+MACDONALD                    :Austral Is-C Pac    :28.98 :S :140.25 :W :  -50 
+MACHIN, CERRO                :Colombia            : 4.48 :N : 75.40 :W : 2650 
+MACIZO DE LARANCAGUA         :Bolivia             :18.25 :S : 68.53 :W : 5520 
+MACIZO DE PACUNI             :Bolivia             :18.32 :S : 68.80 :W : 5400 
+MADERA, LA                   :Nicaragua           :11.446:N : 85.515:W : 1394 
+MADILOGO                     :New Guinea          : 9.20 :S :147.57 :E :  850 
+MAGASO                       :Philippines-C       : 9.258:N :123.175:E : 1904 
+MAGEIK                       :Alaska Peninsula    :58.20 :N :155.25 :W : 2165 
+MAHAGNOA                     :Philippines-C       :10.872:N :124.853:E :  800 
+MAHAWU                       :Sulawesi-Indonesia  : 1.358:N :124.858:E : 1324 
+MAIPO                        :Chile-C             :34.161:S : 69.833:W : 5264 
+MAKATURING                   :Mindanao-Philippines: 7.647:N :124.32 :E : 1940 
+MAKIAN                       :Halmahera-Indonesia : 0.32 :N :127.40 :E : 1357 
+MAKUSHIN                     :Aleutian Is         :53.90 :N :166.93 :W : 2036 
+MALANG PLAIN                 :Java                : 8.02 :S :112.68 :E :  680 
+MALINAO                      :Luzon-Philippines   :13.422:N :123.597:E : 1548 
+MALINCHE, LA                 :Mexico              :19.23 :N : 98.03 :W : 4420 
+MALINDANG                    :Mindanao-Philippines: 8.22 :N :123.63 :E : 2435 
+MALINDIG                     :Luzon-Philippines   :13.24 :N :122.018:E : 1157 
+MALLAHLE                     :Ethiopia            :13.27 :N : 41.65 :E : 1875 
+MALY PAYALPAN                :Kamchatka           :55.82 :N :157.98 :E : 1802 
+MALY SEMIACHIK               :Kamchatka           :54.13 :N :159.67 :E : 1560 
+MANAGLASE PLATEAU            :New Guinea          : 9.08 :S :148.33 :E : 1342 
+MANAM                        :New Guinea-NE of    : 4.10 :S :145.061:E : 1807 
+MANDA-INAKIR                 :Ethiopia            :12.38 :N : 42.20 :E :  600 
+MANDALAGAN                   :Philippines-C       :10.615:N :123.22 :E : 1879 
+MANENGOUBA                   :Africa-W            : 5.03 :N :  9.83 :E : 2411 
+MANUK                        :Banda Sea           : 5.53 :S :130.292:E :  282 
+MAQUILING                    :Luzon-Philippines   :14.13 :N :121.20 :E : 1090 
+MARAPI                       :Sumatra             : 0.38 :S :100.471:E : 2891 
+MARCHENA                     :Galapagos           : 0.33 :N : 90.47 :W :  343 
+MARHA, JABAL EL-             :Arabia-S            :15.28 :N : 44.22 :E : 2650 
+MARION ISLAND                :Indian O.-S         :46.90 :S : 37.75 :E : 1230 
+MARIVELES                    :Luzon-Philippines   :14.50 :N :120.50 :E : 1420 
+MARKAGUNT PLATEAU            :US-Utah             :37.58 :N :112.67 :W : 2840 
+MAROA                        :New Zealand         :38.42 :S :176.08 :E : 1156 
+MARRA, JEBEL                 :Africa-N            :12.95 :N : 24.27 :E : 3042 
+MARSABIT                     :Africa-E            : 2.32 :N : 37.97 :E : 1707 
+MARTIN                       :Alaska Peninsula    :58.17 :N :155.35 :W : 1860 
+MASARAGA                     :Luzon-Philippines   :13.32 :N :123.60 :E : 1328 
+MASAYA                       :Nicaragua           :11.984:N : 86.161:W :  635 
+MASCOTA VOLC FIELD           :Mexico              :20.62 :N :104.83 :W : 2540 
+MASHKOVTSEV                  :Kamchatka           :51.10 :N :156.72 :E :  503 
+MASHU                        :Hokkaido-Japan      :43.57 :N :144.57 :E :  855 
+MAT ALA                      :Ethiopia            :13.10 :N : 41.15 :E :  523 
+MATTHEW ISLAND               :SW Pacific          :22.33 :S :171.32 :E :  177 
+MATUTUM                      :Mindanao-Philippines: 6.37 :N :125.108:E : 2293 
+MAULE, LAGUNA DEL            :Chile-C             :36.02 :S : 70.58 :W : 3092 
+MAUNA KEA                    :Hawaiian Is         :19.82 :N :155.47 :W : 4206 
+MAUNA LOA                    :Hawaiian Is         :19.475:N :155.608:W : 4170 
+MAYON                        :Luzon-Philippines   :13.257:N :123.685:E : 2462 
+MAYOR ISLAND                 :New Zealand         :37.28 :S :176.25 :E :  355 
+MAY-YA-MOTO                  :Africa-C            : 0.93 :S : 29.33 :E :  950 
+MEAGER                       :Canada              :50.63 :N :123.50 :W : 2680 
+MEDICINE LAKE                :US-California       :41.58 :N :121.57 :W : 2412 
+MEDVEZHIA                    :Kurile Is           :45.38 :N :148.83 :E : 1124 
+MEGA BASALT FIELD            :Ethiopia            : 4.08 :N : 37.42 :E : 1067 
+MEGATA                       :Honshu-Japan        :39.95 :N :139.73 :E :  291 
+MEHETIA                      :Society Is-C Pac    :17.87 :S :148.07 :W :  435 
+MEIDOB VOLC FIELD            :Africa-N            :15.13 :N : 26.17 :E : 1000 
+MELBOURNE                    :Antarctica          :74.35 :S :164.70 :E : 2732 
+MELIMOYU                     :Chile-S             :44.08 :S : 72.88 :W : 2400 
+MENCHECA                     :Chile-C             :40.534:S : 72.038:W : 1840 
+MENDELEEV                    :Kurile Is           :43.98 :N :145.70 :E :  887 
+MENENGAI                     :Africa-E            : 0.20 :S : 36.07 :E : 2278 
+MENTOLAT                     :Chile-S             :44.67 :S : 73.08 :W : 1660 
+MERAPI                       :Java                : 7.542:S :110.442:E : 2911 
+MERBABU                      :Java                : 7.45 :S :110.43 :E : 3145 
+MERE LAVA                    :Vanuatu-SW Pacific  :14.45 :S :168.05 :E : 1028 
+MERU                         :Africa-E            : 3.25 :S : 36.75 :E : 4565 
+METHANA                      :Greece              :37.615:N : 23.336:E :  760 
+METIS SHOAL                  :Tonga-SW Pacific    :19.18 :S :174.87 :W :   -4 
+MEZHDUSOPOCHNY               :Kamchatka           :57.43 :N :160.20 :E : 1641 
+MICHAEL                      :Antarctica          :57.78 :S : 26.45 :W :  990 
+MICHOACAN-GUANAJUATO         :Mexico              :19.48 :N :102.25 :W : 3170 
+MICOTRIN                     :W Indies            :15.33 :N : 61.33 :W : 1387 
+MIDDLE GOBI                  :Mongolia            :45.28 :N :106.70 :E : 1120 
+MILBANKE SOUND GROUP         :Canada              :52.50 :N :128.73 :W :  335 
+MILNE                        :Kurile Is           :46.82 :N :151.78 :E : 1540 
+MILOS                        :Greece              :36.699:N : 24.439:E :  751 
+MINAMI-HIYOSHI               :Volcano Is-Japan    :23.507:N :141.905:E :  -30 
+MINCHINMAVIDA                :Chile-S             :42.78 :S : 72.43 :W : 2404 
+MIRAVALLES                   :Costa Rica          :10.748:N : 85.153:W : 2028 
+MISTI, EL                    :Peru                :16.294:S : 71.409:W : 5822 
+MIYAKE-JIMA                  :Izu Is-Japan        :34.08 :N :139.53 :E :  815 
+MOCHO-CHOSHUENCO             :Chile-C             :39.928:S : 72.027:W : 2422 
+MOFFETT                      :Aleutian Is         :51.93 :N :176.75 :W : 1196 
+MOIRO, CERRO                 :Bolivia             :21.68 :S : 67.47 :W : 4250 
+MOJANDA                      :Ecuador             : 0.13 :N : 78.27 :W : 4294 
+MOMBACHO                     :Nicaragua           :11.826:N : 85.968:W : 1345 
+MOMOTOMBO                    :Nicaragua           :12.423:N : 86.54 :W : 1258 
+MONACO BANK                  :Azores              :37.60 :N : 25.88 :W : -197 
+MONDACA                      :Chile-C             :35.464:S : 70.80 :W : 2048 
+MONO CRATERS                 :US-California       :37.88 :N :119.00 :W : 2796 
+MONO LAKE VOLC FIELD         :US-Calif            :38.00 :N :119.03 :W : 2121 
+MONOWAI SEAMOUNT             :Kermadec Is         :25.888:S :177.188:W : -100 
+MOTIR                        :Halmahera-Indonesia : 0.45 :N :127.40 :E :  690 
+MOTLAV                       :Vanuatu-SW Pacific  :13.67 :S :167.67 :E :  411 
+MOUA PIHAA                   :Society Is-C Pac    :18.32 :S :148.67 :W : -180 
+MOUSA ALLI                   :Ethiopia            :12.47 :N : 42.40 :E : 2028 
+MOYUTA                       :Guatemala           :14.03 :N : 90.10 :W : 1662 
+MUHAVURA                     :Africa-C            : 1.38 :S : 29.67 :E : 4127 
+MUNDUA                       :New Britain-SW Pac  : 4.63 :S :149.35 :E :  179 
+MUSA RIVER                   :New Guinea          : 9.308:S :148.13 :E :  808 
+MUTNOVSKY                    :Kamchatka           :52.453:N :158.195:E : 2322 
+MUTSU-HIUCHI-DAKE            :Honshu-Japan        :41.43 :N :141.07 :E :  781 
+MYOKO                        :Honshu-Japan        :36.88 :N :138.12 :E : 2446 
+NABRO                        :Ethiopia            :13.37 :N : 41.70 :E : 2218 
+NAKANO-SHIMA                 :Ryukyu Is           :29.85 :N :129.87 :E :  979 
+NAMARUNU                     :Africa-E            : 1.90 :N : 36.27 :E :  817 
+NANTAI                       :Honshu-Japan        :36.77 :N :139.50 :E : 2484 
+NARAGE                       :New Britain-SW Pac  : 4.55 :S :149.125:E :  307 
+NARCONDUM                    :Andaman Is-Ind O    :13.43 :N : 94.25 :E :  710 
+NARUGO                       :Honshu-Japan        :38.73 :N :140.73 :E :  462 
+NASU                         :Honshu-Japan        :37.12 :N :139.97 :E : 1917 
+NATIB                        :Luzon-Philippines   :14.705:N :120.40 :E : 1287 
+NAZKO                        :Canada              :52.90 :N :123.73 :W : 1230 
+NDETE NAPU                   :Lesser Sunda Is     : 8.72 :S :121.78 :E :  750 
+NE UDOKAN PLATEAU            :Russia-SE           :56.33 :N :118.07 :E : 2180 
+NEGRA, SIERRA                :Galapagos           : 0.83 :S : 91.17 :W : 1490 
+NEGRILLAR, EL                :Chile-N             :24.18 :S : 68.25 :W : 3500 
+NEGRILLAR, LA                :Chile-N             :24.28 :S : 68.60 :W : 4109 
+NEGRO DE MAYASQUER, CERRO    :Colombia            : 0.828:N : 77.964:W : 4445 
+NEGRO, CERRO                 :Nicaragua           :12.506:N : 86.702:W :  675 
+NEJAPA-TICOMO                :Nicaragua           :12.12 :N : 86.32 :W :  220 
+NEMO PEAK                    :Kurile Is           :49.57 :N :154.808:E : 1018 
+NEMRUT DAGI                  :Turkey              :38.65 :N : 42.02 :E : 3050 
+NEVADA, SIERRA               :Chile               :26.48 :S : 68.58 :W : 6127 
+NEVIS PEAK                   :W Indies            :17.15 :N : 62.58 :W :  985 
+NEWBERRY VOLCANO             :US-Oregon           :43.722:N :121.229:W : 2434 
+NEWER VOLCANICS PROV         :Australia           :37.77 :S :142.50 :E : 1011 
+NGAOUNDERE PLATEAU           :Africa-W            : 7.25 :N : 13.67 :E :-99999
+NGOZI                        :Africa-E            : 8.97 :S : 33.57 :E : 2622 
+NIEUWERKERK                  :Banda Sea           : 6.60 :S :124.675:E :-2285 
+NIGORIGAWA                   :Hokkaido-Japan      :42.12 :N :140.45 :E :  356 
+NIIGATA-YAKE-YAMA            :Honshu-Japan        :36.92 :N :138.03 :E : 2400 
+NII-JIMA                     :Izu Is-Japan        :34.37 :N :139.27 :E :  432 
+NIKKO                        :Volcano Is-Japan    :23.075:N :142.308:E : -391 
+NIKKO-SHIRANE                :Honshu-Japan        :36.80 :N :139.38 :E : 2578 
+NILA                         :Banda Sea           : 6.73 :S :129.50 :E :  781 
+NIPESOTSU-UPEPESANKE         :Japan               :43.45 :N :143.03 :E : 2013 
+NISHINO-SHIMA                :Volcano Is-Japan    :27.243:N :140.877:E :   52 
+NISYROS                      :Greece              :36.58 :N : 27.18 :E :  698 
+NIUAFO'OU                    :Tonga-SW Pacific    :15.60 :S :175.63 :W :  260 
+NONDA                        :Solomon Is-SW Pac   : 7.67 :S :156.60 :E :  760 
+NORIKURA                     :Honshu-Japan        :36.12 :N :137.55 :E : 3026 
+NORTH ISLAND                 :Africa-E            : 4.07 :N : 36.05 :E :  520 
+NORTH SISTER FIELD           :US-Oregon           :44.17 :N :121.77 :W : 3074 
+NORTH VATE                   :Vanuatu-SW Pacific  :17.45 :S :168.33 :E :  594 
+NOSY-BE                      :Madagascar          :13.32 :S : 48.48 :E :  214 
+NOVARUPTA                    :Alaska Peninsula    :58.27 :N :155.16 :W :  841 
+NUEVO MUNDO                  :Bolivia             :19.78 :S : 66.48 :W : 5438 
+NUMAZAWA                     :Honshu-Japan        :37.43 :N :139.58 :E : 1100 
+NUNIVAK ISLAND               :Alaska-W            :60.02 :N :166.33 :W :  511 
+NYAMBENI HILLS               :Africa-E            : 0.23 :N : 37.87 :E :  750 
+NYAMURAGIRA                  :Africa-C            : 1.408:S : 29.20 :E : 3058 
+NYIRAGONGO                   :Africa-C            : 1.52 :S : 29.25 :E : 3469 
+OFU-OLOSEGA                  :Samoa-SW Pacific    :14.175:S :169.618:W :  639 
+OJOS DEL SALADO, NEVADOS     :Chile-N             :27.12 :S : 68.53 :W : 6887 
+OKA VOLC FIELD               :Russia-SE           :52.70 :N : 98.98 :E : 2077 
+OKATAINA                     :New Zealand         :38.12 :S :176.50 :E : 1111 
+OKI-DOGO                     :Honshu-Japan        :36.17 :N :133.33 :E :  151 
+OKINAWA-TORI-SHIMA           :Ryukyu Is           :27.85 :N :128.25 :E :  217 
+OKMOK                        :Aleutian Is         :53.42 :N :168.13 :W : 1073 
+OKU VOLC FIELD               :Africa-W            : 6.25 :N : 10.50 :E : 3011 
+OL KOKWE                     :Africa-E            : 0.63 :N : 36.08 :E : 1130 
+OLCA-PARUMA                  :Chile-N             :20.93 :S : 68.48 :W : 5407 
+OLKARIA                      :Africa-E            : 0.904:S : 36.292:E : 2434 
+OLKOVIY                      :Kamchatka           :52.077:N :157.477:E :  636 
+OLLAGUE                      :Chile-N             :21.30 :S : 68.18 :W : 5868 
+OLOT VOLC FIELD              :Spain               :42.17 :N :  2.53 :E :  893 
+OMACHI SEAMOUNT              :Izu Is-Japan        :29.22 :N :140.80 :E :-1700 
+OMANAGO GROUP                :Honshu-Japan        :36.78 :N :139.50 :E : 2375 
+ON-TAKE                      :Honshu-Japan        :35.90 :N :137.48 :E : 3063 
+OPALA                        :Kamchatka           :52.543:N :157.335:E : 2475 
+ORAEFAJOKULL                 :Iceland-SE          :64.00 :N : 16.65 :W : 2119 
+ORIZABA, PICO DE             :Mexico              :19.03 :N : 97.268:W : 5610 
+OROSI                        :Costa Rica          :10.98 :N : 85.473:W : 1659 
+OSHIMA                       :Izu Is-Japan        :34.73 :N :139.38 :E :  758 
+OSHIMA-OSHIMA                :Hokkaido-Japan      :41.50 :N :139.37 :E :  737 
+OSORE-YAMA                   :Honshu-Japan        :41.32 :N :141.08 :E :  879 
+OSORNO                       :Chile-S             :41.10 :S : 72.493:W : 2652 
+OSTANETS                     :Kamchatka           :52.154:N :157.322:E :  719 
+OSTRY                        :Kamchatka           :58.18 :N :160.82 :E : 2552 
+OTDELNIY                     :Kamchatka           :52.22 :N :157.428:E :  791 
+OVERO, CERRO                 :Chile-N             :23.35 :S : 67.67 :W : 4555 
+OZERNOY                      :Kamchatka           :51.88 :N :157.38 :E :  562 
+PACAYA                       :Guatemala           :14.381:N : 90.601:W : 2552 
+PACO                         :Mindanao-Philippines: 9.593:N :125.52 :E :  524 
+PAGAN                        :Mariana Is-C Pac    :18.13 :N :145.80 :E :  570 
+PAGO                         :New Britain-SW Pac  : 5.58 :S :150.52 :E :  742 
+PAKA                         :Africa-E            : 0.92 :N : 36.18 :E : 1697 
+PALEI-AIKE VOLC FIELD        :Chile-S             :52.00 :S : 70.00 :W :  250 
+PALENA VOLC GROUP            :Chile-S             :43.68 :S : 72.50 :W :-99999
+PALOMO                       :Chile-C             :34.608:S : 70.295:W : 4860 
+PALUWEH                      :Lesser Sunda Is     : 8.32 :S :121.708:E :  875 
+PAMPA LUXSAR                 :Bolivia             :20.85 :S : 68.20 :W : 5543 
+PAN DE AZUCAR                :Ecuador             : 0.43 :S : 77.72 :W : 3482 
+PANAY                        :Luzon-Philippines   :13.723:N :120.893:E :  501 
+PANTELLERIA                  :Italy               :36.77 :N : 12.02 :E :  836 
+PANTOJA, CERRO               :Chile-C             :40.77 :S : 71.95 :W : 2112 
+PAPANDAYAN                   :Java                : 7.32 :S :107.73 :E : 2665 
+PAPAYO                       :Mexico              :19.308:N : 98.70 :W : 3600 
+PARINACOTA                   :Chile-N             :18.17 :S : 69.15 :W : 6348 
+PATAH                        :Sumatra             : 4.27 :S :103.30 :E : 2817 
+PATATES, MORNE               :W Indies            :15.22 :N : 61.37 :W :  960 
+PATILLA PATA                 :Bolivia             :18.05 :S : 69.03 :W : 5300 
+PATOC                        :Luzon-Philippines   :17.147:N :120.98 :E : 1865 
+PATUHA                       :Java                : 7.15 :S :107.37 :E : 2434 
+PAULET                       :Antarctica          :63.58 :S : 55.77 :W :  353 
+PAUZHETKA                    :Kamchatka           :51.43 :N :156.93 :E : 1331 
+PAVLOF                       :Alaska Peninsula    :55.42 :N :161.90 :W : 2519 
+PAVLOF SISTER                :Alaska Peninsula    :55.45 :N :161.87 :W : 2142 
+PAYUN MATRU, CERRO           :Argentina           :36.42 :S : 69.20 :W : 3691 
+PEINADO                      :Argentina           :26.62 :S : 68.15 :W : 5740 
+PELEE                        :W Indies            :14.82 :N : 61.17 :W : 1397 
+PENANGGUNGAN                 :Java                : 7.62 :S :112.63 :E : 1653 
+PENDAN                       :Sumatra             : 2.82 :S :102.02 :E :-99999
+PENG-CHIA-HSU                :Taiwan-N of         :25.63 :N :122.07 :E :  129 
+PENGUIN ISLAND               :Antarctica          :62.10 :S : 57.93 :W :  180 
+PERBAKTI                     :Java                : 6.75 :S :106.68 :E : 1699 
+PETACAS                      :Colombia            : 1.57 :N : 76.78 :W : 4054 
+PETER I ISLAND               :Antarctica          :68.85 :S : 90.58 :W : 1640 
+PEUET SAGUE                  :Sumatra             : 4.925:N : 96.33 :E : 2780 
+PICO                         :Azores              :38.47 :N : 28.40 :W : 2351 
+PIIP                         :Kamchatka-E of      :55.42 :N :167.33 :E : -300 
+PILAS, LAS                   :Nicaragua           :12.495:N : 86.688:W : 1050 
+PINA, CERRO                  :Chile-N             :19.492:S : 68.65 :W : 4037 
+PINACATE PEAKS               :Mexico              :31.773:N :113.498:W : 1200 
+PINATUBO                     :Luzon-Philippines   :15.13 :N :120.35 :E : 1600 
+PINTA                        :Galapagos           : 0.58 :N : 90.75 :W :  780 
+PIRATKOVSKY                  :Kamchatka           :52.113:N :157.849:E : 1322 
+PITOS, SIERRA DE LAS         :Mexico              :19.923:N : 98.747:W : 3000 
+PLANCHON-PETEROA             :Chile-C             :35.24 :S : 70.57 :W : 4107 
+PLATANAR, CERRO              :Costa Rica          :10.30 :N : 84.366:W : 2183 
+PLEIADES, THE                :Antarctica          :72.67 :S :165.50 :E : 3040 
+PLOSKY                       :Kamchatka           :55.20 :N :158.47 :E : 1236 
+PLOSKY                       :Kamchatka           :57.83 :N :160.25 :E : 1255 
+PLOSKY VOLC GROUP            :Kamchatka           :52.02 :N :157.53 :E :  681 
+POAS                         :Costa Rica          :10.20 :N : 84.233:W : 2708 
+POCDOL MOUNTAINS             :Luzon-Philippines   :13.05 :N :123.958:E : 1102 
+POCO LEOK                    :Lesser Sunda Is     : 8.68 :S :120.48 :E : 1675 
+POCO SOL, LAGUNA             :Costa Rica          :10.32 :N : 84.66 :W :  789 
+POGRANYCHNY                  :Kamchatka           :56.85 :N :159.80 :E : 1427 
+POPA                         :SE Asia             :20.87 :N : 95.23 :E : 1518 
+POPOCATEPETL                 :Mexico              :19.023:N : 98.622:W : 5465 
+POSSESSION, ILE DE LA        :Indian O.-S         :46.42 :S : 51.63 :E :  934 
+POTATO BUTTE                 :US-California       :40.63 :N :121.43 :W : 1532 
+PRESTAHNUKUR                 :Iceland-SW          :64.60 :N : 20.58 :W : 1390 
+PREVO PEAK                   :Kurile Is           :47.02 :N :152.12 :E : 1360 
+PRIETO, CERRO                :Mexico              :32.418:N :115.305:W :  410 
+PRINCE EDWARD ISLAND         :Indian O.-S         :46.63 :S : 37.95 :E :  672 
+PROTECTOR SHOAL              :Antarctica          :55.92 :S : 28.08 :W :  -27 
+PUCHULDIZA                   :Chile-N             :19.42 :S : 68.97 :W : 4500 
+PUESTO CORTADERAS            :Argentina           :37.55 :S : 69.62 :W :  970 
+PULAR                        :Chile-N             :24.18 :S : 68.05 :W : 6233 
+PULAU WEH                    :Sumatra             : 5.88 :N : 95.33 :E :  584 
+PULULAGUA                    :Ecuador             : 0.038:N : 78.463:W : 3356 
+PUNTIGUIDO-CORDON CENIZOS    :Chile-C             :40.969:S : 72.264:W : 2493 
+PURACE                       :Colombia            : 2.32 :N : 76.40 :W : 4650 
+PURICO COMPLEX               :Chile-N             :23.00 :S : 67.75 :W : 5703 
+PUTANA                       :Chile-N             :22.57 :S : 67.87 :W : 5890 
+PUYEHUE                      :Chile-C             :40.59 :S : 72.117:W : 2236 
+PUYUHUAPI                    :Chile-S             :44.30 :S : 72.53 :W :  255 
+QAL'EH HASAN ALI             :Iran                :29.40 :N : 57.57 :E :-99999
+QUALIBOU                     :W Indies            :13.83 :N : 61.05 :W :  777 
+QUETENA                      :Bolivia             :22.25 :S : 67.42 :W : 5730 
+QUETRUPILLAN                 :Chile-C             :39.50 :S : 71.70 :W : 2360 
+QUEZALTEPEQUE                :Guatemala           :14.65 :N : 89.35 :W : 1200 
+QUILL, THE                   :W Indies            :17.48 :N : 62.95 :W :  601 
+QUILOTOA                     :Ecuador             : 0.85 :S : 78.90 :W : 3914 
+QUIMSACHATA                  :Peru                :14.37 :S : 71.17 :W : 3923 
+RABAUL                       :New Britain-SW Pac  : 4.271:S :152.203:E :  688 
+RAGANG                       :Mindanao-Philippines: 7.67 :N :124.50 :E : 2815 
+RAHAH, HARRAT AR             :Arabia-W            :27.80 :N : 36.17 :E : 1660 
+RAHAT, HARRAT                :Arabia-W            :23.08 :N : 39.78 :E : 1744 
+RAIKOKE                      :Kurile Is           :48.292:N :153.25 :E :  551 
+RAINIER                      :US-Washington       :46.87 :N :121.758:W : 4392 
+RAJABASA                     :Sumatra             : 5.78 :S :105.625:E : 1281 
+RANAKAH, GUNUNG              :Lesser Sunda Is     : 8.62 :S :120.52 :E : 2100 
+RANAU                        :Sumatra             : 4.83 :S :103.92 :E : 1881 
+RAOUL ISLAND                 :Kermadec Is         :29.27 :S :177.92 :W :  516 
+RASSHUA                      :Kurile Is           :47.77 :N :153.02 :E :  956 
+RATON-CLAYTON                :US-New Mexico       :36.42 :N :104.08 :W : 3350 
+RAUNG                        :Java                : 8.125:S :114.042:E : 3332 
+RAUSU                        :Hokkaido-Japan      :44.073:N :145.125:E : 1660 
+RECHESCHNOI                  :Aleutian Is         :53.15 :N :168.55 :W : 1984 
+RECLUS                       :Chile-S             :50.98 :S : 73.70 :W :-99999
+RED CONES                    :US-California       :37.58 :N :119.05 :W : 2748 
+REDONDO, CERRO               :Chile-C             :39.27 :S : 71.70 :W : 1496 
+REDOUBT                      :Alaska-SW           :60.48 :N :152.75 :W : 3108 
+REPOROA                      :New Zealand         :38.42 :S :176.33 :E :  592 
+RESAGO, VOLCAN               :Chile-C             :36.45 :S : 70.92 :W : 1550 
+REVENTADOR                   :Ecuador             : 0.078:S : 77.656:W : 3562 
+REVILLAGIGEDO ISLAND         :Alaska-SE           :55.32 :N :131.05 :W :  500 
+REYKJANES                    :Iceland-SW          :63.88 :N : 22.50 :W :  230 
+REYKJANESHRYGGUR             :Iceland-SW          :63.67 :N : 23.33 :W :   80 
+RIANG KOTANG                 :Lesser Sunda Is     : 8.30 :S :122.892:E :  200 
+RINCON DE LA VIEJA           :Costa Rica          :10.83 :N : 85.324:W : 1916 
+RINJANI                      :Lesser Sunda Is     : 8.42 :S :116.47 :E : 3726 
+RISHIRI                      :Hokkaido-Japan      :45.18 :N :141.25 :E : 1719 
+RITTER ISLAND                :New Guinea-NE of    : 5.52 :S :148.121:E :  140 
+ROBINSON CRUSOE              :Chile-Is            :33.658:S : 78.85 :W :  922 
+ROBLEDO                      :Argentina           :26.77 :S : 67.72 :W : 4400 
+ROCARD                       :Society Is-C Pac    :17.642:S :148.60 :W :-2100 
+ROMANOVKA                    :Kamchatka           :55.65 :N :158.80 :E : 1442 
+ROTA                         :Nicaragua           :12.55 :N : 86.75 :W :  836 
+ROTORUA                      :New Zealand         :38.08 :S :176.27 :E :  757 
+ROUNDTOP                     :Aleutian Is         :54.80 :N :163.60 :W : 1871 
+ROYAL SOCIETY RANGE          :Antarctica          :78.25 :S :163.60 :E : 3000 
+RUANG                        :Sangihe Is-Indonesia: 2.28 :N :125.425:E :  725 
+RUAPEHU                      :New Zealand         :39.28 :S :175.57 :E : 2797 
+RUBY                         :Mariana Is-C Pac    :15.62 :N :145.57 :E : -230 
+RUBY MOUNTAIN                :Canada              :59.68 :N :133.32 :W : 1523 
+RUDAKOV                      :Kurile Is           :45.88 :N :149.83 :E :  542 
+RUIZ                         :Colombia            : 4.895:N : 75.323:W : 5321 
+RUMBLE I                     :New Zealand         :35.50 :S :178.875:E :-1100 
+RUMBLE II                    :New Zealand         :35.43 :S :178.65 :E : -880 
+RUMBLE III                   :New Zealand         :35.745:S :178.478:E : -140 
+RUMBLE IV                    :New Zealand         :36.22 :S :178.05 :E : -450 
+RUMBLE V                     :New Zealand         :36.139:S :178.197:E : -700 
+RUNGWE                       :Africa-E            : 9.13 :S : 33.67 :E : 2961 
+RUSEKERE                     :Africa-C            : 0.73 :N : 30.38 :E : 1615 
+SABA                         :W Indies            :17.63 :N : 63.23 :W :  887 
+SABANCAYA                    :Peru                :15.78 :S : 71.85 :W : 5967 
+SACABAYA, VOLCAN DE          :Bolivia             :18.62 :S : 68.75 :W : 4215 
+SADDLE BUTTE                 :US-Oregon           :43.00 :N :117.80 :W : 1700 
+SAIRECABUR                   :Chile-N             :22.73 :S : 67.88 :W : 5971 
+SAKAR                        :New Guinea-NE of    : 5.414:S :148.094:E :  992 
+SAKURA-JIMA                  :Kyushu-Japan        :31.58 :N :130.67 :E : 1117 
+SALAK                        :Java                : 6.72 :S :106.73 :E : 2211 
+SAN AGUSTIN, CERRO           :Bolivia             :21.25 :S : 67.75 :W : 4980 
+SAN BORJA VOLC FIELD         :Mexico              :28.50 :N :113.75 :W :-99999
+SAN CARLOS                   :Africa-W            : 3.35 :N :  8.52 :E : 2260 
+SAN CRISTOBAL                :Nicaragua           :12.702:N : 87.004:W : 1745 
+SAN CRISTOBAL                :Galapagos           : 0.88 :S : 89.50 :W :  759 
+SAN DIEGO                    :El Salvador         :14.27 :N : 89.47 :W :  860 
+SAN FELIX                    :Chile-Is            :26.27 :S : 80.12 :W :  183 
+SAN JOAQUIN                  :Africa-W            : 3.35 :N :  8.63 :E : 2009 
+SAN JORGE                    :Azores              :38.65 :N : 28.08 :W : 1053 
+SAN JOSE                     :Chile-C             :33.782:S : 69.897:W : 5856 
+SAN LUIS GONZAGA, ISLA       :Mexico              :29.814:N :114.384:W :  160 
+SAN MARTIN, VOLCAN DE        :Mexico              :18.572:N : 95.169:W : 1650 
+SAN MIGUEL                   :El Salvador         :13.431:N : 88.272:W : 2130 
+SAN PEDRO                    :Chile-N             :21.88 :S : 68.40 :W : 6145 
+SAN PEDRO-PELLADO            :Chile-C             :35.989:S : 70.849:W : 3621 
+SAN QUINTIN VOLC FIELD       :Mexico              :30.468:N :115.996:W :  267 
+SAN SALVADOR                 :El Salvador         :13.736:N : 89.286:W : 1893 
+SAN VICENTE                  :El Salvador         :13.623:N : 88.852:W : 2000 
+SAN VICENTE                  :Cape Verde Is       :16.85 :N : 24.97 :W :  697 
+SANBE                        :Honshu-Japan        :35.13 :N :132.62 :E : 1126 
+SAND MOUNTAIN FIELD          :US-Oregon           :44.38 :N :121.93 :W : 1664 
+SANFORD                      :Alaska-E            :62.22 :N :144.13 :W : 4949 
+SANGANGUEY                   :Mexico              :21.45 :N :104.73 :W : 2353 
+SANGAY                       :Ecuador             : 2.03 :S : 78.33 :W : 5230 
+SANGEANG API                 :Lesser Sunda Is     : 8.18 :S :119.058:E : 1949 
+SANO, WAI                    :Lesser Sunda Is     : 8.68 :S :120.025:E :  903 
+SANTA ANA                    :El Salvador         :13.853:N : 89.63 :W : 2365 
+SANTA CATARINA RANGE         :Mexico              :19.32 :N : 99.00 :W : 2734 
+SANTA CLARA                  :US-Utah             :37.257:N :113.625:W : 1465 
+SANTA CRUZ                   :Galapagos           : 0.62 :S : 90.33 :W :  864 
+SANTA ISABEL                 :Africa-W            : 3.58 :N :  8.75 :E : 3007 
+SANTA ISABEL                 :Colombia            : 4.82 :N : 75.37 :W : 4950 
+SANTA ISABEL, CERRO          :Bolivia             :21.67 :S : 66.50 :W : 5100 
+SANTA MARIA                  :Guatemala           :14.756:N : 91.552:W : 3772 
+SANTIAGO                     :Galapagos           : 0.22 :S : 90.77 :W :  920 
+SANTIAGO, CERRO              :Guatemala           :14.33 :N : 89.87 :W : 1192 
+SANTO ANTAO                  :Cape Verde Is       :17.07 :N : 25.17 :W : 1979 
+SANTO TOMAS                  :Luzon-Philippines   :16.33 :N :120.55 :E : 2260 
+SANTORINI                    :Greece              :36.404:N : 25.396:E :  564 
+SAO TOME                     :Africa-W            : 0.32 :N :  6.72 :E : 2024 
+SARIGAN                      :Mariana Is-C Pac    :16.708:N :145.78 :E :  538 
+SARYCHEV PEAK                :Kurile Is           :48.092:N :153.20 :E : 1496 
+SATAH MOUNTAIN               :Canada              :52.47 :N :124.70 :W : 1921 
+SAVAI'I                      :Samoa-SW Pacific    :13.612:S :172.525:W : 1858 
+SAVO                         :Solomon Is-SW Pac   : 9.13 :S :159.82 :E :  510 
+SAWAD, HARRA ES-             :Arabia-S            :13.58 :N : 46.12 :E : 1737 
+SEAL NUNATAKS GROUP          :Antarctica          :65.03 :S : 60.05 :W :  368 
+SEDANKINSKY                  :Kamchatka           :57.23 :N :160.08 :E : 1241 
+SEGERERUA PLATEAU            :Africa-E            : 1.57 :N : 37.90 :E :  699 
+SEGUAM                       :Aleutian Is         :52.32 :N :172.52 :W : 1054 
+SEGULA                       :Aleutian Is         :52.02 :N :178.13 :E : 1153 
+SEKINCAU BELIRANG            :Sumatra             : 5.12 :S :104.32 :E : 1719 
+SEMERU                       :Java                : 8.108:S :112.92 :E : 3676 
+SEMISOPOCHNOI                :Aleutian Is         :51.95 :N :179.62 :E : 1221 
+SEMPU                        :Sulawesi-Indonesia  : 1.142:N :124.73 :E : 1549 
+SERGIEF                      :Aleutian Is         :52.03 :N :174.93 :W :  560 
+SERUA                        :Banda Sea           : 6.30 :S :130.00 :E :  641 
+SESSAGARA                    :New Guinea          : 9.48 :S :149.13 :E :  370 
+SETE CIDADES                 :Azores              :37.87 :N : 25.78 :W :  856 
+SEULAWAH AGAM                :Sumatra             : 5.425:N : 95.60 :E : 1726 
+SEVERNY                      :Kamchatka           :58.28 :N :160.87 :E : 1936 
+SHALA                        :Ethiopia            : 7.47 :N : 38.55 :E : 2075 
+SHARAT KOVAKAB               :Syria               :36.53 :N : 40.85 :E :  534 
+SHASTA                       :US-California       :41.42 :N :122.20 :W : 4317 
+SHIGA                        :Honshu-Japan        :36.70 :N :138.52 :E : 2036 
+SHIKARIBETSU GROUP           :Hokkaido-Japan      :43.28 :N :143.08 :E : 1430 
+SHIKOTSU                     :Hokkaido-Japan      :42.70 :N :141.333:E : 1320 
+SHIN-IWO-JIMA                :Volcano Is-Japan    :24.28 :N :141.52 :E :  -14 
+SHIRETOKO-IWO-ZAN            :Hokkaido            :44.13 :N :145.17 :E : 1563 
+SHIRIBETSU                   :Hokkaido-Japan      :42.767:N :140.916:E : 1107 
+SHIRINKI                     :Kurile Is           :50.20 :N :154.98 :E :  761 
+SHISHALDIN                   :Aleutian Is         :54.75 :N :163.97 :W : 2857 
+SHISHEL                      :Kamchatka           :57.45 :N :160.37 :E : 2525 
+SHIVELUCH                    :Kamchatka           :56.653:N :161.36 :E : 3283 
+SHOSHONE LAVA FIELD          :US-Idaho            :43.07 :N :114.43 :W : 1525 
+SIBAYAK                      :Sumatra             : 3.208:N : 98.47 :E : 2212 
+SILALI                       :Africa-E            : 1.15 :N : 36.23 :E : 1528 
+SILAY                        :Philippines-C       :10.77 :N :123.23 :E : 1535 
+SILVERTHRONE                 :Canada              :51.43 :N :126.30 :W : 3160 
+SIMBO                        :Solomon Is-SW Pac   : 8.292:S :156.52 :E :  335 
+SINABUNG                     :Sumatra             : 3.17 :N : 98.392:E : 2460 
+SINARKA                      :Kurile Is           :48.875:N :154.175:E :  934 
+SINGU PLATEAU                :SE Asia             :22.70 :N : 95.98 :E :  507 
+SINGUIL, CERRO               :El Salvador         :14.05 :N : 89.63 :W :  958 
+SIPLE                        :Antarctica          :73.43 :S :126.67 :W : 3110 
+SIRUNG                       :Lesser Sunda Is     : 8.51 :S :124.148:E :  862 
+SLAMET                       :Java                : 7.242:S :109.208:E : 3432 
+SMIRNOV                      :Kurile Is           :44.43 :N :146.13 :E : 1189 
+SMITH ROCK                   :Izu Is-Japan        :31.32 :N :140.05 :E :  136 
+SNAEFELLSJOKULL              :Iceland-W           :64.80 :N : 23.78 :W : 1448 
+SNEGOVOY                     :Kamchatka           :58.20 :N :160.97 :E : 2169 
+SNEZHNIY                     :Kamchatka           :58.02 :N :160.75 :E : 2169 
+SNOWY                        :Alaska Peninsula    :58.33 :N :154.68 :W : 2161 
+SOCHE                        :Ecuador             : 0.552:N : 77.58 :W : 3955 
+SOCOMPA                      :Chile-N             :24.40 :S : 68.25 :W : 6051 
+SOCORRO                      :Mexico-Is           :18.78 :N :110.95 :W : 1050 
+SODORE                       :Ethiopia            : 8.43 :N : 39.35 :E : 1765 
+SOLLIPULLI                   :Chile-C             :38.97 :S : 71.52 :W : 2282 
+SOPUTAN                      :Sulawesi-Indonesia  : 1.108:N :124.725:E : 1784 
+SORETIMEAT                   :Vanuatu-SW Pacific  :13.80 :S :167.47 :E :  921 
+SORIKMARAPI                  :Sumatra             : 0.687:N : 99.537:E : 2145 
+SORKALE                      :Ethiopia            :13.18 :N : 41.725:E : 1611 
+SOTARA                       :Colombia            : 2.12 :N : 76.58 :W : 4400 
+SOUFRIERE GUADELOUPE         :W Ind               :16.05 :N : 61.67 :W : 1467 
+SOUFRIERE HILLS              :W Indies            :16.72 :N : 62.18 :W :  915 
+SOUFRIERE ST. VINCENT        :W Indies            :13.33 :N : 61.18 :W : 1220 
+SOUTH ISLAND                 :Africa-E            : 2.63 :N : 36.60 :E :  700 
+SOUTH SISTER                 :US-Oregon           :44.10 :N :121.77 :W : 3157 
+SOUTHERN SIKHOTE-ALIN        :Russia-SE           :44.50 :N :135.50 :E :-99999
+SPECTRUM RANGE               :Canada              :57.43 :N :130.68 :W : 2430 
+SPURR                        :Alaska-SW           :61.30 :N :152.25 :W : 3374 
+SQUAW RIDGE FIELD            :US-Oregon           :43.472:N :120.754:W : 1711 
+SREDNII                      :Kurile Is           :47.60 :N :152.92 :E :   36 
+ST. ANDREW STRAIT            :Admiralty Is-SW Pac : 2.38 :S :147.35 :E :  270 
+ST. CATHERINE                :W Indies            :12.15 :N : 61.67 :W :  840 
+ST. HELENS                   :US-Washington       :46.20 :N :122.18 :W : 2549 
+ST. MICHAEL                  :Alaska-W            :63.45 :N :162.12 :W :  715 
+ST. PAUL                     :Indian O.-S         :38.72 :S : 77.53 :E :  268 
+ST. PAUL ISLAND              :Alaska-W            :57.18 :N :170.30 :W :  203 
+STEAMBOAT SPRINGS            :US-Nevada           :39.375:N :119.72 :W : 1415 
+STELLER                      :Alaska Peninsula    :58.43 :N :154.40 :W : 2272 
+STROMBOLI                    :Italy               :38.789:N : 15.213:E :  926 
+STURGE ISLAND                :Antarctica          :67.40 :S :164.83 :E : 1167 
+SUCHITAN VOLC FIELD          :Guatemala           :14.40 :N : 89.78 :W : 2042 
+SUKARIA CALDERA              :Lesser Sunda Is     : 8.792:S :121.77 :E : 1500 
+SUMACO                       :Ecuador             : 0.538:S : 77.626:W : 3990 
+SUMBING                      :Sumatra             : 2.42 :S :101.73 :E : 2508 
+SUMBING                      :Java                : 7.38 :S :110.058:E : 3371 
+SUMIYOSHI-IKE                :Kyushu-Japan        :31.768:N :130.594:E :  100 
+SUNDORO                      :Java                : 7.30 :S :109.992:E : 3151 
+SUNSET CRATER                :US-Arizona          :35.37 :N :111.50 :W : 2447 
+SUOH                         :Sumatra             : 5.25 :S :104.27 :E : 1000 
+SUPHAN DAGI                  :Turkey              :38.92 :N : 42.82 :E : 4434 
+SUPPLY REEF                  :Mariana Is-C Pac    :20.13 :N :145.10 :E :   -8 
+SUSWA                        :Africa-E            : 1.175:S : 36.35 :E : 2356 
+SUWANOSE-JIMA                :Ryukyu Is           :29.53 :N :129.72 :E :  799 
+SW USANGU BASIN              :Africa-E            : 8.75 :S : 33.80 :E : 2179 
+TAAL                         :Luzon-Philippines   :14.002:N :120.993:E :  400 
+TABLE TOP-WIDE BAY           :Aleutian Is         :53.98 :N :166.67 :W :  800 
+TABURETE                     :El Salvador         :13.45 :N : 88.53 :W : 1172 
+TACANA                       :Mexico              :15.13 :N : 92.113:W : 4110 
+TACORA                       :Chile-N             :17.72 :S : 69.77 :W : 5980 
+TAFTAN                       :Iran                :28.60 :N : 61.60 :E : 4050 
+TAJUMULCO                    :Guatemala           :15.034:N : 91.903:W : 4220 
+TAKAHARA                     :Honshu-Japan        :36.90 :N :139.78 :E : 1795 
+TAKAHE                       :Antarctica          :76.28 :S :112.08 :W : 3460 
+TAKAWANGHA                   :Aleutian Is         :51.87 :N :178.02 :W : 1449 
+TAKUAN GROUP                 :Bougainville-SW Pac : 6.442:S :155.608:E : 2210 
+TALAGABODAS                  :Java                : 7.208:S :108.07 :E : 1020 
+TALAKMAU                     :Sumatra             : 0.079:N : 99.982:E : 2912 
+TALANG                       :Sumatra             : 0.978:S :100.679:E : 2896 
+TAMBORA                      :Lesser Sunda Is     : 8.25 :S :118.00 :E : 2850 
+TAMPOMAS                     :Java                : 6.77 :S :107.95 :E : 1684 
+TANAGA                       :Aleutian Is         :51.88 :N :178.13 :W : 1806 
+TANDIKAT                     :Sumatra             : 0.433:S :100.317:E : 2438 
+TANGKUBANPARAHU              :Java                : 6.77 :S :107.60 :E : 2084 
+TAO-RUSYR CALDERA            :Kurile Is           :49.35 :N :154.70 :E : 1325 
+TARA, BATU                   :Lesser Sunda Is     : 7.792:S :123.579:E :  748 
+TARYATU-CHULUTU              :Mongolia            :48.17 :N : 99.70 :E : 2400 
+TAT ALI                      :Ethiopia            :13.28 :N : 41.07 :E :  700 
+TATA SABAYA                  :Bolivia             :19.13 :S : 68.53 :W : 5430 
+TATESHINA                    :Honshu-Japan        :36.10 :N :138.30 :E : 2530 
+TATE-YAMA                    :Honshu-Japan        :36.57 :N :137.60 :E : 2621 
+TATIO                        :Chile-N             :22.35 :S : 68.03 :W : 4280 
+TA'U                         :Samoa-SW Pacific    :14.23 :S :169.454:W :  931 
+TAUNSHITS                    :Kamchatka           :54.53 :N :159.80 :E : 2353 
+TAUPO                        :New Zealand         :38.82 :S :176.00 :E :  760 
+TAVAI RURO                   :Vanuatu-SW Pacific  :16.80 :S :168.43 :E :  554 
+TAVEUNI                      :Fiji Is-SW Pacific  :16.82 :S :179.97 :W : 1241 
+TEAHITIA                     :Society Is-C Pac    :17.57 :S :148.85 :W :-1600 
+TECAPA                       :El Salvador         :13.497:N : 88.503:W : 1592 
+TECUAMBURRO                  :Guatemala           :14.156:N : 90.407:W : 1845 
+TELICA                       :Nicaragua           :12.603:N : 86.845:W : 1010 
+TELOMOYO                     :Java                : 7.37 :S :110.40 :E : 1894 
+TELONG, BUR NI               :Sumatra             : 4.77 :N : 96.808:E : 2624 
+TENAYO GROUP                 :Mexico              :19.17 :N : 98.82 :W : 3080 
+TENDURUK DAGI                :Turkey              :39.33 :N : 43.83 :E : 3584 
+TENERIFE                     :Canary Is           :28.271:N : 16.641:W : 3715 
+TENGCHONG                    :China-S             :25.32 :N : 98.47 :E : 2865 
+TENGGER CALDERA              :Java                : 7.942:S :112.95 :E : 2329 
+TENORIO GROUP                :Costa Rica          :10.673:N : 85.015:W : 1916 
+TEON                         :Banda Sea           : 6.92 :S :129.125:E :  655 
+TEPETILTIC, VOLCAN           :Mexico              :21.27 :N :104.70 :W : 2020 
+TEPI                         :Ethiopia            : 7.42 :N : 35.43 :E : 2728 
+TERCEIRA                     :Azores              :38.73 :N : 27.32 :W : 1023 
+TEYR, DJEBEL                 :Red Sea             :15.70 :N : 41.742:E :  244 
+THEISTAREYKJARBUNGA          :Iceland             :65.88 :N : 16.83 :W :  564 
+THOMPSON ISLAND              :Atlantic-S          :53.93 :S :  5.50 :E :-99999
+THULE ISLANDS                :Antarctica          :59.45 :S : 27.37 :W : 1075 
+TIANSHAN VOLC GROUP          :China-W             :42.50 :N : 86.50 :E :-99999
+TIATIA                       :Kurile Is           :44.358:N :146.27 :E : 1819 
+TICSANI                      :Peru                :16.755:S : 70.595:W : 5408 
+TIGRE, ISLA EL               :Honduras            :13.27 :N : 87.63 :W :  760 
+TIHO                         :Djibouti            :11.53 :N : 42.05 :E :  500 
+TINAKULA                     :Santa Cruz Is-SW Pac:10.38 :S :165.80 :E :  851 
+TINDFJALLAJOKULL             :Iceland-S           :63.78 :N : 19.57 :W : 1463 
+TINGUIRIRICA                 :Chile-C             :34.814:S : 70.352:W : 4280 
+TIPAS                        :Argentina           :27.20 :S : 68.55 :W : 6660 
+TITILA                       :Kamchatka           :57.40 :N :160.10 :E : 1559 
+TJORNES FRACTURE ZONE        :Iceland-N of        :66.30 :N : 17.10 :W :-99999
+TLEVAK STRAIT-SUEMEZ IS.     :Alaska-SE           :55.25 :N :133.30 :W :   50 
+TOBA                         :Sumatra             : 2.58 :N : 98.83 :E : 2157 
+TOCONCE, CERRO               :Chile-N             :22.20 :S : 68.10 :W : 5435 
+TOCORPURI, CERROS DE         :Chile-N             :22.43 :S : 67.90 :W : 5808 
+TODOKO-RANU                  :Halmahera-Indonesia : 1.30 :N :127.43 :E :  979 
+TOFUA                        :Tonga-SW Pacific    :19.75 :S :175.07 :W :  512 
+TOH, TARSO                   :Africa-N            :21.33 :N : 16.33 :E : 2000 
+TOKACHI                      :Hokkaido-Japan      :43.42 :N :142.68 :E : 2077 
+TOLBACHIK                    :Kamchatka           :55.83 :N :160.33 :E : 3682 
+TOLGUACA                     :Chile-C             :38.31 :S : 71.645:W : 2806 
+TOLIMA                       :Colombia            : 4.67 :N : 75.33 :W : 5200 
+TOLIMAN                      :Guatemala           :14.613:N : 91.189:W : 3158 
+TOLMACHEV DOL                :Kamchatka           :52.63 :N :157.58 :E : 1021 
+TONDANO CALDERA              :Sulawesi-Indonesia  : 1.23 :N :124.83 :E : 1202 
+TONEY MOUNTAIN               :Antarctica          :75.80 :S :115.83 :W : 3595 
+TONGARIRO                    :New Zealand         :39.13 :S :175.642:E : 1978 
+TONGKOKO                     :Sulawesi-Indonesia  : 1.52 :N :125.20 :E : 1149 
+TORE                         :Bougainville-SW Pac : 5.83 :S :154.93 :E : 2200 
+TORFAJOKULL                  :Iceland-S           :63.92 :N : 19.17 :W : 1259 
+TORI-SHIMA                   :Izu Is-Japan        :30.48 :N :140.32 :E :  403 
+TOROENG PRONG                :SE Asia             :14.93 :N :108.00 :E :  800 
+TORTUGA, ISLA                :Mexico              :27.392:N :111.858:W :  310 
+TOSA SUCHA                   :Ethiopia            : 5.92 :N : 37.57 :E : 1650 
+TO-SHIMA                     :Izu Is-Japan        :34.52 :N :139.28 :E :  508 
+TOUSSIDE, TARSO              :Africa-N            :21.03 :N : 16.45 :E : 3265 
+TOWADA                       :Honshu-Japan        :40.47 :N :140.92 :E : 1159 
+TRAITOR'S HEAD               :Vanuatu-SW Pacific  :18.75 :S :169.23 :E :  837 
+TRES VIRGENES                :Mexico              :27.47 :N :112.591:W : 1940 
+TRI SESTRY                   :Kurile Is           :45.93 :N :149.92 :E :  998 
+TRIDENT                      :Alaska Peninsula    :58.23 :N :155.08 :W : 1864 
+TRINDADE                     :Atlantic-S          :20.514:S : 29.331:W :  600 
+TRISTAN DA CUNHA             :Atlantic-S          :37.092:S : 12.28 :W : 2060 
+TROMEN                       :Argentina           :37.142:S : 70.03 :W : 3978 
+TSEAX RIVER CONE             :Canada              :55.12 :N :128.90 :W :  609 
+TSHIBINDA                    :Africa-C            : 2.32 :S : 28.75 :E : 1460 
+TSURUMI                      :Kyushu-Japan        :33.28 :N :131.43 :E : 1374 
+TUJLE, CERRO                 :Chile-N             :23.83 :S : 67.95 :W : 3550 
+TULABUG                      :Ecuador             : 1.78 :S : 78.613:W : 3336 
+TULLU MOJE                   :Ethiopia            : 8.158:N : 39.13 :E : 2349 
+TUMBLE BUTTES                :US-California       :40.68 :N :121.55 :W : 2191 
+TUNDROVIY                    :Kamchatka           :52.25 :N :157.60 :E :  739 
+TUNGNAFELLSJOKULL            :Iceland-NE          :64.73 :N : 17.92 :W : 1535 
+TUNGURAHUA                   :Ecuador             : 1.467:S : 78.442:W : 5023 
+TUNKIN DEPRESSION            :Russia-SE           :51.50 :N :102.50 :E : 1200 
+TUPUNGATITO                  :Chile-C             :33.40 :S : 69.80 :W : 6000 
+TURFAN                       :China-W             :42.90 :N : 89.25 :E :-99999
+TURRIALBA                    :Costa Rica          :10.03 :N : 83.77 :W : 3340 
+TUTUILA                      :Samoa-SW Pacific    :14.295:S :170.70 :W :  653 
+TUTUPACA                     :Peru                :17.025:S : 70.358:W : 5815 
+TUZGLE, CERRO                :Argentina           :24.05 :S : 66.48 :W : 5550 
+TUZOVSKY                     :Kamchatka           :57.32 :N :159.97 :E : 1533 
+TWIN BUTTES                  :US-California       :40.78 :N :121.60 :W : 1631 
+TZANJUYUB, VOLCAN DE         :Guatemala           :14.75 :N : 91.43 :W : 3542 
+UBEHEBE CRATERS              :US-Calif            :37.02 :N :117.45 :W :  752 
+UBINAS                       :Peru                :16.355:S : 70.903:W : 5672 
+UDINA                        :Kamchatka           :55.755:N :160.527:E : 2923 
+UDOKAN VOLC FIELD            :Russia-SE           :56.18 :N :117.47 :E : 1980 
+UGASHIK-PEULIK               :Alaska Peninsula    :57.75 :N :156.37 :W : 1474 
+UINKARET FIELD               :US-Arizona          :36.38 :N :113.13 :W : 1555 
+UKA                          :Kamchatka           :57.70 :N :160.58 :E : 1643 
+UKINREK MAARS                :Alaska Peninsula    :57.83 :N :156.52 :W :   91 
+UKSICHAN                     :Kamchatka           :56.08 :N :158.38 :E : 1692 
+ULAWUN                       :New Britain-SW Pac  : 5.05 :S :151.33 :E : 2334 
+ULIAGA                       :Aleutian Is         :53.07 :N :169.77 :W :  888 
+ULREUNG                      :Korea               :37.50 :N :130.87 :E :  984 
+ULUG-ARGINSKY                :Russia-SE           :52.33 :N : 98.00 :E : 1800 
+UMBOI                        :New Guinea-NE of    : 5.589:S :147.875:E : 1548 
+UMM MARAFIEB, JEBEL          :Africa-N            :18.20 :N : 33.80 :E :-99999
+UNGARAN                      :Java                : 7.18 :S :110.33 :E : 2050 
+UNZEN                        :Kyushu-Japan        :32.75 :N :130.30 :E : 1359 
+UPOLU                        :Samoa-SW Pacific    :13.935:S :171.72 :W : 1100 
+URATAMAN                     :Kurile Is           :47.12 :N :152.23 :E :  678 
+USHISHUR                     :Kurile Is           :47.52 :N :152.80 :E :  401 
+USHKOVSKY                    :Kamchatka           :56.105:N :160.47 :E : 3943 
+USU                          :Hokkaido-Japan      :42.53 :N :140.83 :E :  731 
+USULUTAN                     :El Salvador         :13.42 :N : 88.47 :W : 1450 
+UTILA ISLAND                 :Honduras            :16.10 :N : 86.90 :W :   90 
+UTURUNCO                     :Bolivia             :22.27 :S : 67.22 :W : 6008 
+'UWAYRID, HARRAT             :Arabia-W            :27.08 :N : 37.25 :E : 1900 
+UZON                         :Kamchatka           :54.50 :N :159.97 :E : 1617 
+VAKAK GROUP                  :Afghanistan         :34.25 :N : 67.97 :E : 3190 
+VALLES CALDERA               :US-New Mexico       :35.87 :N :106.57 :W : 3430 
+VATNAFJOLL                   :Iceland-S           :63.92 :N : 19.67 :W : 1235 
+VEER                         :Kamchatka           :53.63 :N :158.42 :E :  350 
+VENIAMINOF                   :Alaska Peninsula    :56.17 :N :159.38 :W : 2507 
+VERDE, LAGUNA                :El Salvador         :13.891:N : 89.786:W : 1829 
+VERKHOVOY                    :Kamchatka           :56.52 :N :159.53 :E : 1400 
+VERNADSKII RIDGE             :Kurile Is           :50.55 :N :155.97 :E : 1183 
+VESTMANNAEYJAR               :Iceland-S           :63.43 :N : 20.28 :W :  279 
+VESUVIUS                     :Italy               :40.821:N : 14.426:E : 1281 
+VETERAN                      :SE Asia             : 9.83 :N :109.05 :E :-99999
+VICTORY                      :New Guinea          : 9.20 :S :149.07 :E : 1925 
+VIEDMA, VOLCAN               :Argentina           :49.358:S : 73.28 :W : 1300 
+VILLARRICA                   :Chile-C             :39.42 :S : 71.93 :W : 2847 
+VILYUCHIK                    :Kamchatka           :52.68 :N :158.30 :E : 2173 
+VISOKE                       :Africa-C            : 1.47 :S : 29.492:E : 3711 
+VISOKIY                      :Kamchatka           :52.43 :N :157.93 :E : 1234 
+VOLCANICO, CERRO             :Argentina           :42.07 :S : 71.65 :W :-99999
+VOON, TARSO                  :Africa-N            :20.92 :N : 17.28 :E : 3100 
+VOYAMPOLSKY                  :Kamchatka           :58.37 :N :160.62 :E : 1225 
+VSEVIDOF                     :Aleutian Is         :53.13 :N :168.68 :W : 2149 
+VULCANO                      :Italy               :38.404:N : 14.962:E :  500 
+VULSINI                      :Italy               :42.60 :N : 11.93 :E :  800 
+WAESCHE                      :Antarctica          :77.17 :S :126.88 :W : 3292 
+WAIOWA                       :New Guinea          : 9.57 :S :149.075:E :  640 
+WALLIS ISLANDS               :SW Pacific          :13.30 :S :176.17 :W :  143 
+WALO                         :New Britain-SW Pac  : 5.53 :S :150.90 :E :   15 
+WAPI LAVA FIELD              :US-Idaho            :42.88 :N :113.22 :W : 1604 
+WASHINGTON                   :US-Oregon           :44.332:N :121.837:W : 2376 
+WAYANG-WINDU                 :Java                : 7.208:S :107.63 :E : 2182 
+WELLS GRAY-CLEARWATER        :Canada              :52.33 :N :120.57 :W : 2015 
+WEST CRATER                  :US-Washington       :45.88 :N :122.08 :W :  914 
+WEST EIFEL VOLC FIELD        :Germany             :50.17 :N :  6.85 :E :  600 
+WESTDAHL                     :Aleutian Is         :54.52 :N :164.65 :W : 1654 
+WHALE ISLAND                 :New Zealand         :37.858:S :176.98 :E :  348 
+WHANGAREI                    :New Zealand         :35.75 :S :174.27 :E :  397 
+WHITE ISLAND                 :New Zealand         :37.52 :S :177.18 :E :  321 
+WILIS                        :Java                : 7.808:S :111.758:E : 2563 
+WOLF, VOLCAN                 :Galapagos           : 0.02 :N : 91.35 :W : 1710 
+WRANGELL                     :Alaska-E            :62.00 :N :144.02 :W : 4317 
+WUDALIANCHI                  :China-E             :48.72 :N :126.12 :E :  597 
+WURLALI                      :Banda Sea           : 7.125:S :128.675:E :  868 
+XIANJINDAO                   :Korea               :41.33 :N :128.00 :E :-99999
+YAKE-DAKE                    :Honshu-Japan        :36.22 :N :137.58 :E : 2455 
+YALI                         :Greece              :36.63 :N : 27.10 :E :  176 
+YANGUDI                      :Ethiopia            :10.58 :N : 41.042:E : 1383 
+YANTARNI                     :Alaska Peninsula    :57.02 :N :157.18 :W : 1336 
+YANTELES, CERRO              :Chile-S             :43.42 :S : 72.83 :W : 2050 
+YAR, JABAL                   :Arabia-W            :17.05 :N : 42.83 :E :  305 
+YASUR                        :Vanuatu-SW Pacific  :19.52 :S :169.425:E :  361 
+YATE, MT.                    :Chile-S             :41.755:S : 72.396:W : 2187 
+YEGUADA, LA                  :Panama              : 8.523:N : 80.91 :W : 1297 
+YELIA                        :New Guinea          : 7.05 :S :145.858:E : 3384 
+YELLOWSTONE                  :US-Wyoming          :44.43 :N :110.67 :W : 2805 
+YERSEY                       :Lesser Sunda Is     : 7.53 :S :123.95 :E :-3800 
+YOJOA, LAKE                  :Honduras            :14.98 :N : 87.98 :W : 1090 
+YOMBA                        :New Guinea-NE of    : 4.92 :S :146.75 :E :-99999
+YOTEI                        :Hokkaido-Japan      :42.83 :N :140.82 :E : 1893 
+YOUNG ISLAND                 :Antarctica          :66.42 :S :162.45 :E : 1340 
+YUCAMANE                     :Peru                :17.18 :S : 70.20 :W : 5550 
+YUMIA, CERRO                 :Bolivia             :21.50 :S : 67.50 :W : 4050 
+YUNASKA                      :Aleutian Is         :52.63 :N :170.63 :W :  550 
+ZACATE GRANDE, ISLA          :Honduras            :13.33 :N : 87.63 :W :  600 
+ZAO                          :Honshu-Japan        :38.15 :N :140.45 :E : 1841 
+ZAOZERNY                     :Kamchatka           :56.88 :N :159.95 :E : 1349 
+ZAPATERA ISLAND              :Nicaragua           :11.73 :N : 85.82 :W :  625 
+ZARECHNY                     :Kamchatka           :56.38 :N :160.83 :E :  760 
+ZAVARITSKY                   :Kamchatka           :53.905:N :158.385:E : 1567 
+ZAVARITZKI CALDERA           :Kurile Is           :46.925:N :151.95 :E :  624 
+ZAVODOVSKI                   :Antarctica          :56.30 :S : 27.57 :W :  551 
+ZENGYU                       :Taiwan-N of         :26.18 :N :122.458:E : -418 
+ZHELTOVSKY                   :Kamchatka           :51.57 :N :157.323:E : 1953 
+ZHUPANOVSKY                  :Kamchatka           :53.59 :N :159.147:E : 2958 
+ZIMINA                       :Kamchatka           :55.862:N :160.603:E : 3081 
+ZUBAYR, JEBEL                :Red Sea             :15.08 :N : 42.17 :E :  191 
+ZUNI-BANDERA                 :US-New Mexico       :34.80 :N :108.00 :W : 2550 
+UNKNOWN                      :Unknown             :0     :N :0      :E : 0
+
