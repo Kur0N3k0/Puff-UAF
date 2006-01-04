@@ -39,6 +39,6 @@ pp2nc_SOURCES = pp2nc.C
 pp2nc_LDADD = $(NETCDF_CXX_LIB)
 
 HEADER_SRC = ash.h ashdump_options.h atmosphere.h dem.h cloud.h particle.h \
-planes.h puff.h puff_options.h ran_utils.h rcfile.h volcsites.h volc_utils.h uni2puff_options.h
+planes.h puff.h puff_options.h ran_utils.h rcfile.h volc_utils.h uni2puff_options.h
 
-EXTRA_DIST = $(HEADER_SRC) volcsites.args volcanos.txt my_getopt.c my_getopt.h
+EXTRA_DIST = $(HEADER_SRC) volcanos.txt my_getopt.c my_getopt.h
