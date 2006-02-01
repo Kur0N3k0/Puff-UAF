@@ -1077,7 +1077,11 @@ void Ash::stashData()
   
   for (int i=0;i<ashN;i++)
   {
-    recParticle.push_back(particle[i]);
+		// only stash particles that exists (not out of bounds)
+		if (particle[i].exists)
+		{
+    	recParticle.push_back(particle[i]);
+		}
   }
   // advance the record counter
   recAshN++;
