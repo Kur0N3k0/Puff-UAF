@@ -16,11 +16,11 @@ print "<head>";
 print "<title>WebPuff</title>";
 print "<link rel='shortcut icon' href='pix/puff_dragon.ico'>";
 print "</head>";
-print '<frameset rows="300,*">';
+print '<frameset rows="320,*">';
   print "<frame src=\"runParams.pl?sessionID=$sessionID\" name=runParams  frameborder=0>";
   print '<frameset cols="150,480">';
     print "<frame src=\"ashxpOptions.pl\" name=ashxpOptions frameborder=0>";
-    print "<frame src=\"pix/puff_bg.gif\" name=imageFrame frameborder=0>";
+    print "<frame src=\"$Webpuff::home_web/pix/puff_bg.gif\" name=imageFrame frameborder=0>";
   print "</frameset>";
 print "</frameset>";
 

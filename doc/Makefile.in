@@ -75,6 +75,8 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+BUILD_INSTALL_DOCS_FALSE = @BUILD_INSTALL_DOCS_FALSE@
+BUILD_INSTALL_DOCS_TRUE = @BUILD_INSTALL_DOCS_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
@@ -386,6 +388,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+@BUILD_INSTALL_DOCS_FALSE@install-data-local:
 clean: clean-am
 
 clean-am: clean-generic clean-libtool mostlyclean-am
@@ -482,12 +485,12 @@ uninstall-am: uninstall-info-am
 .texi.pdf:
 	$(TEXI2DVI) --pdf $<
 
-.PHONY: html_docs pdf_docs
+@BUILD_INSTALL_DOCS_TRUE@  .PHONY: html_docs pdf_docs
 
-install-data-local:
-	$(mkinstalldirs) $(prefix)/share/doc
-	$(MAKE) puff.pdf
-	$(INSTALL_DATA) puff.pdf $(prefix)/share/doc/puff.pdf
+@BUILD_INSTALL_DOCS_TRUE@install-data-local:
+@BUILD_INSTALL_DOCS_TRUE@	$(mkinstalldirs) $(prefix)/share/doc
+@BUILD_INSTALL_DOCS_TRUE@	$(MAKE) puff.pdf
+@BUILD_INSTALL_DOCS_TRUE@	$(INSTALL_DATA) puff.pdf $(prefix)/share/doc/puff.pdf
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

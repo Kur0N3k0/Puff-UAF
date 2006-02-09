@@ -35,7 +35,7 @@ if ($q->param('runashxp')) {
 sub create_form {
 
   my %jpgLabels=();
-  my $initial_image = "pix/puff_bg.gif";
+  my $initial_image = "$Webpuff::home_web/pix/puff_bg.gif";
   my $update_label = "Map";
   
   #set defaults
@@ -55,7 +55,7 @@ sub create_form {
   }
 
 if (scalar @jpgFiles > 0) {
-  $initial_image="$runDir/$sessionID/$previous/$jpgFiles[0]";
+  $initial_image="$Webpuff::home_web/$runDir/$sessionID/$previous/$jpgFiles[0]";
   $update_label="Update";
 } 
 
@@ -64,9 +64,9 @@ if (scalar @jpgFiles > 0) {
                        -bgcolor=>"lightseagreen",
 		       -head=>Link({-rel=>'stylesheet',
 		                    -type=>'text/css',
-				    -href=>'webpuff.css'}),
+				    -href=>"$Webpuff::home_web/webpuff.css"}),
                        -script=>{-language=>'JAVASCRIPT',
-	                          -src=>"javascript/webpuff.js"},
+	                          -src=>"$Webpuff::home_web/javascript/webpuff.js"},
 		       -onLoad=>"parent.imageFrame.location='$initial_image'",
 
 	             );
@@ -100,19 +100,19 @@ print $q->start_form(-name=>"imageForm",
 			   -labels=>\%jpgLabels,
 			   -size=>5,
 			   -default=>$jpgFiles[0],
-        -onChange=>"loadjpeg(parent.ashxpOptions.document.imageForm,parent.imageFrame, '$runDir/$sessionID/$previous/')"
+        -onChange=>"loadjpeg(parent.ashxpOptions.document.imageForm,parent.imageFrame, '$Webpuff::home_web/$runDir/$sessionID/$previous/')"
 			 );
 print $q->end_form;
   print "</td>"; # the image scroll list
   print "<td>"; # button 1	
   # only show a movie button for GIF files
   if ($ashxpOption{format} eq "GIF") {
-  print "<a href=\"#\" onclick=\"loadmovie(parent.imageFrame, '$runDir/$sessionID/$previous/movie.gif')\" ><img border='0' src='pix/movie.png' alt=\"show movie\" /></a><br/>";
+  print "<a href=\"#\" onclick=\"loadmovie(parent.imageFrame, '$Webpuff::home_web/$runDir/$sessionID/$previous/movie.gif')\" ><img border='0' src='$Webpuff::home_web/pix/movie.png' alt=\"show movie\" /></a><br/>";
   }
   print "</td>"; # end of button 1
   print "</tr><tr>";
   print "<td>"; # button 2 since the scroll list takes up column 1
-  print '<a href="map.pl"><img border="0" src="pix/map-button.gif" alt="map tool"/></a>';
+  print "<a href='map.pl'><img border='0' src=\"$Webpuff::home_web/pix/map-button.gif\" alt='map tool'/></a>";
   print "</td>"; # end button 2
   print "</tr>";
   print "</table>"; # end of small table holding image scroll list and buttons
@@ -120,7 +120,7 @@ print $q->end_form;
 #print "</tr>";
 
 print $q->start_form(-name=>"ashxpOptionsForm",
-                     -onSubmit=>"resetImage(parent.imageFrame)",
+                     -onSubmit=>"resetImage(parent.imageFrame,\"$Webpuff::home_web/pix/puff_bg.gif\")",
 		     -method=>"GET"
 		     );
 
@@ -164,7 +164,7 @@ print $q->checkbox("no-stamp",$ashxpOption{"no-stamp"},"no-stamp","no stamp");
 print "</td></tr>";
 
 print "<tr><td>";
-print "<b><a href=\"#\" onclick=\"openHelp('help/gridlines.html')\" class=\"helpLink\" title=\"click for option explanation\"> gridlines</a></b>";
+print "<b><a href=\"#\" onclick=\"openHelp('$Webpuff::home_web/help/gridlines.html')\" class=\"helpLink\" title=\"click for option explanation\"> gridlines</a></b>";
 print "</td><td>";
 print $q->textfield(-name=>"gridlines",
                     -size=>8,
@@ -174,7 +174,7 @@ print $q->textfield(-name=>"gridlines",
 print "</td></tr>";
 
 print "<tr><td>";
-print "<b><a href=\"#\" onclick=\"openHelp('help/latlon.html')\" class=\"helpLink\" title=\"click for option explanation\"> bounds</a></b>";
+print "<b><a href=\"#\" onclick=\"openHelp('$Webpuff::home_web/help/latlon.html')\" class=\"helpLink\" title=\"click for option explanation\"> bounds</a></b>";
 print "</td><td>";
 print $q->textfield(-name=>"latlon",
                     -size=>16,
@@ -182,17 +182,17 @@ print $q->textfield(-name=>"latlon",
 		    );
 print "</td></tr>";
 		    
-#my @colors = qw(gray rainbow red isopach);
-#print "<tr>";
-#print "<td class=\"labelText\">";
-#print "color:";
-#print "</td><td>";
-#print $q->scrolling_list(-name=>'colorProtocol',
-#                         -value=>[@colors],
-#			 -size=>1,
-#			 -class=>"tableEntry",
-#			 -default=>$colors[0],
-#			 );
+my @colors = qw(gray rainbow red isopach);
+print "<tr>";
+print "<td class=\"labelText\">";
+print "color:";
+print "</td><td>";
+print $q->scrolling_list(-name=>'colorProtocol',
+                         -value=>[@colors],
+			 -size=>1,
+			 -class=>"tableEntry",
+			 -default=>$colors[0],
+			 );
 print "</td></tr>";
 
 my @projections = qw(mercator lambert polar);
@@ -210,30 +210,30 @@ print $q->scrolling_list(-name=>'projection',
 print "</td>";
 print "</tr>";
 
-#print "<tr>";
-#print "<td class=\"labelText\">";
-#print "particle size:";
-#print "</td><td>";
-#print $q->textfield(-name=>'pixels',
-#                    -size=>2,
-#		    -maxLength=>1, 
-#		    -class=>"tableEntry",
-#		    -default=>$ashxpOption{pixels});
-#print "</td>";
-#print "</tr>";
-#
-#
-#print "<tr>";
-#print "<td class=\"labelText\">";
-#print "magnify:";
-#print "</td><td>";
-#print $q->textfield(-name=>'magnify',
-#                    -size=>2,
-#		    -maxLength=>2, 
-#		    -class=>"tableEntry",
-#		    -default=>$ashxpOption{magnify});
-#print "</td>";
-#print "</tr>";
+print "<tr>";
+print "<td class=\"labelText\">";
+print "particle size:";
+print "</td><td>";
+print $q->textfield(-name=>'pixels',
+                    -size=>2,
+		    -maxLength=>1, 
+		    -class=>"tableEntry",
+		    -default=>$ashxpOption{pixels});
+print "</td>";
+print "</tr>";
+
+
+print "<tr>";
+print "<td class=\"labelText\">";
+print "magnify:";
+print "</td><td>";
+print $q->textfield(-name=>'magnify',
+                    -size=>2,
+		    -maxLength=>2, 
+		    -class=>"tableEntry",
+		    -default=>$ashxpOption{magnify});
+print "</td>";
+print "</tr>";
 
 
 print "<tr>";
@@ -256,13 +256,13 @@ print "</table>";
 
 print $q->end_form;
 
-print "<a href=\"#\" onclick=\"openHelp('$runDir/$sessionID/$previous/ashxp.log')\" class=\"helpLink\" title=\"click for log\">log</a><br/>";
+print "<a href=\"#\" onclick=\"openHelp('$Webpuff::home_web/$runDir/$sessionID/$previous/ashxp.log')\" class=\"helpLink\" title=\"click for log\">log</a><br/>";
 print $q->end_html;
 }
 
 #------------------------
 sub lock_free {
-  return 0 if (-e "$runDir/$sessionID/ashxp.lock");
+  return 0 if (-e "$Webpuff::home_abs/$runDir/$sessionID/ashxp.lock");
   return 1;
 }
 #------------------------
@@ -274,7 +274,7 @@ sub show_updating {
 #		                        -content=>"5;URL=\"ashxpOptions.pl?refresh=1&runDir=$runDir&sessionID=$sessionID&previous=$previous\""})
 		                        -content=>"5;URL=\"ashxpOptions.pl?refresh=1&sessionID=$sessionID&previous=$previous\""})
 		  ); 
- print "<img src=\"pix/updating.gif\">";
+ print "<img src=\"$Webpuff::home_web/pix/updating.gif\">";
  print $q->end_html();
  return;
 }
@@ -320,7 +320,7 @@ sub init_images {
 		           -head=>$q->meta({-http_equiv=>'refresh',
 		                            -content=>"5;ashxpOptions.pl?sessionID=$sessionID&previous=$previous"})
 		  	   ); 
-      print "<img src=\"pix/updating.gif\">";
+      print "<img src=\"$Webpuff::home_web/pix/updating.gif\">";
       print $q->end_html();
       } elsif (defined $pid) {
       #child here
@@ -336,7 +336,7 @@ sub run_command {
   my $command = shift;
   
   # go to the directory since ashxp dumps to the current directory
-  chdir "$runDir/$sessionID/$previous" or die "Failed to chdir to $runDir/$sessionID:$!\n";
+  chdir "$Webpuff::home_abs/$runDir/$sessionID/$previous" or die "Failed to chdir to $Webpuff::home_abs/$runDir/$sessionID:$!\n";
   
   # open a log, clobber an existing one so that we can parse it easily when
   # reloading the last used values
@@ -365,14 +365,14 @@ sub process_form {
 
   # get a listing of any available netCDF files
   my @ncFiles=();
-  foreach (glob("$runDir/$sessionID/$previous/*.cdf")) { push @ncFiles, $_; }
+  foreach (glob("$Webpuff::home_abs/$runDir/$sessionID/$previous/*.cdf")) { push @ncFiles, $_; }
 
   my $filelist="";
   foreach(@ncFiles) { $filelist.=" " . basename($_); }
 
 	# conc. clouds use the .nc file
 	if ($q->param('imageFormat') eq "conc") {
-		$filelist = basename(glob("$runDir/$sessionID/$previous/*.nc"));
+		$filelist = basename(glob("$Webpuff::home_abs/$runDir/$sessionID/$previous/*.nc"));
 	}
   
   my $command;
@@ -388,13 +388,13 @@ sub process_form {
   my %opts;
   
   # set a large background file unless one is already defined
-  $command .="--bgfile=$Webpuff::home/etc/images/GLOBALeb3colshade.jpg " unless (defined $ENV{ASHXP_BG_FILE_NAME});
+  $command .="--bgfile=$Webpuff::home_exe/etc/images/GLOBALeb3colshade.jpg " unless (defined $ENV{ASHXP_BG_FILE_NAME});
 
-#  $opts{color} = $q->param('colorProtocol');
-#  $command .= "--color=$opts{color} ";
+  $opts{color} = $q->param('colorProtocol');
+  $command .= "--color=$opts{color} ";
   
-#  $opts{pixels} = $q->param('pixels');
-#  $command .= "--pixels=$opts{pixels} ";  
+   $opts{pixels} = $q->param('pixels');
+   $command .= "--pixels=$opts{pixels} ";  
   
   $opts{projection} = $q->param('projection');
   $command .= "--projection=$opts{projection} ";
@@ -411,8 +411,8 @@ sub process_form {
   $opts{latlon} = $q->param('latlon');
   $command .= "--latlon $opts{latlon} " if (length $opts{latlon} > 0);
   
-#  $opts{magnify} = $q->param('magnify');
-#  $command .= "--magnify=$opts{magnify} ";
+   $opts{magnify} = $q->param('magnify');
+   $command .= "--magnify=$opts{magnify} ";
   
   $opts{hgtrange} = get_hgt_range($q);
   $command .= "--hgt-range=$opts{hgtrange} " if (length $opts{hgtrange} > 0);
@@ -454,7 +454,7 @@ sub jpg_listing {
     return @jpgFiles;
   }
   
-  foreach (glob("$runDir/$sessionID/$previous/*$ext"))
+  foreach (glob("$Webpuff::home_abs/$runDir/$sessionID/$previous/*$ext"))
   {
     $_ = basename($_);
     push @jpgFiles, $_;
@@ -477,7 +477,7 @@ sub parse_previous {
   
   my $command = "";
   
-  open LOG, "<$runDir/$sessionID/$dir/ashxp.log";
+  open LOG, "<$Webpuff::home_abs/$runDir/$sessionID/$dir/ashxp.log" or return;
 #   while (<LOG>) {
 #     $command = $_ if ($_=~/$Webpuff::ashxp_exe/);
 #   }

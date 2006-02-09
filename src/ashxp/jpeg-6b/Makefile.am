@@ -15,4 +15,4 @@ HEADER_SRC = cderror.h jchuff.h jdct.h jerror.h jmemsys.h jpegint.h \
 jversion.h cdjpeg.h jconfig.h jdhuff.h jinclude.h jmorecfg.h jpeglib.h \
  transupp.h 
 
-CFG_FILES = jconfig.cfg makefile.cfg
+CFG_FILES = configure jconfig.cfg makefile.cfg

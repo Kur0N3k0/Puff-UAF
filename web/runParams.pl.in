@@ -19,7 +19,8 @@ my %scrollOptions = (
   model      => [],
   dem        => ["none"],
   plumeShape => [ "linear", "poisson", "exponential"],
-  restartFile=> ["none"]
+  restartFile=> ["none"],
+	sedimentation=> ["stokes", "reynolds", "constant"]
   );
 
 # the labels are an hash of hashes
@@ -27,7 +28,8 @@ my %scrollOptionLabels = (
   model       =>{ },
   dem         =>{ },
   plumeShape  =>{ },
-  restartFile =>{ } 
+  restartFile =>{ },
+	sedimentation=>{ } 
   ) ;
 
 read_resource_file();
@@ -68,9 +70,9 @@ print $q->start_html(-title=>"WebPUFF",
                      -bgcolor=>"lightsteelblue",
 		     -head=>Link({-rel=>'stylesheet',
 		                  -type=>'text/css',
-				  -href=>'webpuff.css'}),
+				  -href=>"$Webpuff::home_web/webpuff.css"}),
                      -script=>{-language=>'JAVASCRIPT',
-		               -src=>"javascript/webpuff.js"},
+		               -src=>"$Webpuff::home_web/javascript/webpuff.js"},
          -onLoad=>"previousDefault(parent.ashxpOptions,'$sessionID','$previous')"
 	             		     );
 
@@ -113,8 +115,8 @@ print "<tr><td>";
 # run options table within the main table
 print '<table border="0" cellspacing="0" cellpadding="0">'; 
 print "<tr>";
-print '<td><img src="pix/puff_1.gif" width="150" alt="dragon icon"/></td>';
-print "<td><a href=\"#\" onclick=\"openHelp('help/volcano_name.html')\" class=\"helpLink\" title=\"click for option explanation\">Volcano Name</a><br/>";
+print "<td><img src=\"$Webpuff::home_web/pix/puff_1.gif\" width=\"150\" alt=\"dragon icon\"/></td>";
+print "<td><a href=\"#\" onclick=\"openHelp('$Webpuff::home_web/help/volcano_name.html')\" class=\"helpLink\" title=\"click for option explanation\">Volcano Name</a><br/>";
 #print "<td class=\"labelText\"><b>Volcano Name</b><br/>";
 # list of possible volcanos
 print 
@@ -158,7 +160,7 @@ print "</td>";
 my @previousRuns=();
 #print "<td class=\"labelText\">";
 
-foreach (glob("$runDir/$sessionID/*"))
+foreach (glob("$Webpuff::home_abs/$runDir/$sessionID/*"))
 {
   
   if (-d $_)
@@ -175,7 +177,7 @@ if (scalar @previousRuns > 0) {
     $name .= "($number)" if ($number);
     $previousRunsLabels{$_} = "$name";
   }
-  print "<td><a href=\"#\" onclick=\"openHelp('help/previous.html')\" class=\"helpLink\" title=\"click for option explanation\">Previous</a><br/>";  
+  print "<td><a href=\"#\" onclick=\"openHelp('$Webpuff::home_web/help/previous.html')\" class=\"helpLink\" title=\"click for option explanation\">Previous</a><br/>";  
 #  print "<b>Previous</b><br/>";
   print $q->scrolling_list(-name=>'previous',
                            -values=>[@previousRuns],
@@ -220,7 +222,7 @@ makeTextField("phiDist","&Phi; distribution");
 print "</tr>";
 
 print "<tr>";
-makeScrollField();
+makeScrollField("sedimentation","Fall dyn.");
 makeTextField("plumeHwidth","Plume width[km]");
 makeTextField("plumeZwidth","Plume thickness[km]");
 print "</tr>";
@@ -286,7 +288,7 @@ sub process_form {
   if ($makeNewDirectory) {
     $dir=$val; 
     my $count = 2;
-    while (-d "$runDir/$sessionID/$dir")
+    while (-d "$Webpuff::home_abs/$runDir/$sessionID/$dir")
     {
       $dir="$val$count";
       $count++;
@@ -302,7 +304,7 @@ sub process_form {
   #create the command
   my $command = $Webpuff::puff_exe;
   #put the output in the directory
-  $command .= "--opath=$oPath ";
+  $command .= "--opath=$Webpuff::home_abs/$oPath ";
   
   # there is not a default value for this in the %puffOption hash, so add
   # it manually
@@ -322,13 +324,13 @@ sub process_form {
   #without the environment variable $HOME, we need to specify a resource file.
   # the web uses the user 'nobody' which has no $HOME, so use the default
   if (!$ENV{HOME}) {
-    $command .= "--rcfile $Webpuff::home/etc/puffrc ";
+    $command .= "--rcfile $Webpuff::home_exe/etc/puffrc ";
   }
   
   # if PUFF_VOLCANO_FILE is set, Puff will use that.  Otherwise, assume we
   # have a file in "../etc/"
   if (!$ENV{PUFF_VOLCANO_FILE}) {
-    $command .= "--volcFile $Webpuff::home/etc/volcanos.txt ";
+    $command .= "--volcFile $Webpuff::home_exe/etc/volcanos.txt ";
   }
   
   # loop through all the default options.  If the option is empty, do not add
@@ -345,10 +347,10 @@ sub process_form {
   }
   
   # create the output directory  
-  system("mkdir $oPath") if ($makeNewDirectory);
+  system("mkdir -m 777 $Webpuff::home_abs/$oPath") if ($makeNewDirectory);
   
   # write log data in logText format
-  open LOG, ">>$oPath/puff.log";
+  open LOG, ">>$Webpuff::home_abs/$oPath/puff.log";
   print LOG "$command\n";
   my $err = "";
   open PUFF, "$command 2>&1|";
@@ -357,6 +359,9 @@ sub process_form {
     # log everything
     print LOG $_;
     if ($_ =~ m/ERROR/) { $text_color = "red"; }
+		# scrub abs path from public view
+		# $_ =~ s/$Webpuff::home_abs\//~/;
+		# $_ =~ s/Reading.*/Reading data/;
     print STDOUT "<FONT size = 1 color=$text_color>$_</FONT><br/>";
     $err = $1 if ($_ =~ m/ERROR:(.*)/);
   }
@@ -382,14 +387,14 @@ print $q->end_form();
 print $q->end_html();
 
 # remove folders with errors
-if ($err) { `rm -r $oPath` };
+if ($err) { `rm -r $Webpuff::home_abs/$oPath` };
 
   return $err;
     
 }
 #---------------------
 sub helpButton {
-  return "<td align=\"right\"><a href=\"#\" onclick=\"openHelp('help/webpuff.html')\" class=\"helpButton\" title=\"Help me use this form!\">Help</a></td>";
+  return "<td align=\"right\"><a href=\"#\" onclick=\"openHelp('$Webpuff::home_web/help/webpuff.html')\" class=\"helpButton\" title=\"Help me use this form!\">Help</a></td>";
 } 
 #---------------------
 # a special field for the -logSize field
@@ -404,7 +409,7 @@ sub makeLogSizeField {
                      );
   print "<font class=\"helpLink\">&plusmn;</font>";		     
   print $q->textfield(-name=>"ashLogSdev",
-                      -size=>1,
+                      -size=>3,
 		      -maxLength=>2,
 		      -class=>"tableEntry",
 		      -default=>$puffOption{ashLogSdev},
@@ -426,7 +431,7 @@ sub makeTextField {
   }
    
   print "<td>";
-  print "<a href=\"#\" onclick=\"openHelp('help/$param.html')\" class=\"helpLink\" title=\"click for option explanation\">$string</a>";
+  print "<a href=\"#\" onclick=\"openHelp('$Webpuff::home_web/help/$param.html')\" class=\"helpLink\" title=\"click for option explanation\">$string</a>";
 #  print "<a href=\"#\" onclick=\"window.open('runHours.html')\">$string</a>";
   print "</td>";
   print "<td>";
@@ -464,7 +469,7 @@ sub makeScrollField {
   
   my $labels = $scrollOptionLabels{$param};
   print "<td>";
-  print "<a href=\"#\" onclick=\"openHelp('help/$param.html')\" class=\"helpLink\" title=\"click for option explanation\">$string</a>";
+  print "<a href=\"#\" onclick=\"openHelp('$Webpuff::home_web/help/$param.html')\" class=\"helpLink\" title=\"click for option explanation\">$string</a>";
   print "</td>";
   print "<td>";
   print $q->scrolling_list(-name=>"$param",
@@ -491,7 +496,7 @@ sub parse_previous {
   
   my $command = "";
   
-  open LOG, "<$runDir/$sessionID/$dir/puff.log";
+  open LOG, "<$Webpuff::home_abs/$runDir/$sessionID/$dir/puff.log";
   while (<LOG>) {
     $command = $_ if ($_=~/$Webpuff::puff_exe/);
   }
@@ -542,7 +547,7 @@ sub volcano_list {
   if ($ENV{PUFF_VOLCANO_LIST}) {
     $volc_file = $ENV{PUFF_VOLCANO_LIST};
   } else {
-    $volc_file ="$Webpuff::home/etc/volcanos.txt";
+    $volc_file ="$Webpuff::home_exe/etc/volcanos.txt";
   }
   
   open PUFF, $volc_file;
@@ -578,7 +583,7 @@ sub volcano_list {
  
 sub read_resource_file {
 #  return if not $ENV{HOME};
-  open PUFFRC, "<$Webpuff::home/etc/puffrc" or die "no resource file\n";
+  open PUFFRC, "<$Webpuff::home_exe/etc/puffrc" or die "no resource file\n";
   while (<PUFFRC>) {
     if ($_ =~ m/^model=(\S+)\s/) {
       push @{$scrollOptions{model} }, $1 if not (map /$1/, @{$scrollOptions{model} } );
@@ -594,7 +599,7 @@ sub read_resource_file {
 
   # get a list of possible restart files
   my $dir = $q->param('previous');
-  foreach (glob "$runDir/$sessionID/$dir/*ash.cdf") {
+  foreach (glob "$Webpuff::home_abs/$runDir/$sessionID/$dir/*ash*.cdf") {
     my $file = $_;
     # make more readable
     $file =~ m/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/;
@@ -626,7 +631,7 @@ sub logout {
                        -head=>$q->meta({-http_equiv => 'refresh',
 		          -content => "1,URL=\"http://puff.images.alaska.edu\""}),
                      -script=>{-language=>'JAVASCRIPT',
-		               -src=>"javascript/webpuff.js"},
+		               -src=>"$Webpuff::home_web/javascript/webpuff.js"},
                      -onLoad=>"close()"
  			);
 

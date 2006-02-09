@@ -102,6 +102,8 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+BUILD_INSTALL_DOCS_FALSE = @BUILD_INSTALL_DOCS_FALSE@
+BUILD_INSTALL_DOCS_TRUE = @BUILD_INSTALL_DOCS_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
@@ -231,7 +233,7 @@ HEADER_SRC = cderror.h jchuff.h jdct.h jerror.h jmemsys.h jpegint.h \
 jversion.h cdjpeg.h jconfig.h jdhuff.h jinclude.h jmorecfg.h jpeglib.h \
  transupp.h 
 
-CFG_FILES = jconfig.cfg makefile.cfg
+CFG_FILES = configure jconfig.cfg makefile.cfg
 all: all-am
 
 .SUFFIXES:

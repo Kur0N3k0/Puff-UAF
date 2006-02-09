@@ -1,4 +1,5 @@
-data_files = data/2002092500_avn-U.cdf data/2002092500_avn-V.cdf data/2003042300_cmc.cdf
+#data_files = data/2002092500_avn-U.cdf data/2002092500_avn-V.cdf data/2003042300_cmc.cdf
+data_files = 
 etc_files = etc/volcanos.txt etc/puffrc
 doc_files = license.terms INSTALL
 

@@ -134,7 +134,7 @@ sub conc_range {
 
 	foreach (@files) {
 		my $timestr=$_->{'time'} . ".";
-		open PIPE, "ncks -d time,$timestr -d level,$opt->{hgt_min},$opt->{hgt_max} -v $opt->{var} -C $_->{in} |";
+		open PIPE, "@NCKS@ -d time,$timestr -d level,$opt->{hgt_min},$opt->{hgt_max} -v $opt->{var} -C $_->{in} |";
 		while (<PIPE>) {
 			next unless ($_ =~ m/^time\[/);
 			$_ =~ m/$opt{var}\[\d*\]=(\d*\.?\d*)/;
@@ -156,7 +156,7 @@ sub basemap {
   if (defined $opt->{latlon}) {
     ($latmin,$latmax,$lonmin,$lonmax) = split "/", $opt->{latlon};
   } 
-#	open ASHFILE, "ncks -m $opt{ashfile} |";
+#	open ASHFILE, "@NCKS@ -m $opt{ashfile} |";
 #   while (<ASHFILE>) {
 #     if ($_ =~ m/lon.*min_value.*value=(-?\d*\.?\d*)/) {
 #       $lonmin = $1 unless (defined $lonmin);
@@ -274,7 +274,7 @@ sub contours {
 # this value
 #	my $max_conc = 0;
 
-	open ASHFILE, "ncks -m $opt{ashfile} |";
+	open ASHFILE, "@NCKS@ -m $opt{ashfile} |";
    while (<ASHFILE>) {
 		if ($_ =~ m/$opt{var}.*max_value.*value = (-?\d*\.?\d*)/) {
 			$opt{conc_max} = $1 unless (defined $opt{conc_max});
@@ -289,7 +289,7 @@ sub contours {
 	$var = "rel_fallout_conc" if ($opt{fallout});
 	# put values in a hash of hashes
 	my %conc;
-	open PIPE, "ncks -d time,$opt{timestr} -d level,$opt{hgt_min},$opt{hgt_max} -v $var -C $opt{ashfile} |";
+	open PIPE, "@NCKS@ -d time,$opt{timestr} -d level,$opt{hgt_min},$opt{hgt_max} -v $var -C $opt{ashfile} |";
 	while (<PIPE>){
 		next unless ($_ =~ m/^time\[/);
 		#$_ =~ m/level\[\d+\]=(-?\d*\.?\d*) lat\[\d+\]=(-?\d*\.?\d*) lon\[\d*\]=(\d*\.?\d*) $var\[\d*\]=(\d*\.?\d*)/;
@@ -375,14 +375,14 @@ sub elipse_size {
 
 # get grid spacing from ashfile
 	my (@x, @y);
-	open PIPE, "ncks -v lat -d lat,0,1 $ncfile|";
+	open PIPE, "@NCKS@ -v lat -d lat,0,1 $ncfile|";
 	while (<PIPE>) {
 	$y[1] = $1 if ($_ =~ m/lat\[0\]=(-?\d*\.?\d*)/);
 	$y[2] = $1 if ($_ =~ m/lat\[1\]=(-?\d*\.?\d*)/);
 	}
 	close PIPE;
 
-	open PIPE, "ncks -v lon -d lon,0,1 $ncfile|";
+	open PIPE, "@NCKS@ -v lon -d lon,0,1 $ncfile|";
 	while (<PIPE>) {
 	$x[1] = $1 if ($_ =~ m/lon\[0\]=(-?\d*\.?\d*)/);
 	$x[2] = $1 if ($_ =~ m/lon\[1\]=(-?\d*\.?\d*)/);
@@ -415,7 +415,7 @@ sub particles2 {
 	# array of hashes 
 	my %part;
 	foreach my $l qw(lon lat hgt exists grounded) {
-	open PIPE, "ncks -v $l --units $opt{ashfile} |";
+	open PIPE, "@NCKS@ -v $l --units $opt{ashfile} |";
 	while (<PIPE>) {
 		next unless ($_ =~ m/nash\[\d+\] $l\[\d+\]=(-?\d*\.?\d*)/);
 		push @{$part{$l}}, $1 ;
@@ -455,10 +455,10 @@ sub particles2 {
 
 	# mark the volcano location
 	my ($olon, $olat, $ret);
-	$ret = `ncks -C -v origin_lon $opt{ashfile}`;
+	$ret = `@NCKS@ -C -v origin_lon $opt{ashfile}`;
 	$ret =~ m/origin_lon = (\d+\.\d+)/;
 	$olon = $1;
-	$ret = `ncks -C -v origin_lat $opt{ashfile}`;
+	$ret = `@NCKS@ -C -v origin_lat $opt{ashfile}`;
 	$ret =~ m/origin_lat = (\d+\.\d+)/;
 	$olat = $1;
 	if (defined $olon and defined $olat) {
@@ -514,7 +514,7 @@ sub annotation {
   my %params;
   $param{edate} = "200209250000";
   
-	open ASHHEADER,"ncks -M $opt{ashfile} |";
+	open ASHHEADER,"@NCKS@ -M $opt{ashfile} |";
   while (<ASHHEADER>) {
     if ($_ =~ m/volcano.*value = (\D+)/) {
       $param{volcname} = $1;
@@ -635,7 +635,7 @@ sub ps2png {
 	# convert the postscript to PNG using gs.  Magnification is done with the resolution
 	# flag.  The whitespace is trimmed using convert
 	print STDERR "$pngfile exists, overwriting.\n" if (-e $pngfile);
-	my $command = "gs -sDEVICE=png256 -sOutputFile=$pngfile -r$mag $psfile";
+	my $command = "@GHOSTSCRIPT@ -sDEVICE=png256 -sOutputFile=$pngfile -r$mag $psfile";
 	print STDERR "$command\n" if $opt{verbose};
 
   open PIPE, "|$command > /dev/null";
@@ -699,10 +699,10 @@ sub boundingbox {
     $latmax = -90.0;
   }
   
-  my $command = "ncks -m $file";
+  my $command = "@NCKS@ -m $file";
   print STDERR "$command\n" if ($opt->{verbose});
   
-	open ASHFILE, "ncks -m $file |";
+	open ASHFILE, "@NCKS@ -m $file |";
    while (<ASHFILE>) {
      if ($_ =~ m/lon.*min_value.*value = (-?\d*\.?\d*)/) {
        $lonmin = $1 - $br if ($1 < $lonmin);
@@ -789,7 +789,7 @@ sub fileio {
 			# add the numeric suffix if appropriate
 			$infile[$fi] =~ /conc(\d*).nc/;
 			my $nsuf = $1;
-			open PIPE, "ncks -C --units -v time $infile[$fi]| ";
+			open PIPE, "@NCKS@ -C --units -v time $infile[$fi]| ";
 			while (<PIPE>) {
 				next unless ($_ =~ m/time\[\d+\]=(\d+)/);
 				my $time_t = $1;

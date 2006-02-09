@@ -67,8 +67,8 @@ function openHelp(helpFile) {
    (helpFile,"helpWindow","toolbar=no,width=500,height=200,scrollbars=yes")
    }
 
-function resetImage(imageFrame) {
-  imageFrame.location = 'pix/puff_bg.gif'
+function resetImage(imageFrame,image) {
+	imageFrame.location = image
   }
 
 function openMapOptions() {

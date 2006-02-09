@@ -19,7 +19,8 @@ AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER(config.h)
 
 # make the default install directory this one
-AC_PREFIX_DEFAULT(`pwd`)
+#AC_PREFIX_DEFAULT(`pwd`)
+AC_PREFIX_DEFAULT(`(cd ..; pwd)`)
 
 AC_PROG_CC
 AC_PROG_CXX
@@ -197,6 +198,11 @@ AC_PATH_PROG(MAKECPT,makecpt,,)
 AC_PATH_PROG(GIFSICLE, gifsicle,,)
 AC_ARG_VAR(GIFSICLE, path to gifsicle)
 
+AC_PATH_PROG(NCKS, ncks,,)
+#AC_ARG_VAR(NCKS, path to ncks)
+
+AC_PATH_PROG(GHOSTSCRIPT, gs,,)
+
 dnl cgi's and other web stuff may reside in different places
 AC_ARG_VAR(CGIHOME, [location of CGI's])
 
@@ -248,6 +254,11 @@ if test "$with_statistics" = "yes"; then
   AC_DEFINE(PUFF_STATISTICS,1,make additional statistical information)
 fi
 #############################################
+# give the option not to build documentation
+AC_ARG_WITH(documentation,AC_HELP_STRING([--with-documentation],[make/install docs(default is yes)]),with_documentation=$withval,with_documentation=yes)
+
+AM_CONDITIONAL(BUILD_INSTALL_DOCS, test "$with_documentation" == "yes")
+#############################################
 dnl deal with bugs, my bugs in all likelyhood.
 case $build in
   powerpc-apple-darwin6.8) AC_DEFINE(BUG_GMTIME,1,[swap localtime for gmtime]);;
@@ -259,7 +270,8 @@ AC_CONFIG_FILES([src/perl/grib2pf],[chmod +x src/perl/grib2pf])
 AC_CONFIG_FILES([src/perl/ashgmt],[chmod +x src/perl/ashgmt])
 AC_CONFIG_FILES([test/test00.sh],[chmod +x test/test00.sh])
 AC_CONFIG_FILES([Makefile src/Makefile src/libsrc/Makefile test/Makefile])
-AC_CONFIG_FILES([doc/Makefile src/perl/Makefile web/Makefile])
+AC_CONFIG_FILES([src/perl/Makefile web/Makefile])
+AC_CONFIG_FILES([doc/Makefile])
 AC_CONFIG_FILES([web/mini_httpd/Makefile])
 AC_CONFIG_FILES([src/libsrc/dmapf-c/Makefile])
 AC_CONFIG_FILES([src/ashxp/Makefile])

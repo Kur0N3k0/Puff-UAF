@@ -10,9 +10,12 @@ pdf_docs = puff.pdf
 .texi.pdf:
 	$(TEXI2DVI) --pdf $<
 
-.PHONY: html_docs pdf_docs
+if BUILD_INSTALL_DOCS
+  .PHONY: html_docs pdf_docs
 
 install-data-local:
 	$(mkinstalldirs) $(prefix)/share/doc
 	$(MAKE) puff.pdf
 	$(INSTALL_DATA) puff.pdf $(prefix)/share/doc/puff.pdf
+
+endif

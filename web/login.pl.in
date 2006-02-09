@@ -60,7 +60,7 @@ sub loadOldSession {
   
   $sessionID = cleanID($sessionID);
 
-  if (-d "$runDir/$sessionID") {
+  if (-d "$Webpuff::home_abs/$runDir/$sessionID") {
     $goToNewSession = 1;
     return;
   } else {
@@ -80,7 +80,7 @@ sub createSession {
     return;
     }
     
-  if ( system("mkdir $runDir/$sessionID") != 0) {
+  if ( system("mkdir -m 777 $Webpuff::home_abs/$runDir/$sessionID") != 0) {
     $sessionCreateFailed = 1;
     return;
     }
@@ -140,10 +140,10 @@ return;
 #---------------------
 sub loginScreen {
   print $q->start_html(-title=>'Webpuff Login',
-                       -background=>"pix/puff_bg_dark.jpg",
+                       -background=>"$Webpuff::home_web/pix/puff_bg_dark.jpg",
 		       -head=>Link({-rel=>'stylesheet',
 		                    -type=>'text/css',
-				    -href=>'webpuff.css'})  
+				    -href=>"$Webpuff::home_web/webpuff.css"})  
 		       );
   print $q->h1({-class=>'loginHeader'},"Start a WebPuff session");
   print $q->start_form(-method=>'get');
