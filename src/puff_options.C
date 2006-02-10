@@ -534,6 +534,11 @@ void option_switch(int opt, const char *optarg, const struct option *opt_lng) {
     case REPEAT:
       if (sscanf(optarg, "%i", &argument.repeat) == 0)
         std::cerr << "invalid value for option repeat: " << optarg << std::endl;
+			if (argument.repeat > 999)
+			{
+				std::cerr << "WARNING: Repeat runs must be less than 1000, ignoring value  \""  << argument.repeat  << "\"\n";
+				argument.repeat = -1;
+			}
       break;
     case RESTARTFILE:
       if (strcmp(optarg, "none") == 0) break;
@@ -792,6 +797,7 @@ void show_help() {
   std::cout << "  -argFile      filename   (string)\n";
   std::cout << "  -ashLogMean   value      (float)\n";
   std::cout << "  -ashLogSdev   value      (float)\n";
+	std::cout << "  -averageOutput\n";
   std::cout << "  -dem          name       (string)\n";
   std::cout << "  -diffuseH     value      (float)\n";
   std::cout << "  -diffuseZ     value      (float)\n";
@@ -818,6 +824,7 @@ void show_help() {
   std::cout << "  -path         filepath   (string)\n";
   std::cout << "  -pickGrid     XX/YY      (string)\n";
   std::cout << "  -phiDist      value      (string) i.e. \"1=30;2=70\"\n";
+	std::cout << "  -planesFile   filename|fileglob (string)\n";
   std::cout << "  -plumeMax     value      (float)\n";
   std::cout << "  -plumeMin     value      (float)\n";
   std::cout << "  -plumeHwidth  value      (float) in km\n";
@@ -831,6 +838,7 @@ void show_help() {
   std::cout << "  -runHours     value      (float)\n";
   std::cout << "  -runSurface [deprecated, does nothing]\n";
   std::cout << "  -saveHours    value      (float)\n";
+	std::cout << "  -sedimentation type      (string)\n";
   std::cout << "  -shiftWest\n";
   std::cout << "  -saveAshInit\n";
   std::cout << "  -saveWinds\n";
