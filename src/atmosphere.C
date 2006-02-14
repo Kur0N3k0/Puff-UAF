@@ -54,6 +54,11 @@ float Atmosphere::temperature (float time, Particle *p) {
   return T.nnint(time, (*p).z, (*p).y, (*p).x);
 }
 //////////////////////////////////////////////////////////////////////////
+float Atmosphere::diffuseKh (float time, Particle *p) {
+
+	return Kh.nnint(time, (*p).z, (*p).y, (*p).x);
+	}
+//////////////////////////////////////////////////////////////////////////
 float Atmosphere::pressure (float time, Particle *p) {
   if (P.empty())
   {
@@ -343,7 +348,7 @@ int Atmosphere::make_winds ()
   U.set_coverage ();
   V.set_coverage ();
 
-  if (wind_create_W (U, V, W) == PUFF_ERROR) {
+  if (wind_create_W (U, V, W, Kh) == PUFF_ERROR) {
     return PUFF_ERROR;
   }
 
@@ -368,6 +373,7 @@ int Atmosphere::make_winds ()
     U.write(&argument.saveWfilename);
     V.append(&argument.saveWfilename);
     W.append(&argument.saveWfilename);
+		Kh.append(&argument.saveWfilename);
     // these values should be written as well, but they might be a different
     // size, so something has to be done to Grid::append() to deal with it
 //    T.append(&argument.saveWfilename);
@@ -459,7 +465,7 @@ int Atmosphere::read_uni (Grid & uni, std::string *filename)
 // in nmc format, this is not so!
 //
 ////////////////////////////////////////////////////////////////////////
-int Atmosphere::wind_create_W (Grid & U, Grid & V, Grid & W)
+int Atmosphere::wind_create_W (Grid & U, Grid & V, Grid & W, Grid & Kh)
 {
 
   std::cout << "Making vertical wind ... " << std::flush;
@@ -512,12 +518,23 @@ int Atmosphere::wind_create_W (Grid & U, Grid & V, Grid & W)
   W.set_units (U.units ());
   W.set_name ("w_wind");
 
-  // copy dimension data into W, i.e. lat,lon,level
+	// create the horizontal diffusivity object as well
+	Kh.create (nt, nz, ny, nx);
+
+  // copy some information
+  Kh.set_title ("Horizontal diffusivity");
+  Kh.set_units ("m^2/s");
+  Kh.set_name ("kh");
+
+  // copy dimension data into Kh,W, i.e. lat,lon,level
   for (i = 1; i <= 4; i++) {
     W.set_units (ID (i), U.units (ID (i)));
     W.set_name (ID (i), U.name (ID (i)));
+    Kh.set_units (ID (i), U.units (ID (i)));
+    Kh.set_name (ID (i), U.name (ID (i)));
     for (j = 0; unsigned (j) < U[ID (i)].size; j++) {
       W[ID (i)].val[j] = U[ID (i)].val[j];
+      Kh[ID (i)].val[j] = U[ID (i)].val[j];
     }
   }
 
@@ -532,6 +549,7 @@ int Atmosphere::wind_create_W (Grid & U, Grid & V, Grid & W)
   float *ppU = U[VAR].val;
   float *ppV = V[VAR].val;
   float *ppW = W[VAR].val;
+	float *ppKh = Kh[VAR].val;
 
 	// make sure surface velocity is zero
 	// level = X2
@@ -541,6 +559,7 @@ int Atmosphere::wind_create_W (Grid & U, Grid & V, Grid & W)
       for (i = 0; i < nx; i++) {
 	off = W.offset (l, 0, j, i);
 	ppW[off] = 0.0;
+	ppKh[off] = 0.0;
       }
     }
   }
@@ -553,8 +572,13 @@ int Atmosphere::wind_create_W (Grid & U, Grid & V, Grid & W)
   int offp, offm;
 
   for (l = 0; l < nt; l++) {	// l -> time variable index
-    for (k = 1; k < nz; k++) {	// k -> level variable index - skip ground level
-      Dz = lev[k] - lev[k - 1];	// meters
+    for (k = 0; k < nz; k++) {	// k -> level variable index - skip ground level
+			// surface velocity is zero, so the bottom (k=0) loop is only for
+			// calculating Kh.  Set Dz to something (zero here) to avoid the
+			// indexing error. It doesn't matter, we don't use Dz later on.
+			if (k == 0) Dz = 0;
+			else Dz = lev[k] - lev[k-1]; // meters
+      //Dz = lev[k] - lev[k - 1];	// meters
       for (i = 0; i < nx; i++) {	// loop over all longitude values
 	i2 = i;			// copy if 'i' because we may change it if on the pole
 	ip = i + 1;		// "forward" index
@@ -626,7 +650,11 @@ int Atmosphere::wind_create_W (Grid & U, Grid & V, Grid & W)
 	    return PUFF_ERROR;
 	  }
 	  off = W.offset (l, k, j, i2);
-	  ppW[off] = temp_float;
+		// don't assign the bottom level (k=0) a value since W is zero there.
+		// It was already zero'ed out, so simply skip.  We are only doing the
+		// k=0 level to calculate Kh anyway.
+	  if (k != 0) ppW[off] = temp_float;
+		ppKh[off] = 1/sqrt(2)*0.14*0.14*Dx*Dx*sqrt(powf((Dv/Dx+Du/Dy),2)+powf((Du/Dx-Dv/Dy),2));
 	}
       }
     }

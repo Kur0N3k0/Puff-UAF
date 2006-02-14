@@ -32,7 +32,7 @@ $home_abs="$home/web";
 $pidfile="webpuff.pid";
 $puff_exe="$home_exe/bin/puff ";
 $ashxp_exe="$home_exe/bin/ashxp ";
-$ashgmt_exe="$home_exe/bin/ashgmt --movie=movie.gif ";
+$ashgmt_exe="$home_exe/bin/ashgmt --verbose --movie=movie.gif ";
 
 # This is the directory in which all sessions are stored, relative to this dir.
 # for a localhost install, you probably want simply

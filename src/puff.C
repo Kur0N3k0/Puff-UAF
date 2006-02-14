@@ -244,6 +244,7 @@ int run_puff ()
     Particle dr (0, 0, 0);
 
     // Diffusivity constants:
+		// if diffusion is variable, these are neglected later on
     float ch = sqrt (2. * argument.diffuseH / double (dtMins_t));
     float cv = sqrt (2. * argument.diffuseZ / double (dtMins_t));
 
@@ -316,7 +317,11 @@ int run_puff ()
 	     (ash.particleExists(i) ) )
 	{
 
-	    // Diffusion:
+	    // variable diffusion:
+			// -1 is 'turbulent', there could be other options...
+			if (argument.diffuseH == -1)
+      	ch = sqrt (2. * (atm->diffuseKh(diffHrs, &ash.r[i])) / double (dtMins_t));
+
 	    dr.x = dtMins_t * ch * gasdev (iseed);
 	    dr.y = dtMins_t * ch * gasdev (iseed);
 	    dr.z = dtMins_t * cv * gasdev (iseed);

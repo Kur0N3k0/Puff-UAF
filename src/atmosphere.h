@@ -14,6 +14,7 @@ private:
   Grid V;
   Grid W;
   Grid T;
+	Grid Kh;
   
   // paths and filenames from where the data was read
   std::string filenameU;
@@ -39,6 +40,7 @@ public:
  float ySpeed(float time, Particle *p); 
  float zSpeed(float time, Particle *p); 
  float pressure(float time, Particle *p);
+ float diffuseKh(float time, Particle *p);
  
  // these return the full path and filename for where the data was read from
  const std::string *fileU() { return &filenameU;};
@@ -65,7 +67,7 @@ public:
 private:
   int make_winds();
   int read_uni(Grid &grid, std::string *filename);
-  int wind_create_W(Grid &U, Grid &V, Grid &W);
+  int wind_create_W(Grid &U, Grid &V, Grid &W, Grid &Kh);
 	void checkRotatedGrid(const char *file);
 	void checkRotatedGridError();
 };

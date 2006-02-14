@@ -214,8 +214,18 @@ void option_switch(int opt, const char *optarg, const struct option *opt_lng) {
       }
       break;
     case DIFFUSEH: 
+			if (strncmp(optarg, "turbulent", 9) == 0)
+			{
+				argument.diffuseH = -1;
+				break;
+			}
       if (sscanf(optarg, "%lf", &argument.diffuseH) == 0)
         std::cerr << "invalid value for option diffuseH: " << optarg << std::endl;
+			if (argument.diffuseH < 0)
+			{
+				std::cerr << "WARNING: diffuseH cannot be less than 0, setting to 0\n";
+				argument.diffuseH = 0;
+			}
       break;
     case DIFFUSEZ: 
       if (sscanf(optarg, "%lf", &argument.diffuseZ) == 0)

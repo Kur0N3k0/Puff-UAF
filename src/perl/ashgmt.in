@@ -437,7 +437,8 @@ sub particles2 {
 
 	# make a color palette, hgt spec's can change here
 #	my $cpt = tmpnam();
-	`@MAKECPT@ -T0/16000/8 > $opt{cpt}`;
+#	`@MAKECPT@ -T0/16000/8 > $opt{cpt}`;
+	`@MAKECPT@ -T$opt{hgt_min}/$opt{hgt_max}/8 > $opt{cpt}`;
 
 	my $xyfile = tmpnam();
 	open XYFILE, ">$xyfile";
