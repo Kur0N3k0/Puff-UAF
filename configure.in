@@ -19,8 +19,9 @@ AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER(config.h)
 
 # make the default install directory this one
-#AC_PREFIX_DEFAULT(`pwd`)
-AC_PREFIX_DEFAULT(`(cd ..; pwd)`)
+AC_PREFIX_DEFAULT(`pwd`)
+# make the default install directory one above this one
+#AC_PREFIX_DEFAULT(`(cd ..; pwd)`)
 
 AC_PROG_CC
 AC_PROG_CXX
@@ -155,6 +156,7 @@ if test "x$puff_have_libudunits" = xno; then
 fi
 
 #############################################
+dnl wget is used to fetch netCDF data files for the puff tests
 AC_PATH_PROG(WGET,wget,,)
 AC_ARG_VAR(WGET,path to wget)
 
@@ -164,14 +166,15 @@ AC_ARG_VAR(PERL,path to perl)
 #AC_PATH_PROG(NCGEN,ncgen,,)
 #AC_ARG_VAR(NCGEN,path to ncgen)
 
-AC_PATH_PROG(WGRIB,wgrib,,)
-AC_ARG_VAR(WGRIB,path to wgrib)
+#AC_PATH_PROG(WGRIB,wgrib,,)
+#AC_ARG_VAR(WGRIB,path to wgrib)
 
 dnl programs for ashgmt
 if test "x$GMTHOME" != "x"; then
 	PATH="$PATH:$GMTHOME/bin"
 fi
 
+dnl The following all are required for ashgmt
 AC_PATH_PROG(CONVERT,convert,,)
 AC_ARG_VAR(CONVERT,path to convert)
 
@@ -204,7 +207,7 @@ AC_PATH_PROG(NCKS, ncks,,)
 AC_PATH_PROG(GHOSTSCRIPT, gs,,)
 
 dnl cgi's and other web stuff may reside in different places
-AC_ARG_VAR(CGIHOME, [location of CGI's])
+#AC_ARG_VAR(CGIHOME, [location of CGI's])
 
 dnl set ashdump.pl to the location we build here
 if test "$prefix" != "NONE"; then
@@ -263,6 +266,15 @@ dnl deal with bugs, my bugs in all likelyhood.
 case $build in
   powerpc-apple-darwin6.8) AC_DEFINE(BUG_GMTIME,1,[swap localtime for gmtime]);;
 esac
+
+#############################################
+dnl disable shared libraries
+dnl There is limited use to using a shared library, and just increases compilation
+dnl time and causes problems on many systems.  
+dnl In fact, it may be better if we got rid of using a library all together.  It is
+dnl only here as a learning tool, actually.
+AC_DEFINE(ENABLE_SHARED,0,Enable shared libraries)
+echo "disabling shared libraries..."
 
 #############################################
 AC_CONFIG_FILES([src/perl/ashdump.pl],[chmod +x src/perl/ashdump.pl])

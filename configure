@@ -429,7 +429,7 @@ PACKAGE_VERSION='2.1.7'
 PACKAGE_STRING='puff 2.1.7'
 PACKAGE_BUGREPORT='rorik@gi.alaska.edu'
 
-ac_default_prefix=`(cd ..; pwd)`
+ac_default_prefix=`pwd`
 # Factoring default headers for most tests.
 ac_includes_default="\
 #include <stdio.h>
@@ -467,7 +467,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT NETCDF_LIB NETCDF_INC PUFF_NEED_LIBDMAPF_TRUE PUFF_NEED_LIBDMAPF_FALSE ASHXP_BUILD_LIBJPEG_TRUE ASHXP_BUILD_LIBJPEG_FALSE WGET PERL WGRIB CONVERT GMTSET PSCOAST PSBASEMAP PSXY PSTEXT PSCONTOUR MAKECPT GIFSICLE NCKS GHOSTSCRIPT CGIHOME ASHDUMP PATH_TO_WEBPUFF INSTALL_DIR PUFF_NEED_GETOPT_LONG_TRUE PUFF_NEED_GETOPT_LONG_FALSE BUILD_INSTALL_DOCS_TRUE BUILD_INSTALL_DOCS_FALSE LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot AMTAR am__tar am__untar CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT NETCDF_LIB NETCDF_INC PUFF_NEED_LIBDMAPF_TRUE PUFF_NEED_LIBDMAPF_FALSE ASHXP_BUILD_LIBJPEG_TRUE ASHXP_BUILD_LIBJPEG_FALSE WGET PERL CONVERT GMTSET PSCOAST PSBASEMAP PSXY PSTEXT PSCONTOUR MAKECPT GIFSICLE NCKS GHOSTSCRIPT ASHDUMP PATH_TO_WEBPUFF INSTALL_DIR PUFF_NEED_GETOPT_LONG_TRUE PUFF_NEED_GETOPT_LONG_FALSE BUILD_INSTALL_DOCS_TRUE BUILD_INSTALL_DOCS_FALSE LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -964,10 +964,6 @@ ac_env_PERL_set=${PERL+set}
 ac_env_PERL_value=$PERL
 ac_cv_env_PERL_set=${PERL+set}
 ac_cv_env_PERL_value=$PERL
-ac_env_WGRIB_set=${WGRIB+set}
-ac_env_WGRIB_value=$WGRIB
-ac_cv_env_WGRIB_set=${WGRIB+set}
-ac_cv_env_WGRIB_value=$WGRIB
 ac_env_CONVERT_set=${CONVERT+set}
 ac_env_CONVERT_value=$CONVERT
 ac_cv_env_CONVERT_set=${CONVERT+set}
@@ -976,10 +972,6 @@ ac_env_GIFSICLE_set=${GIFSICLE+set}
 ac_env_GIFSICLE_value=$GIFSICLE
 ac_cv_env_GIFSICLE_set=${GIFSICLE+set}
 ac_cv_env_GIFSICLE_value=$GIFSICLE
-ac_env_CGIHOME_set=${CGIHOME+set}
-ac_env_CGIHOME_value=$CGIHOME
-ac_cv_env_CGIHOME_set=${CGIHOME+set}
-ac_cv_env_CGIHOME_value=$CGIHOME
 
 #
 # Report the --help message.
@@ -1104,10 +1096,8 @@ Some influential environment variables:
   NETCDF_INC  location of netCDF header files
   WGET        path to wget
   PERL        path to perl
-  WGRIB       path to wgrib
   CONVERT     path to convert
   GIFSICLE    path to gifsicle
-  CGIHOME     location of CGI's
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -2099,8 +2089,9 @@ am__tar='${AMTAR} chof - "$$tardir"'; am__untar='${AMTAR} xf -'
 
 
 # make the default install directory this one
-#AC_PREFIX_DEFAULT(`pwd`)
 
+# make the default install directory one above this one
+#AC_PREFIX_DEFAULT(`(cd ..; pwd)`)
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -4304,7 +4295,7 @@ ia64-*-hpux*)
   ;;
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4307 "configure"' > conftest.$ac_ext
+  echo '#line 4298 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -5412,7 +5403,7 @@ fi
 
 
 # Provide some information about the compiler.
-echo "$as_me:5415:" \
+echo "$as_me:5406:" \
      "checking for Fortran 77 compiler version" >&5
 ac_compiler=`set X $ac_compile; echo $2`
 { (eval echo "$as_me:$LINENO: \"$ac_compiler --version </dev/null >&5\"") >&5
@@ -6446,11 +6437,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6449: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6440: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6453: \$? = $ac_status" >&5
+   echo "$as_me:6444: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -6679,11 +6670,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6682: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6673: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:6686: \$? = $ac_status" >&5
+   echo "$as_me:6677: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -6739,11 +6730,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:6742: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:6733: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:6746: \$? = $ac_status" >&5
+   echo "$as_me:6737: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -8073,7 +8064,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 8076 "configure"' > conftest.$ac_ext
+    echo '#line 8067 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -8944,7 +8935,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 8947 "configure"
+#line 8938 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -9042,7 +9033,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 9045 "configure"
+#line 9036 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -11221,11 +11212,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11224: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11215: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:11228: \$? = $ac_status" >&5
+   echo "$as_me:11219: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -11281,11 +11272,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:11284: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:11275: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:11288: \$? = $ac_status" >&5
+   echo "$as_me:11279: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -11792,7 +11783,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 11795 "configure"' > conftest.$ac_ext
+    echo '#line 11786 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -12663,7 +12654,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12666 "configure"
+#line 12657 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -12761,7 +12752,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 12764 "configure"
+#line 12755 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -13588,11 +13579,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13591: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13582: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:13595: \$? = $ac_status" >&5
+   echo "$as_me:13586: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -13648,11 +13639,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:13651: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:13642: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:13655: \$? = $ac_status" >&5
+   echo "$as_me:13646: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -14962,7 +14953,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 14965 "configure"' > conftest.$ac_ext
+    echo '#line 14956 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -15703,11 +15694,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15706: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15697: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15710: \$? = $ac_status" >&5
+   echo "$as_me:15701: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -15936,11 +15927,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15939: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15930: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>conftest.err)
    ac_status=$?
    cat conftest.err >&5
-   echo "$as_me:15943: \$? = $ac_status" >&5
+   echo "$as_me:15934: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s "$ac_outfile"; then
      # The compiler can only warn and ignore the option if not recognized
      # So say no if there are warnings
@@ -15996,11 +15987,11 @@ else
    -e 's:.*FLAGS}? :&$lt_compiler_flag :; t' \
    -e 's: [^ ]*conftest\.: $lt_compiler_flag&:; t' \
    -e 's:$: $lt_compiler_flag:'`
-   (eval echo "\"\$as_me:15999: $lt_compile\"" >&5)
+   (eval echo "\"\$as_me:15990: $lt_compile\"" >&5)
    (eval "$lt_compile" 2>out/conftest.err)
    ac_status=$?
    cat out/conftest.err >&5
-   echo "$as_me:16003: \$? = $ac_status" >&5
+   echo "$as_me:15994: \$? = $ac_status" >&5
    if (exit $ac_status) && test -s out/conftest2.$ac_objext
    then
      # The compiler can only warn and ignore the option if not recognized
@@ -17330,7 +17321,7 @@ linux*)
   libsuff=
   case "$host_cpu" in
   x86_64*|s390x*|powerpc64*)
-    echo '#line 17333 "configure"' > conftest.$ac_ext
+    echo '#line 17324 "configure"' > conftest.$ac_ext
     if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -18201,7 +18192,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 18204 "configure"
+#line 18195 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -18299,7 +18290,7 @@ else
   lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 18302 "configure"
+#line 18293 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -21902,46 +21893,8 @@ fi
 #AC_PATH_PROG(NCGEN,ncgen,,)
 #AC_ARG_VAR(NCGEN,path to ncgen)
 
-# Extract the first word of "wgrib", so it can be a program name with args.
-set dummy wgrib; ac_word=$2
-echo "$as_me:$LINENO: checking for $ac_word" >&5
-echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
-if test "${ac_cv_path_WGRIB+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  case $WGRIB in
-  [\\/]* | ?:[\\/]*)
-  ac_cv_path_WGRIB="$WGRIB" # Let the user override the test with a path.
-  ;;
-  *)
-  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-  for ac_exec_ext in '' $ac_executable_extensions; do
-  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_path_WGRIB="$as_dir/$ac_word$ac_exec_ext"
-    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-done
-
-  ;;
-esac
-fi
-WGRIB=$ac_cv_path_WGRIB
-
-if test -n "$WGRIB"; then
-  echo "$as_me:$LINENO: result: $WGRIB" >&5
-echo "${ECHO_T}$WGRIB" >&6
-else
-  echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-
+#AC_PATH_PROG(WGRIB,wgrib,,)
+#AC_ARG_VAR(WGRIB,path to wgrib)
 
 if test "x$GMTHOME" != "x"; then
 	PATH="$PATH:$GMTHOME/bin"
@@ -22396,7 +22349,7 @@ echo "${ECHO_T}no" >&6
 fi
 
 
-
+#AC_ARG_VAR(CGIHOME, [location of CGI's])
 
 if test "$prefix" != "NONE"; then
 ASHDUMP="${prefix}/bin/ashdump.pl"
@@ -22799,6 +22752,14 @@ cat >>confdefs.h <<\_ACEOF
 _ACEOF
 ;;
 esac
+
+#############################################
+
+cat >>confdefs.h <<\_ACEOF
+#define ENABLE_SHARED 0
+_ACEOF
+
+echo "disabling shared libraries..."
 
 #############################################
           ac_config_files="$ac_config_files src/perl/ashdump.pl"
@@ -23627,7 +23588,6 @@ s,@ASHXP_BUILD_LIBJPEG_TRUE@,$ASHXP_BUILD_LIBJPEG_TRUE,;t t
 s,@ASHXP_BUILD_LIBJPEG_FALSE@,$ASHXP_BUILD_LIBJPEG_FALSE,;t t
 s,@WGET@,$WGET,;t t
 s,@PERL@,$PERL,;t t
-s,@WGRIB@,$WGRIB,;t t
 s,@CONVERT@,$CONVERT,;t t
 s,@GMTSET@,$GMTSET,;t t
 s,@PSCOAST@,$PSCOAST,;t t
@@ -23639,7 +23599,6 @@ s,@MAKECPT@,$MAKECPT,;t t
 s,@GIFSICLE@,$GIFSICLE,;t t
 s,@NCKS@,$NCKS,;t t
 s,@GHOSTSCRIPT@,$GHOSTSCRIPT,;t t
-s,@CGIHOME@,$CGIHOME,;t t
 s,@ASHDUMP@,$ASHDUMP,;t t
 s,@PATH_TO_WEBPUFF@,$PATH_TO_WEBPUFF,;t t
 s,@INSTALL_DIR@,$INSTALL_DIR,;t t

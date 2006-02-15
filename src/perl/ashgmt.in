@@ -4,7 +4,19 @@ use Getopt::Long;
 use POSIX qw(tmpnam strftime);
 use strict;
 
-$main::version = "2.1.5";
+# These paths may need to be modified, configure will attempt to fill them in
+$main::gifsicle_exe = "@GIFSICLE@";
+$main::ncks_exe = "@NCKS@";
+$main::gs_exe = "@GHOSTSCRIPT@";
+$main::convert_exe = "@CONVERT@";
+$main::gmtset_exe = "@GMTSET@";
+$main::psbasemap_exe = "@PSBASEMAP@";
+$main::pscoast_exe = "@PSCOAST@";
+$main::pscontour_exe = "@PSCONTOUR@";
+$main::pstext_exe = "@PSTEXT@";
+$main::psxy_exe = "@PSXY@";
+$main::makecpt_exe = "@MAKECPT@";
+$main::version = "@VERSION@";
 
 my %opt;
 
@@ -33,10 +45,14 @@ GetOptions(
 	"save-ps"     => \$opt{save_ps},
   "stamp!"      => \$opt{stamp},
 	"time=s"			=> \$opt{'time'},
+	"usage"       => \&print_help,
 	"variable=s"  => \$opt{var},
   "verbose"     => \$opt{verbose},
 	"version" => sub { print "@VERSION@\n"; exit(0);}
   );
+
+# check that the GMT utilities are all here
+check_utilities();
 
 # determine the file type
 $opt{filetype} = filetype($ARGV[0]);
@@ -83,9 +99,9 @@ foreach my $file (@file) {
   annotation(\%opt) if $opt{stamp};
   
   # convert to a gif if 'convert' exists
-  #ps2gif(\%opt) if ("@CONVERT@");
+  #ps2gif(\%opt) if ("$main::convert_exe");
 	# convert to a PNG using ghostscript
-  ps2png(\%opt) if ("@CONVERT@");
+  ps2png(\%opt);
 #  close STDOUT;
   # clear the output file
   undef($opt{output});
@@ -99,12 +115,31 @@ foreach my $file (@file) {
 	unlink($basefile);
 	unlink($opt{cpt});
 # # # # # # # # # # # # # # # # # # # # # # # #
+sub check_utilities {
+	unless ($main::gmtset_exe and 
+			$main::gmtset_exe and
+			$main::psbasemap_exe and
+			$main::pscoast_exe and
+			$main::pscontour_exe and
+			$main::pstext_exe and
+			$main::psxy_exe and
+			$main::makecpt_exe ) {
+	print "GMT utilities are not installed or could not be found.  If GMT has been installed, specify the location of the utilities at the top of this script. They are available at http://gmt.soest.hawaii.edu\n";
+	exit(0);
+	}
+	unless ($main::ncks_exe) {
+	print "The NCO utilities are not installed or could not be found.  If NCO has been installed, specify the location of the utilities at the top of this script. They are available at http://nco.sf.net\n";
+	exit(0);
+	}
+	return;
+}
+# # # # # # # # # # # # # # # # # # # # # # # #
 sub set_gmt_parameters {
   
   # these need to be set everytime since ./.gmtdefaults will be written, and
   # then used with subsequent GMT commands.  Thus, there is a .gmtdefaults
   # in every directory from where this program is executed.
-  my $gmtset = "@GMTSET@";
+  my $gmtset = "$main::gmtset_exe";
   
   `$gmtset BASEMAP_FRAME_RGB 0/0/0`;
   `$gmtset BASEMAP_TYPE FANCY`;
@@ -134,7 +169,7 @@ sub conc_range {
 
 	foreach (@files) {
 		my $timestr=$_->{'time'} . ".";
-		open PIPE, "@NCKS@ -d time,$timestr -d level,$opt->{hgt_min},$opt->{hgt_max} -v $opt->{var} -C $_->{in} |";
+		open PIPE, "$main::ncks_exe -d time,$timestr -d level,$opt->{hgt_min},$opt->{hgt_max} -v $opt->{var} -C $_->{in} |";
 		while (<PIPE>) {
 			next unless ($_ =~ m/^time\[/);
 			$_ =~ m/$opt{var}\[\d*\]=(\d*\.?\d*)/;
@@ -156,7 +191,7 @@ sub basemap {
   if (defined $opt->{latlon}) {
     ($latmin,$latmax,$lonmin,$lonmax) = split "/", $opt->{latlon};
   } 
-#	open ASHFILE, "@NCKS@ -m $opt{ashfile} |";
+#	open ASHFILE, "$main::ncks_exe -m $opt{ashfile} |";
 #   while (<ASHFILE>) {
 #     if ($_ =~ m/lon.*min_value.*value=(-?\d*\.?\d*)/) {
 #       $lonmin = $1 unless (defined $lonmin);
@@ -230,7 +265,7 @@ sub basemap {
   
   # the --gridlines option is DX, DX:TX or DX:TXxDY:TY
   # where DX is degree interval in the 'x' direction
-  #       XT is the thickness of the gridline in the 'x' directions
+  #       TX is the thickness of the gridline in the 'x' directions
   # and same for the 'y' direction
   $opt{gridlines} =~ m/(\d+):?(\d*)x?(\d*):?(\d*)/;
   my $dx = $1;
@@ -252,7 +287,7 @@ sub basemap {
 
   # debugging output
 	# -P portrait option would go here if used
-  my $command = "@PSCOAST@ $range $map -W1 -G150 $xtra_opts $gridlines -Dh -K > $opt{output}";
+  my $command = "$main::pscoast_exe $range $map -W1 -G150 $xtra_opts $gridlines -Dh -K > $opt{output}";
   print STDERR "$command\n" if $opt{verbose};
   
 #  print STDOUT `$command`;
@@ -274,7 +309,7 @@ sub contours {
 # this value
 #	my $max_conc = 0;
 
-	open ASHFILE, "@NCKS@ -m $opt{ashfile} |";
+	open ASHFILE, "$main::ncks_exe -m $opt{ashfile} |";
    while (<ASHFILE>) {
 		if ($_ =~ m/$opt{var}.*max_value.*value = (-?\d*\.?\d*)/) {
 			$opt{conc_max} = $1 unless (defined $opt{conc_max});
@@ -289,7 +324,7 @@ sub contours {
 	$var = "rel_fallout_conc" if ($opt{fallout});
 	# put values in a hash of hashes
 	my %conc;
-	open PIPE, "@NCKS@ -d time,$opt{timestr} -d level,$opt{hgt_min},$opt{hgt_max} -v $var -C $opt{ashfile} |";
+	open PIPE, "$main::ncks_exe -d time,$opt{timestr} -d level,$opt{hgt_min},$opt{hgt_max} -v $var -C $opt{ashfile} |";
 	while (<PIPE>){
 		next unless ($_ =~ m/^time\[/);
 		#$_ =~ m/level\[\d+\]=(-?\d*\.?\d*) lat\[\d+\]=(-?\d*\.?\d*) lon\[\d*\]=(\d*\.?\d*) $var\[\d*\]=(\d*\.?\d*)/;
@@ -337,12 +372,12 @@ sub contours {
 #	my $cintv = $max_conc/$opt{num_levels};
 	my $cintv = $opt{conc_max}/$opt{num_levels};
 #	my $cpt = tmpnam();
-#	`@MAKECPT@ -T$opt{conc_min}/$max_conc/$cintv > $opt{cpt}`;
-	`@MAKECPT@ -T$opt{conc_min}/$opt{conc_max}/$cintv > $opt{cpt}`;
+#	`$main::makecpt_exe -T$opt{conc_min}/$max_conc/$cintv > $opt{cpt}`;
+	`$main::makecpt_exe -T$opt{conc_min}/$opt{conc_max}/$cintv > $opt{cpt}`;
 		
-	my $command = "@PSCONTOUR@ $xyzfile $main::maprange -C$opt{cpt} -I -O -K >> $opt{output}";
+	my $command = "$main::pscontour_exe $xyzfile $main::maprange -C$opt{cpt} -I -O -K >> $opt{output}";
 	# change to elipse plotting unless contours requested
-  $command = "@PSXY@ $xyzfile $main::maprange -C$opt{cpt} -Se -O -K >> $opt{output}" unless ($opt{contour});
+  $command = "$main::psxy_exe $xyzfile $main::maprange -C$opt{cpt} -Se -O -K >> $opt{output}" unless ($opt{contour});
 	print STDERR "$command\n" if ($opt{verbose});
 	`$command`;
 
@@ -375,14 +410,14 @@ sub elipse_size {
 
 # get grid spacing from ashfile
 	my (@x, @y);
-	open PIPE, "@NCKS@ -v lat -d lat,0,1 $ncfile|";
+	open PIPE, "$main::ncks_exe -v lat -d lat,0,1 $ncfile|";
 	while (<PIPE>) {
 	$y[1] = $1 if ($_ =~ m/lat\[0\]=(-?\d*\.?\d*)/);
 	$y[2] = $1 if ($_ =~ m/lat\[1\]=(-?\d*\.?\d*)/);
 	}
 	close PIPE;
 
-	open PIPE, "@NCKS@ -v lon -d lon,0,1 $ncfile|";
+	open PIPE, "$main::ncks_exe -v lon -d lon,0,1 $ncfile|";
 	while (<PIPE>) {
 	$x[1] = $1 if ($_ =~ m/lon\[0\]=(-?\d*\.?\d*)/);
 	$x[2] = $1 if ($_ =~ m/lon\[1\]=(-?\d*\.?\d*)/);
@@ -415,7 +450,7 @@ sub particles2 {
 	# array of hashes 
 	my %part;
 	foreach my $l qw(lon lat hgt exists grounded) {
-	open PIPE, "@NCKS@ -v $l --units $opt{ashfile} |";
+	open PIPE, "$main::ncks_exe -v $l --units $opt{ashfile} |";
 	while (<PIPE>) {
 		next unless ($_ =~ m/nash\[\d+\] $l\[\d+\]=(-?\d*\.?\d*)/);
 		push @{$part{$l}}, $1 ;
@@ -437,8 +472,8 @@ sub particles2 {
 
 	# make a color palette, hgt spec's can change here
 #	my $cpt = tmpnam();
-#	`@MAKECPT@ -T0/16000/8 > $opt{cpt}`;
-	`@MAKECPT@ -T$opt{hgt_min}/$opt{hgt_max}/8 > $opt{cpt}`;
+#	`$main::makecpt_exe -T0/16000/8 > $opt{cpt}`;
+	`$main::makecpt_exe -T$opt{hgt_min}/$opt{hgt_max}/8 > $opt{cpt}`;
 
 	my $xyfile = tmpnam();
 	open XYFILE, ">$xyfile";
@@ -448,22 +483,22 @@ sub particles2 {
 		}
 	close XYFILE;
 
-#    print STDOUT  `@PSXY@ $xyfile $main::maprange -C$cpt -Sc -O -K`;
-    `@PSXY@ $xyfile $main::maprange -C$opt{cpt} -Sc$opt{pixels}p -O -K >> $opt{output}`;
+#    print STDOUT  `$main::psxy_exe $xyfile $main::maprange -C$cpt -Sc -O -K`;
+    `$main::psxy_exe $xyfile $main::maprange -C$opt{cpt} -Sc$opt{pixels}p -O -K >> $opt{output}`;
 
 	unlink($xyfile); 
 #	unlink($cpt);
 
 	# mark the volcano location
 	my ($olon, $olat, $ret);
-	$ret = `@NCKS@ -C -v origin_lon $opt{ashfile}`;
+	$ret = `$main::ncks_exe -C -v origin_lon $opt{ashfile}`;
 	$ret =~ m/origin_lon = (\d+\.\d+)/;
 	$olon = $1;
-	$ret = `@NCKS@ -C -v origin_lat $opt{ashfile}`;
+	$ret = `$main::ncks_exe -C -v origin_lat $opt{ashfile}`;
 	$ret =~ m/origin_lat = (\d+\.\d+)/;
 	$olat = $1;
 	if (defined $olon and defined $olat) {
-		my $cmd = "echo \"$olon $olat\" | @PSXY@ $main::maprange -O -K -Sa10p -G0 >> $opt{output}";
+		my $cmd = "echo \"$olon $olat\" | $main::psxy_exe $main::maprange -O -K -Sa10p -G0 >> $opt{output}";
 		print $cmd if ($opt{verbose});
 	`$cmd`;
 	}
@@ -471,42 +506,42 @@ sub particles2 {
 	return;
 }
 # # # # # # # # # # # # # # # # # # # # # # # #
-sub particles {
-  my $opt = pop;
-  
-  my @levels=@main::levels;
-  my @red=@main::red;
-  my @green=@main::green;
-  my @blue=@main::blue;
-  my ($bottom, $top);
-
-  # add an additional filter if --hgt-range was specified, make it empty
-  # otherwise
-  my $filter = "";
-  if (defined($opt->{hgt_range}) ) {
-    $opt->{hgt_range} =~ m[(-?\d+\.?\d*)/(-?\d+\.?\d*)];
-    if (defined($1) and defined($2) ) {
-      $filter = "--range hgt=$1/$2";
-    } 
-  }
-  
-  # add an airborne or fallout filter
-  if (defined($opt->{airborne})) {
-    $filter .= " --range grounded=0/0";
-  }
-  
-  if (defined($opt->{fallout})) {
-    $filter .= " --range grounded=1/1";
-  }
-    
-  # map the ash particles for each level in a different color
-  my $num_levels=scalar @levels;
-  for (my $i=0; $i<$num_levels-1; $i++) {
-
-    print STDOUT  `@ASHDUMP@ --quiet --noheader --var lon,lat --range hgt=$levels[$i]/$levels[$i+1] $filter $opt{ashfile} |@PSXY@ $main::maprange -Sc$opt{pixels}p -G$red[$i]/$green[$i]/$blue[$i] -O -K`;
-  }
-  return;
-}
+#sub particles {
+#  my $opt = pop;
+#  
+#  my @levels=@main::levels;
+#  my @red=@main::red;
+#  my @green=@main::green;
+#  my @blue=@main::blue;
+#  my ($bottom, $top);
+#
+#  # add an additional filter if --hgt-range was specified, make it empty
+#  # otherwise
+#  my $filter = "";
+#  if (defined($opt->{hgt_range}) ) {
+#    $opt->{hgt_range} =~ m[(-?\d+\.?\d*)/(-?\d+\.?\d*)];
+#    if (defined($1) and defined($2) ) {
+#      $filter = "--range hgt=$1/$2";
+#    } 
+#  }
+#  
+#  # add an airborne or fallout filter
+#  if (defined($opt->{airborne})) {
+#    $filter .= " --range grounded=0/0";
+#  }
+#  
+#  if (defined($opt->{fallout})) {
+#    $filter .= " --range grounded=1/1";
+#  }
+#    
+#  # map the ash particles for each level in a different color
+#  my $num_levels=scalar @levels;
+#  for (my $i=0; $i<$num_levels-1; $i++) {
+#
+#    print STDOUT  `@ASHDUMP@ --quiet --noheader --var lon,lat --range hgt=$levels[$i]/$levels[$i+1] $filter $opt{ashfile} |@PSXY@ $main::maprange -Sc$opt{pixels}p -G$red[$i]/$green[$i]/$blue[$i] -O -K`;
+#  }
+#  return;
+#}
 # # # # # # # # # # # # # # # # # # # # # # # #
 sub annotation {
   my $opt = pop;
@@ -515,7 +550,7 @@ sub annotation {
   my %params;
   $param{edate} = "200209250000";
   
-	open ASHHEADER,"@NCKS@ -M $opt{ashfile} |";
+	open ASHHEADER,"$main::ncks_exe -M $opt{ashfile} |";
   while (<ASHHEADER>) {
     if ($_ =~ m/volcano.*value = (\D+)/) {
       $param{volcname} = $1;
@@ -550,12 +585,12 @@ sub annotation {
   my $amap = "-JX$xinch"."i/$yinch"."i";
   my $arange = "-R0/$xinch/0/$yinch";
   # -Y adds 2.0 cm at the bottom for adding an annotation region
-  `@PSBASEMAP@ $amap $arange -BWESN -Y-3.0c -O -K >> $opt{output}`;
+  `$main::psbasemap_exe $amap $arange -BWESN -Y-3.0c -O -K >> $opt{output}`;
 
   # the text strings
   # format is x y size angle fontnumber justify text
-  `echo \"0.10 0.30 12 0 0 1 $param{volcname}\" | @PSTEXT@ $amap $arange -O -K >> $opt{output}`;
-	`echo \"0.10 0.10 12 0 0 1 $param{datetime}\" | @PSTEXT@ $amap $arange -O -K >> $opt{output}`;
+  `echo \"0.10 0.30 12 0 0 1 $param{volcname}\" | $main::pstext_exe $amap $arange -O -K >> $opt{output}`;
+	`echo \"0.10 0.10 12 0 0 1 $param{datetime}\" | $main::pstext_exe $amap $arange -O -K >> $opt{output}`;
 
 	if ($opt{filetype} eq "ash") { particle_colorbar( "$amap $arange", \%opt) };
 	if ($opt{filetype} eq "conc") { conc_colorbar( "$amap $arange", \%opt) };
@@ -564,7 +599,7 @@ sub annotation {
 #fixme:
 $param{model} = "$main::version";
 my $xl = $main::xinch - 0.5;
-`echo \"$xl .25 12 0 0 1\" $param{model} | @PSTEXT@ $amap $arange -O >> $opt{output}`;
+`echo \"$xl .25 12 0 0 1\" $param{model} | $main::pstext_exe $amap $arange -O >> $opt{output}`;
 
   return ;
 }
@@ -577,15 +612,15 @@ sub conc_colorbar {
 	my $x0 = 2.80;
 
 	# print "minimum" text
-	`echo $x0 0.1 12 0 0 3 'low' | @PSTEXT@ $amap -O -K >> $opt{output}`;
+	`echo $x0 0.1 12 0 0 3 'low' | $main::pstext_exe $amap -O -K >> $opt{output}`;
 
 	for (my $i = 0; $i < $opt{num_levels}; $i++) {
 		my $c = $opt{conc_min}+($i+0.5)/$opt{num_levels}*($opt{conc_max}-$opt{conc_min});
-		`echo $x0 0.35 $c | @PSXY@ $amap -Sb0.5ib0.25i -C$opt{cpt} -O -K >> $opt{output}`; 
+		`echo $x0 0.35 $c | $main::psxy_exe $amap -Sb0.5ib0.25i -C$opt{cpt} -O -K >> $opt{output}`; 
 		$x0+=0.5;
 		}
 	# print "maxmimum" text
-	`echo $x0 0.1 12 0 0 3 'high' | @PSTEXT@ $amap -O -K >> $opt{output}`;
+	`echo $x0 0.1 12 0 0 3 'high' | $main::pstext_exe $amap -O -K >> $opt{output}`;
 	return;
 		}
 # # # # # # # # # # # # # # # # # # # # # # # #
@@ -605,21 +640,21 @@ sub particle_colorbar {
   my $x0=2.80;
 
 for (my $i=0; $i<$opt{num_levels}; $i++) {
-	`echo $x0 0.35 $hgt[$i] | @PSXY@ $amap -Sb0.2b0.25 -C$opt{cpt} -O -K >> $opt{output}`;
+	`echo $x0 0.35 $hgt[$i] | $main::psxy_exe $amap -Sb0.2b0.25 -C$opt{cpt} -O -K >> $opt{output}`;
 	$x0 += 0.1;
   # label the color bar in kilometers every 3rd time
 	if ($i % 3 == 0) {
 		$hgt[$i] = int($hgt[$i]/1000);
 		# label the left edge of the bar
 		my $xl = $x0-.2;
-		`echo $xl 0.1 12 0 0 1 $hgt[$i] | @PSTEXT@ $amap -O -K >> $opt{output}`;
+		`echo $xl 0.1 12 0 0 1 $hgt[$i] | $main::pstext_exe $amap -O -K >> $opt{output}`;
 		}
   }
 	# place the last label
 	{
 	my $xl = $x0-0.1;
 	my $hgt = int($hgt[$opt{num_levels}]/1000);
-	`echo $xl 0.1 12 0 0 1 \"$hgt km\" | @PSTEXT@ $amap -O -K >> $opt{output}`;
+	`echo $xl 0.1 12 0 0 1 \"$hgt km\" | $main::pstext_exe $amap -O -K >> $opt{output}`;
 	}
   
 	return;
@@ -628,6 +663,11 @@ for (my $i=0; $i<$opt{num_levels}; $i++) {
 sub ps2png {
 	my $opt = shift;
 
+	# exit if ghostscript was not found
+	unless ($main::gs_exe) {
+		print STDERR "Cannot create a PNG image from the postscript because ghostscript 'gs' is not installed or was not found.  The path must be specified at the top of this script\n";
+		return;
+	}
 	my $psfile = $opt->{output};
 	(my $pngfile = $psfile) =~ s/.ps$/.png/;
 	my $mag = 100*($opt->{magnify});
@@ -636,19 +676,25 @@ sub ps2png {
 	# convert the postscript to PNG using gs.  Magnification is done with the resolution
 	# flag.  The whitespace is trimmed using convert
 	print STDERR "$pngfile exists, overwriting.\n" if (-e $pngfile);
-	my $command = "@GHOSTSCRIPT@ -sDEVICE=png256 -sOutputFile=$pngfile -r$mag $psfile";
+	my $command = "$main::gs_exe -sDEVICE=png256 -sOutputFile=$pngfile -r$mag $psfile";
 	print STDERR "$command\n" if $opt{verbose};
 
   open PIPE, "|$command > /dev/null";
 	print PIPE "\nquit\n";
 	close PIPE;
-	$command = "@CONVERT@ -trim -rotate 90 $pngfile $pngfile > /dev/null";
+	# Without 'convert', leave the PNG as is.
+	unless ($main::convert_exe) {
+		print STDERR "The PNG file cannot be trimmed and rotated because Imagemagick 'convert' is not installed or could not be found.  The path must be specified at the top of this script\n";
+		return;
+	}
+	# trim and rotate the PNG file.
+	$command = "$main::convert_exe -trim -rotate 90 $pngfile $pngfile > /dev/null";
 	print STDERR "$command\n" if $opt{verbose};
 	`$command`;
 	# if we are making a movie, make a GIF also
 	if (defined($opt->{movie}) ) {
 	  (my $gif = $pngfile) =~ s/.png$/.gif/;
-		$command = "@CONVERT@ $pngfile $gif";
+		$command = "$main::convert_exe $pngfile $gif";
 		print $command if $opt{verbose};
 		`$command`;
 		}
@@ -658,25 +704,25 @@ sub ps2png {
 	return;
 	}
 # # # # # # # # # # # # # # # # # # # # # # # #
-sub ps2gif {
-  my $opt = shift;
-  
-  my $psfile = $opt->{output};
-  (my $giffile = $psfile) =~ s/\.ps$/.gif/;
-  
-  # convert the postscript to a GIF, trim the excess space GMT generates
-  # to make it a portrait size
-  my $command = "@CONVERT@ -trim $psfile GIF:$giffile > /dev/null";
-  print STDERR "$command\n" if $opt{verbose};
-  `$command`;
-  
-  # set the image in the upper, right corner and trim the leftover transparency
-  $command = "@GIFSICLE@ --no-position --crop-transparency --output $giffile $giffile";
-  print STDERR "$command\n" if $opt{verbose};
-  `$command`;
-  
-  return;
-}
+#sub ps2gif {
+#  my $opt = shift;
+#  
+#  my $psfile = $opt->{output};
+#  (my $giffile = $psfile) =~ s/\.ps$/.gif/;
+#  
+#  # convert the postscript to a GIF, trim the excess space GMT generates
+#  # to make it a portrait size
+#  my $command = "$main::convert_exe -trim $psfile GIF:$giffile > /dev/null";
+#  print STDERR "$command\n" if $opt{verbose};
+#  `$command`;
+#  
+#  # set the image in the upper, right corner and trim the leftover transparency
+#  $command = "$main::gifsicle_exe --no-position --crop-transparency --output $giffile $giffile";
+#  print STDERR "$command\n" if $opt{verbose};
+#  `$command`;
+#  
+#  return;
+#}
 # # # # # # # # # # # # # # # # # # # # # # # #
 # find the minimum bounding box for each file and set $opt->{latlon} to it
 sub boundingbox {
@@ -700,10 +746,10 @@ sub boundingbox {
     $latmax = -90.0;
   }
   
-  my $command = "@NCKS@ -m $file";
+  my $command = "$main::ncks_exe -m $file";
   print STDERR "$command\n" if ($opt->{verbose});
   
-	open ASHFILE, "@NCKS@ -m $file |";
+	open ASHFILE, "$main::ncks_exe -m $file |";
    while (<ASHFILE>) {
      if ($_ =~ m/lon.*min_value.*value = (-?\d*\.?\d*)/) {
        $lonmin = $1 - $br if ($1 < $lonmin);
@@ -728,6 +774,11 @@ sub boundingbox {
 }
 # # # # # # # # # # # # # # # # # # # # # # # #
 sub make_movie {
+
+	unless ($main::gifsicle_exe) {
+		print STDERR "The 'gifsicle' program is required to create a movie and is not installed or could not be found.  The location must be specified at the top of this script.  It is available at http://www.icdf.org/gifsicle\n";
+		return;
+	}
   my $opt = shift;
   my $fileref = shift;
 #	my @file = @$fileref;
@@ -739,7 +790,7 @@ sub make_movie {
 	}
   
  my $movie = $opt->{movie};
-  my $command = "@GIFSICLE@ --loop=forever --delay=50 --colors=128 ";
+  my $command = "$main::gifsicle_exe --loop=forever --delay=50 --colors=128 ";
   foreach (@file) {
 		$command .= "$_ ";
   }
@@ -790,7 +841,7 @@ sub fileio {
 			# add the numeric suffix if appropriate
 			$infile[$fi] =~ /conc(\d*).nc/;
 			my $nsuf = $1;
-			open PIPE, "@NCKS@ -C --units -v time $infile[$fi]| ";
+			open PIPE, "$main::ncks_exe -C --units -v time $infile[$fi]| ";
 			while (<PIPE>) {
 				next unless ($_ =~ m/time\[\d+\]=(\d+)/);
 				my $time_t = $1;
@@ -850,6 +901,8 @@ sub defaults {
 		$opt->{num_levels} = 24 if ($opt{filetype} eq 'ash');
 		}
   $opt->{pixels} = 2 unless (defined ($opt->{pixels} ));
+	# save the intermemdiate postscript if PNG is not being created
+	$opt->{save_ps} = 1 unless ($main::gs_exe);
   $opt->{stamp} = 1 unless (defined ($opt->{stamp} ));
 	$opt->{var} = "rel_air_conc" unless (defined ($opt->{var} ));
   $opt->{verbose} = 0 unless (defined ($opt->{verbose} ));
@@ -865,3 +918,100 @@ sub defaults {
   return;
 }
 
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub print_help {
+
+print << "EOF";
+usage: ashgmt [options] file[s]
+
+The file or file list may be either particle files (*ash*.cdf) or
+concentration files (*conc*.nc).  
+
+--airborne
+	display only airborne particles (default)
+
+--basemap="-R... -J..."
+	specify a custom GMT basemap.  This string should include both the
+	projection (-J) and range (-R) flags, and needs to be quoted since there is
+	a space between the two.  Example: "-R205/220/50/65 -JS210/90/7i".  You can
+	see the default basemap using the --verbose option.  Other 'pscoast' options like
+	-I or -G can also be added to this option.
+
+--conc-range=min/max
+	specify the concentration range.
+
+--conc-limits=min/max
+	Specify the limits of the color bar, overriding the default range.  Often
+   used in conjunction with the --conc-range to override the default range
+   setting.
+
+--contour
+	Use GMT's pscontour routine insted of plotting dots for concentration
+	plotting.
+
+--fallout
+	Only plot grounded particles.  This is exclusive of --airborne.
+
+--gridlines=DX[[:TX]/DY[:TY]]
+  Grid line spacing in degrees.  X and Y directions can be different.  The
+  thickness specification TX and TY is ignored.
+
+--no-gridlines
+  Do not draw gridlines
+
+--help
+  Print usage information and exit.
+
+--hgt-range=min/max
+  Only plot particles or calculate concentration for this range (in meters).
+
+--latlon=latmin/latmax/lonmin/lonmax
+  Draw a map of this range, overriding default behavior which is a map that
+  includes all particles.
+
+--magnify=amount
+  Magnify the image this amount, default is 1, doubling is 2.
+
+--movie=file
+  Create an animated GIF image with name 'file'.  This requires ImageMagick
+	'convert' and 'gifsicle'.
+
+--num-levels=number
+  Use this number of levels in the concentration plot.  Ignored for particle
+  maps.
+
+--pixels=number
+  Draw particles this number pixels in diameter (approximately).
+
+--projection=mercator|polar|lambert
+  Use this projection instead of the default.  If the map crosses the equator,
+  only mercator can be used.
+
+--save-postscript
+  Keep the intermediate postscript file that GMT generates.  --save-ps also
+  works.
+
+--stamp
+  Print a time stamp on this image.  --no-stamp does the opposite.
+
+--time=YYYYmmDDhhMM[:YYYYmmDDhhMM]
+  Only produce maps for this time range from the concentration file.
+
+--usage
+	Print usage information and exit.
+
+--variable=var
+  Plot the data in this variable instead of the default (no yet implemented).
+
+--verbose
+  Print to STDERR all the GMT commands (and others) being used.  This is 
+  helpful for fine-tuning the basemap or lat/lon range from the default.
+
+--version
+	Print the version number and exit.
+
+EOF
+
+exit(0);
+return;
+}
