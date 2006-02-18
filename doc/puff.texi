@@ -2,7 +2,7 @@
 \input texinfo   @c -*-texinfo-*-
 @c %**start of header
 @setfilename puff.info
-@settitle puff-uaf manual 2.0.1
+@settitle puff-uaf manual 3.0.0
 @c %**end of header
 
 @ifinfo
@@ -14,7 +14,7 @@ Copyright @copyright{} 2003 University of Alaska, Fairbanks.
 @titlepage
 @title Puff Technical Manual 
 @subtitle An Ash Particle Tracking Model
-@subtitle Version 2.0@c@today{}
+@subtitle Version 3.0@c@today{}
 @subtitle @url{puff.images.alaska.edu}
 @vskip 5mm
 @iftex
@@ -34,7 +34,7 @@ Copyright @copyright{} 2003 University of Alaska, Fairbanks.
   @image{images/logos2}
 @end ifnotinfo
 
-Copyright @copyright{} 2003 University of Alaska, Fairbanks.
+Copyright @copyright{} 2006 University of Alaska, Fairbanks.
 @end titlepage
 
 @contents
@@ -64,35 +64,37 @@ Craig Searcy originally wrote the Puff collection of programs in C++, and some m
 @unnumbered Preface - version 2.0
 This is a complete reworking of the manual.  The newest version of the GUI @command{pufftk} is completely documented, and the new post-processor @command{ashxp} is introduced.  The older Tcl/Tk applications @command{puffgui} and @command{puffview} are no longer part of the Puff distribution.  Some of the more cumbersome third-party software has been removed, which makes installation much easier and creating pictures and animations much quicker.  Attempts have been made to address the many new features available in the UAF version of Puff, including multiple eruptions and restart files.  All C++ code is now fully compliant with the most current standards, and compiles with strict protocol checking.  Conversion of GRIB files into puff-friendly netCDF files is still a little awkward and done using @command{grib2pf}, a perl script.  However, this script is fairly easy to customize for different and changing GRIB files.  Configuration and building the applications is now done using GNU autotools, and has been successfully tested on Linux, Sun, and MacOSX operating systems.  Rorik Peterson is the current maintainer, and questions and comments should be directed to him @email{rorik@@gi.alaska.edu}.
 
+@unnumbered Preface - version 3.0
+The Puff volcanic ash tracking model has gone through many changes since version 2.0.  The only GUI is now through a web browser, removing the Tk toolkit requirement and hopefully making the program more accessible.  It also means the public access web version looks and functions exactly like a local installation.  There have also been many improvements to the reading of windfield data.  Most complient NetCDF files should now be read by puff with no intermediate processing required.  The @command{uni2puff} utility is now completely integrated within @command{puff} and all processing is done on-the-fly.  The @command{grib2pf} utility is not required, and Unidata's @command{gribtonc} can be used instead.  The physics have been improved.  Variable fall dynamics are now supported, and turbulent diffusion can be automatically calculated and the ambiguous @option{--diffuseH} does not need to be specified. 
+
 @node Introduction, Installation, Preface, Top
 @comment node, next, previous, up
 
 @chapter Introduction
 
-Puff-UAF is slightly different than Puff 2.6, but evolved from it and carries its license.  It is GPL'ed and a separate branch from 2.6, thus a name change and new numbering system.
+Puff-UAF is slightly different than Puff 2.6 (written by Craig Searcy in the 1990's), but evolved from it and carries its license.  It is GPL'ed and a separate branch from 2.6, thus a name change and new numbering system.
 
 Puff models the dispersion of volcanic ash following an eruption.  It requires horizontal wind field data as a function of geopotential height on a grid covering the area of interest.  Puff will then output the location (in 3 dimensions), size, and age-since-eruption of representative ash particles.  Puff is a fast and efficient research and operational tool for predicting the trajectories of ash particles, which is essential for hazard assessment.
 
 Puff was originally developed at the University of Alaska, Fairbanks (UAF) by Craig Searcy, based on a model conceived by Dr. H. Tanaka at the University of Tsukuba.  Subsequent development then split between the Air Force Weather Agency (AFWA) and the National Weather Service (NWS). The AFWA modifications were initially performed by D.S. Tillman at the John Hopkins Applied Physics Laboratory (JHAPL), and others are continuing the development.  Their intent was to develop an operational tool specifically for the needs of AFWA.  The development at the NWS is continued by Craig Searcy.  A copy of the earlier version before splintering has been retained at UAF and is @emph{Puff Version 2.6}, available at the Puff website @url{http://puff.images.alaska.edu}.  Subsequent development of Puff at UAF has begun to dramatically change the program.  For this reason, it has been renamed Puff-UAF and a new version numbering system started.  Puff-UAF is a completely C++ compliant modification of Puff 2.6 with some of the "bells and whistles" from the AFWA version.  Most importantly, it contains several new and unique features. 
 
-Puff is actually a collection of interacting modules as shown in the figure below.  The entire collection is called the Puff suite, or simply Puff with a capital 'P'.  At the heart of the Puff suite is the main program, which we refer to as simply @command{puff} with a lowercase '@command{p}'.  You can interact with the main program @command{puff} through either the GUI @command{pufftk} or via the command line.  
+Puff is actually a collection of interacting modules as shown in the figure below.  The entire collection is called the Puff suite, or simply Puff with a capital 'P'.  At the heart of the Puff suite is the main program, which we refer to as simply @command{puff} with a lowercase '@command{p}'.  You can interact with the main program @command{puff} through @command{webpuff}, the browser-based GUI, or via the command line.  
 
 In addition to specifying eruption parameters,  wind field data valid for the time and location must be provided.  This data can come in a variety of formats, and the Puff suite has various modules to handle each type of data as shown in the figure.  The direct input to @command{puff} must be in netCDF format.
   
-The output from @command{puff} is also a netCDF file. The Puff suite includes several modules for analyzing the output data including the GUI  @command{pufftk}, the post-processor @command{ashxp} and the command line utility @command{ashdump}.   The GUI provides easy and direct post-processing of the data via @command{ashxp}.  Both @command{ashxp} and @command{ashdump} can be executed from the command line to produce graphical images or textual data, respectively.
+The output from @command{puff} is also a NetCDF file. The Puff suite includes several modules for analyzing the output data.  There are two post-processing utilities: @command{ashxp} and @command{ashgmt}.  Both produce graphic maps of the data.  @command{ashxp} produces JPEG images, and @command{ashgmt} produces postscript maps using the Generic Mapping Tools (GMT), PNG images using ghostscript, and GIF images using ImageMagick @command{convert}.  The data can be simply dumped as text using @command{ashdump}.  i
 
 The Puff suite contains the following different executables. 
 
 @enumerate
 @item @command{ashdump} Utility for viewing information in the model output files
+@item @command{ashdump.pl} A perl version of @command{ashdump}
 @item @command{puff} Volcanic Ash Dispersion model .
-@item @command{pufftk} A different GUI requiring Perl and Perl/Tk.
-@item @command{uni2puff} Utility to convert Unidata netCDF data t the required input form for @command{puff}.
 @item @command{ashxp} Utility for creating graphical images form netCDF format ash files generated by @command{puff}.
-@item @command{grib2pf} a conversion utility from GRIB format to puff-friendly netCDF files that can be processed with @command{uni2puff}.
+@item @command{ashgmt} Utility for creating postscript, PNG, and GIF images using GMT.
 @end enumerate
 
-@image{images/flow2.1}
+@image{images/flow3}
 
 @node Installation, Tutorial, Introduction, Top
 @comment node, next, previous, up
@@ -101,39 +103,33 @@ The Puff suite contains the following different executables.
 @cindex installation
 @cindex @kbd{configure}
 
-The entire Puff-UAF distribution is divided into a few parts, each of which can be compiled and installed separately depending on specific site needs.  The programs @command{puff}, @command{uni2puff}, and @command{ashdump} are included in the main @file{Puff-UAF-XX} distribution (where @file{XX} is the version number.)  The post-processor @command{ashxp} is a separate program and resides in @file{ashxp-XX}.  Building and installation of both is done using GNU autotools.   The most basic build is done by @kbd{./configure; make; make check; make install}.  However, there are several compilation options, which can be viewed using @kbd{./configure --help}.  Both Puff-UAF and ashxp require the netCDF @b{C} library and the header file @file{netcdf.h} to compile.  They are available from Unidata @url{http://www.unidata.ucar.edu}.  If these files are not in your compiler's search path, specify their location using the environment variables @env{NETCDF_INC} and @env{NETCDF_LIB} (for example, @kbd{NETCDF_INC=/usr/local/netcdf-3.5.0/include}).  A dynamic-link library @file{libpuff.so} is used by all three Puff-UAF programs, and can be built statically using @kbd{./configure --disable-shared}.
+Puff reads and generated NetCDF files, so Unidata's NetCDF library must be installed first.  It is available from @url{http://www.unidata.ucar.edu/software/netcdf}.  The Udunits library from Unidata is also required; @url{http://www.unidata.ucar.edu/software/udunits}.  Everything else you need to run @command{puff}, @command{webpuff}, and produce JPEG images with @command{ashxp} is included in the @file{puff-uaf-3.x.x.tar.gz} file.  However, somewhat better-looking maps can be made using @command{ashgmt}, which requires the following external utilities.
+@enumerate
+@item GMT - Generic Mapping Tools, available from @url{http://gmt.soest.hawaii.edu}
+@item NCO - NetCDF Operators, available from @url{http://nco.sf.net}
+@item @command{convert} - part of ImageMagick, available from @url{http://www.imagemagick.org}
+@item @command{gifsicle} - avialable from @url{http://www.icdf.org/gifsicle}
+@end enumerate
+
+@cindex @command{gifsicle}
+@cindex GMT
+@cindex NCO
+
+It is advisable to install the above before Puff because the @command{configure} script will attempt to find these utilities.  
+  Building and installation is done using GNU autotools.   The most basic build is done by @kbd{./configure; make; make check; make install}.  However, there are several compilation options, which can be viewed using @kbd{./configure --help}.  Most important may be specifying the location of @file{libnetcdf} and @file{libudunits} using the environment variable @env{NETCDF_LIB}.  The location of the associated header files can be specified with @env{NETCDF_INC}.  Puff can be built with shared or static libraries, but static libraries are recommended and can be done using @kbd{./configure --disable-shared}.
+
 @cindex @env{NETCDF_INC}
 @cindex @env{NETCDF_LIB}
 @cindex shared library
 
-The are three supporting programs within Puff-UAF that are actually Perl scripts: @command{ashdump.pl}, @command{grib2pf} and @command{pufftk}.  If the errors @samp{command not found} or @samp{bad interpreter} occur when attempting to run these programs, check that the first line of each script correctly identifies the location of the Perl interpreter (this is normally done automatically at configure time.)  The GUI interface @command{pufftk} requires the Perl/Tk module with the JPEG image reader.  If the GUI is desired and Perl/Tk is not available, the source code is included with the distribution in the @file{TK800.024} directory.  The JPEG extension is also included in the 
-@file{Tk-JPEG-2.014} directory.  Both of these are compiled and installed by going into the directory and executing @kbd{perl Makefile.PL; make; make install}.  More extensive installation instructions and options are included in the respective directories.  A more convenient option is to download the appropriate precompiled Perl/Tk binary from @url{http://www.perltk.org/binaries}; a repository for major architectures.
-@cindex PerlTk
+The installation location of Puff is specified with the @kbd{--prefix=PREFIX} option to @command{configure}.  The default is the same as the build directory, which is usually not advisable.  Once installed, the @file{PREFIX/bin/} directory contains the programs, @file{PREFIX/web/} contains the web-browser based programs including @command{webpuff}.  The @file{PREFIX/etc/} directory contains auxillary image and font files, and a few text files used by Puff.  The documentation is inside @file{PREFIX/doc} and includes PDF, HTML and postscript version.
 
 @section Tests
-A battery of tests are available in the @file{test} directory of Puff-UAF, and can be executed using @kbd{make check}.  The tests are constantly changing and evolving.  The basic idea is to execute @command{puff}, @command{uni2puff} and @command{ashdump} in a variety of different ways.  Install only after all tests have succeeded.  When each test succeeds, the message @samp{PASS: testXX.sh} is written to standard output. When a test fails, an error log called @file{testXX.err} remains in the @file{test} directory.  This log may provide enough information to fix the problem.  If not, email the error log, along with the program version (@command{puff --version}), to the @email{rorik@@gi.alaska.edu, puff maintainer}.
+A small battery of tests are available in the @file{test} directory of Puff-UAF, and can be executed using @kbd{make check}.  The tests are constantly changing and evolving.  The basic idea is to execute @command{puff} using several different options.  Install only after all tests have succeeded.  When each test succeeds, the message @samp{PASS: testXX.sh} is written to standard output. When a test fails, an error log called @file{testXX.err} remains in the @file{test} directory.  This log may provide enough information to fix the problem.  If not, email the error log, along with the program version (@command{puff --version}), to the @email{rorik@@gi.alaska.edu, puff maintainer}.
 @cindex tests
 
-In order to run these tests, wind field data files that may not be included with the distribution are required.  These files reside in the @file{puff-uaf-XX/data} directory.  If they are not already available, they will be automatically downloaded from the web site @url{http://puff.images.alaska.edu/download} using @command{wget} when running @command{make check}.  If you do not have @command{wget}, you will need to retrieve the files manually before running the tests. 
+In order to run these tests, wind field data files that may not be included with the distribution are required.  These files reside in the @file{puff-uaf-3.x.x/data} directory.  If they are not already available, they will be automatically downloaded from the web site @url{http://puff.images.alaska.edu/download} using @command{wget} when running @command{make check}.  If you do not have @command{wget}, you will need to retrieve the files manually before running the tests. 
 @cindex @command{wget}
-
-@section Third-party software
-In order to broaden the audience that may use Puff, third-party software requirements have been minimized.  However, there is always a trade-off between the expanding the breadth of functionality while minimizing the use of other pre-written software.  Fortunately, the modularity of Puff allows some parts to be used even if others are missing.  Below is a listing of the individual components of Puff and their third-party software requirements:
-
-@itemize @bullet
-@item @command{puff} - netCDF C library, available freely from Unidata in source and binary form for most architectures. @url{http://www.unidata.ucar.edu}
-
-@item @command{uni2puff} - netCDF C library.
-
-@item @command{ashdump} - netCDF C library
-
-@item @command{pufftk} - (1) Perl standard distribution. (2) @file{Tk.pm} and  @file{JPEG.pm} modules available freely in source form from CPAN, see @url{http://www.cpan.org} (3) @command{ashxp}, see next item.
-
-@item @command{ashxp} - JPEG library @file{libjpeg}.  A freely available version is available from the Independent JPEG Group, see @url{http://www.ijp.org}
-
-@item @command{grib2pf} - Perl standard distribution.
-
-@end itemize
 
 @node Tutorial, The puffrc file, Installation, Top
 @comment node, next, previous, up

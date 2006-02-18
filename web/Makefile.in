@@ -42,7 +42,7 @@ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/Webpuff.pm.in $(srcdir)/ashxpOptions.pl.in \
 	$(srcdir)/login.pl.in $(srcdir)/logout.pl.in \
 	$(srcdir)/main.pl.in $(srcdir)/runParams.pl.in \
-	$(srcdir)/webpuff.pl.in
+	$(srcdir)/webpuff.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.in
@@ -51,7 +51,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(SHELL) $(top_srcdir)/auto/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES = ashxpOptions.pl runParams.pl main.pl login.pl \
-	logout.pl webpuff.pl Webpuff.pm
+	logout.pl webpuff Webpuff.pm
 am__installdirs = "$(DESTDIR)$(bindir)"
 binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
 SCRIPTS = $(bin_SCRIPTS)
@@ -84,7 +84,6 @@ BUILD_INSTALL_DOCS_TRUE = @BUILD_INSTALL_DOCS_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
-CGIHOME = @CGIHOME@
 CONVERT = @CONVERT@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
@@ -103,6 +102,7 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
+GHOSTSCRIPT = @GHOSTSCRIPT@
 GIFSICLE = @GIFSICLE@
 GMTSET = @GMTSET@
 INSTALL_DATA = @INSTALL_DATA@
@@ -121,6 +121,7 @@ MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKECPT = @MAKECPT@
 MAKEINFO = @MAKEINFO@
+NCKS = @NCKS@
 NETCDF_INC = @NETCDF_INC@
 NETCDF_LIB = @NETCDF_LIB@
 OBJEXT = @OBJEXT@
@@ -148,7 +149,6 @@ SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
 WGET = @WGET@
-WGRIB = @WGRIB@
 ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
@@ -197,7 +197,7 @@ target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
 SUBDIRS = mini_httpd
-bin_SCRIPTS = ashxpOptions.pl login.pl logout.pl main.pl runParams.pl webpuff.pl
+bin_SCRIPTS = ashxpOptions.pl login.pl logout.pl main.pl runParams.pl webpuff
 PIX_FILES = pix/puff_bg_dark.jpg \
   pix/puff_bg.gif \
   pix/puff_1.gif \
@@ -245,9 +245,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  web/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  web/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  web/Makefile
+	  $(AUTOMAKE) --gnu  web/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -275,7 +275,7 @@ login.pl: $(top_builddir)/config.status $(srcdir)/login.pl.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 logout.pl: $(top_builddir)/config.status $(srcdir)/logout.pl.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
-webpuff.pl: $(top_builddir)/config.status $(srcdir)/webpuff.pl.in
+webpuff: $(top_builddir)/config.status $(srcdir)/webpuff.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 Webpuff.pm: $(top_builddir)/config.status $(srcdir)/Webpuff.pm.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@

@@ -1,7 +1,7 @@
 #!@PERL@
 
 use Getopt::Long;
-use POSIX qw(tmpnam strftime);
+use POSIX qw(tmpnam strftime sys_wait_h);
 use strict;
 
 # These paths may need to be modified, configure will attempt to fill them in
@@ -87,33 +87,48 @@ my @file = fileio(@ARGV);
 # determine concentration range for selected times
 conc_range(\%opt, @file);
 
+# array to hold process ID's of all the children
+my @pids;
 # loop here over all 'in' files
 foreach my $file (@file) {
+	if (my $pid = fork) {
+		# parent here
+		push @pids, $pid;
+	} elsif (defined $pid) {
+	$opt{cpt}=tmpnam();
 	$opt{ashfile} = $file->{in};
 	$opt{output} = $file->{out};
 	$opt{timestr} = $file->{'time'} . ".";
 	`cp $basefile $opt{output}`;
-#	open STDOUT, ">>$opt{output}";
   particles2(\%opt) if ($opt{filetype} eq "ash");
 	contours(\%opt) if ($opt{filetype} eq "conc");
   annotation(\%opt) if $opt{stamp};
   
-  # convert to a gif if 'convert' exists
-  #ps2gif(\%opt) if ("$main::convert_exe");
 	# convert to a PNG using ghostscript
   ps2png(\%opt);
-#  close STDOUT;
-  # clear the output file
+  # clear the output file, not necessary if parallel mode
   undef($opt{output});
-  }
+	unlink($opt{cpt});
+	exit(0);
+	} # end if child process
+  } # end of parent loop
   
+# flag for watching when child processes are all finished
+my $children = 1;
+while ($children) {
+	sleep 1; # sleep a little to not consume resources looping
+	# assume children are all finished
+	$children = 0;
+	# loop over all child PID's to see if any are still running
+	foreach (@pids) { $children = 1 unless (waitpid($_,&WNOHANG) == -1); }
+	}
+
   # make a movie as well if necessary
-#  make_movie(\%opt, @ARGV) if (defined($opt{movie}) ); 
   make_movie(\%opt, \@file) if (defined($opt{movie}) ); 
 
 	# unlink the temporary basemap and color palette files
 	unlink($basefile);
-	unlink($opt{cpt});
+#	unlink($opt{cpt});
 # # # # # # # # # # # # # # # # # # # # # # # #
 sub check_utilities {
 	unless ($main::gmtset_exe and 
@@ -287,7 +302,7 @@ sub basemap {
 
   # debugging output
 	# -P portrait option would go here if used
-  my $command = "$main::pscoast_exe $range $map -W1 -G150 $xtra_opts $gridlines -Dh -K > $opt{output}";
+  my $command = "$main::pscoast_exe $range $map -W1 -G150 $xtra_opts $gridlines -Df -K > $opt{output}";
   print STDERR "$command\n" if $opt{verbose};
   
 #  print STDOUT `$command`;

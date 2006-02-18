@@ -294,7 +294,7 @@ AC_CONFIG_FILES([web/runParams.pl],[chmod +x web/runParams.pl])
 AC_CONFIG_FILES([web/main.pl],[chmod +x web/main.pl])
 AC_CONFIG_FILES([web/login.pl],[chmod +x web/login.pl])
 AC_CONFIG_FILES([web/logout.pl],[chmod +x web/logout.pl])
-AC_CONFIG_FILES([web/webpuff.pl],[chmod +x web/webpuff.pl])
+AC_CONFIG_FILES([web/webpuff],[chmod +x web/webpuff])
 AC_CONFIG_FILES([web/Webpuff.pm])
 dnl manual pages
 AC_CONFIG_FILES([man/Makefile])

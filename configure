@@ -22794,7 +22794,7 @@ echo "disabling shared libraries..."
 
           ac_config_files="$ac_config_files web/logout.pl"
 
-          ac_config_files="$ac_config_files web/webpuff.pl"
+          ac_config_files="$ac_config_files web/webpuff"
 
           ac_config_files="$ac_config_files web/Webpuff.pm"
 
@@ -23418,7 +23418,7 @@ do
   "web/main.pl" ) CONFIG_FILES="$CONFIG_FILES web/main.pl" ;;
   "web/login.pl" ) CONFIG_FILES="$CONFIG_FILES web/login.pl" ;;
   "web/logout.pl" ) CONFIG_FILES="$CONFIG_FILES web/logout.pl" ;;
-  "web/webpuff.pl" ) CONFIG_FILES="$CONFIG_FILES web/webpuff.pl" ;;
+  "web/webpuff" ) CONFIG_FILES="$CONFIG_FILES web/webpuff" ;;
   "web/Webpuff.pm" ) CONFIG_FILES="$CONFIG_FILES web/Webpuff.pm" ;;
   "man/Makefile" ) CONFIG_FILES="$CONFIG_FILES man/Makefile" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
@@ -23855,7 +23855,7 @@ s,@INSTALL@,$ac_INSTALL,;t t
     web/main.pl ) chmod +x web/main.pl ;;
     web/login.pl ) chmod +x web/login.pl ;;
     web/logout.pl ) chmod +x web/logout.pl ;;
-    web/webpuff.pl ) chmod +x web/webpuff.pl ;;
+    web/webpuff ) chmod +x web/webpuff ;;
   esac
 done
 _ACEOF

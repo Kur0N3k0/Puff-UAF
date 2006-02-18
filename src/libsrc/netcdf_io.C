@@ -367,6 +367,7 @@ void Grid::adjust_dimensions(long int *offsets, int dim_idx)
 	size_t move_size = fgData[dim_idx].size*sizeof(fgData[dim_idx].val[0]); 
 	int offset = 0;  // local offset value, set *offsets before returning
 	// only adjust the latitude and longitude data
+	// This check probably precludes regional data sets from funny behavior
 	if (strcmp(fgData[dim_idx].name,"lat") && strcmp(fgData[dim_idx].name,"lon"))
 		return;
 

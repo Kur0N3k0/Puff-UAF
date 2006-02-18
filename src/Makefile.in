@@ -128,7 +128,6 @@ BUILD_INSTALL_DOCS_TRUE = @BUILD_INSTALL_DOCS_TRUE@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
-CGIHOME = @CGIHOME@
 CONVERT = @CONVERT@
 CPP = @CPP@
 CPPFLAGS = @CPPFLAGS@
@@ -147,6 +146,7 @@ EGREP = @EGREP@
 EXEEXT = @EXEEXT@
 F77 = @F77@
 FFLAGS = @FFLAGS@
+GHOSTSCRIPT = @GHOSTSCRIPT@
 GIFSICLE = @GIFSICLE@
 GMTSET = @GMTSET@
 INSTALL_DATA = @INSTALL_DATA@
@@ -165,6 +165,7 @@ MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKECPT = @MAKECPT@
 MAKEINFO = @MAKEINFO@
+NCKS = @NCKS@
 NETCDF_INC = @NETCDF_INC@
 NETCDF_LIB = @NETCDF_LIB@
 OBJEXT = @OBJEXT@
@@ -192,7 +193,6 @@ SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
 WGET = @WGET@
-WGRIB = @WGRIB@
 ac_ct_AR = @ac_ct_AR@
 ac_ct_CC = @ac_ct_CC@
 ac_ct_CXX = @ac_ct_CXX@
@@ -281,9 +281,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  src/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --gnu  src/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  src/Makefile
+	  $(AUTOMAKE) --gnu  src/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \

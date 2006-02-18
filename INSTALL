@@ -8,18 +8,21 @@ if 'make check' gives errors, see the testXX.log for details in the test/ direct
 
 You might need to modify the $home variables at the top of Webpuff.pm in the web/ directory if you are running this on an active webserver and not simply locally.
 
+'ashgmt' requires several external utilities. 'configure' attempts to find them.  You can manually set them at the top few lines of the 'ashgmt' script.
+
 The default resource file is 'etc/puffrc'.  It needs to be modified to reflect where your data is.  Be sure to use absolute paths, the relative ones are only there for testing purposes and will fail once installed.  Note that you can set up your own $HOME/.puffrc file instead, which will be used by the command-line version of puff anyway.
 
-Documentation is in texinfo format and not created by default since different systems will have different documentation processors.  To create documentation in a specific format, go into the doc/ directory and type 'make puff.html', 'make puff.ps', 'make puff.pdf', etc. depending on the desired format.
+Documentation is in texinfo format and not created by default since different systems will have different documentation processors.  To create documentation in a specific format, go into the doc/ directory and type 'make puff.html', 'make puff.ps', 'make puff.pdf', etc. depending on the desired format.  The distribution may already contain these files.
 
 You need the conformal mapping functions from http://www.arl.noaa.gov/ss/models/cmapf.html.  However, I've included version 2.0 with this distribution, and should build automatically if you don't have them. 
+
+the 'ashxp' post-processor requires the JPEG library.  If you don't have it, jpeg-6b is included and should be built automatically.
 
 I have not been able to resolve the fact that libnetcdf_c++ and puff must BOTH be compiled with the same version of g++.  I think the problem is due to the changes in name mangling between pre/post version 3 of gcc.  I don't know if this is my problem or theirs, but until I figure it out, use the same compiler :( I have found that version 3.5.0 of netcdf compiles better with gcc-2.95, and version 3.5.1 works better with versions of gcc >= 3.0, i.e. gcc-3.3.  You can use the environment variable NETCDF_INC and NETCDF_LIB to specify the location of netcdf stuff, see './configure --help'.  
 
 ---------
 
 If you run into symbol referencing errors with UDUNITS library (i.e. utInit() ), it might be because the header file 'udunits.h' does not declare the function external.  In which case, you must add the following near the top of udunits.h:
-
 
 #if defined(__cplusplus)
 extern "C" {

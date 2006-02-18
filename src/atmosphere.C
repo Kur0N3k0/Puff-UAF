@@ -399,7 +399,7 @@ int Atmosphere::read_uni (Grid & uni, std::string *filename)
   }
 
 	// set the range of lat/lon data to read
-	if (argument.regionalWinds)
+	if ( argument.regionalWinds )
 	{
 	  const float region_size = argument.regionalWinds;
 		uni.set_range(LON, *center_lon-region_size, *center_lon+region_size);

@@ -1,6 +1,6 @@
 SUBDIRS = mini_httpd
 
-bin_SCRIPTS = ashxpOptions.pl login.pl logout.pl main.pl runParams.pl webpuff.pl
+bin_SCRIPTS = ashxpOptions.pl login.pl logout.pl main.pl runParams.pl webpuff
 
 PIX_FILES =   pix/puff_bg_dark.jpg \
   pix/puff_bg.gif \

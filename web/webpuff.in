@@ -3,7 +3,7 @@
 use Webpuff;
 use strict;
 
-my $httpd = "$Webpuff::home/bin/mini_httpd";
+my $httpd = "$Webpuff::home_exe/bin/mini_httpd";
 my $pidfile = "$Webpuff::pidfile";
 
 if (-e $pidfile) {
