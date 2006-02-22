@@ -27,6 +27,11 @@ $home_web=".";
 # the cgi's need to know the absolute location of the webpages so things like
 # 'glob()' work
 $home_abs="$home/web";
+# For binary installations, the udunits.dat file location needs to be
+# specified.  Any copy at any location will work.  If you built from source,
+# you probably don't need to specify this.
+#$ENV{UDUNITS_PATH}="/home/rorik/unidata/etc/udunits.dat";
+
 # END OF WEB SERVER INSTALLATION CHANGES ----------
 
 $pidfile="webpuff.pid";

@@ -390,6 +390,9 @@ sub process_form {
   # set a large background file unless one is already defined
   $command .="--bgfile=$Webpuff::home_exe/etc/images/GLOBALeb3colshade.jpg " unless (defined $ENV{ASHXP_BG_FILE_NAME});
 
+	# set the font file
+	$command .= "--fontfile=$Webpuff::home_exe/etc/fonts/FreeMonoBold.ttf ";
+
   $opts{color} = $q->param('colorProtocol');
   $command .= "--color=$opts{color} ";
   

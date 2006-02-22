@@ -14,8 +14,9 @@ if (-e $pidfile) {
   }
 
 # -i [file] writes PID to this file
-chdir "@PATH_TO_WEBPUFF@" or die "failed going to '@PATH_TO_WEBPUFF@': $!\n";
+chdir "$Webpuff::home_web" or die "failed going to \"$Webpuff::home_web\": $!\n";
 print "starting webpuff... point your browser to http://127.0.0.1:1234/login.pl\n";
 exec "$httpd -h 127.0.0.1 -p 1234 -i $pidfile -c \"*.pl\"";
 
+# failed exec goes here
 print "failed to exec $httpd: $!\n";

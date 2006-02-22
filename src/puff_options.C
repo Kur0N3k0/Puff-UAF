@@ -475,7 +475,11 @@ void option_switch(int opt, const char *optarg, const struct option *opt_lng) {
       else { argument.noPatch = true; }
       break;
     case OPATH:
-      argument.opath  = strdup(optarg);
+//      argument.opath  = strdup(optarg);
+			// allocate enough space for the string, an extra \, and 
+			// a terminating \0
+			argument.opath = (char*)realloc(argument.opath,(strlen(optarg)+2)*sizeof(char));
+			strcpy(argument.opath,optarg);
       if ( argument.opath[strlen(argument.opath)-1] != '/')
         strcat(argument.opath, "/");
       break;

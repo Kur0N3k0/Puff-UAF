@@ -497,9 +497,11 @@ sub parse_previous {
   my $command = "";
   
   open LOG, "<$Webpuff::home_abs/$runDir/$sessionID/$dir/puff.log";
-  while (<LOG>) {
-    $command = $_ if ($_=~/$Webpuff::puff_exe/);
-  }
+#  while (<LOG>) {
+#    $command = $_ if ($_=~/$Webpuff::puff_exe/);
+#  }
+# assume first line of log is the command, probably OK
+	$command = <LOG>;
   close LOG;
   
   #pull out --eruptDate="YYYY MM DD HH:mm" because that below won't work

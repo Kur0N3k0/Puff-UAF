@@ -6,11 +6,11 @@ see ./configure --help for options and useful envirnment variables.
 
 if 'make check' gives errors, see the testXX.log for details in the test/ directory.  If the problem persists, send it to the current maintainer rorik@gi.alaska.edu.
 
-You might need to modify the $home variables at the top of Webpuff.pm in the web/ directory if you are running this on an active webserver and not simply locally.
+You might need to modify the various $home variables at the top of Webpuff.pm in the web/ directory if you are running this on an active webserver and not simply locally.
 
-'ashgmt' requires several external utilities. 'configure' attempts to find them.  You can manually set them at the top few lines of the 'ashgmt' script.
+'ashgmt' requires several external utilities including the Generic Mapping Tools (GMT) and ImageMagick 'convert'. 'configure' attempts to find them.  You can manually set them at the top few lines of the 'ashgmt' script.
 
-The default resource file is 'etc/puffrc'.  It needs to be modified to reflect where your data is.  Be sure to use absolute paths, the relative ones are only there for testing purposes and will fail once installed.  Note that you can set up your own $HOME/.puffrc file instead, which will be used by the command-line version of puff anyway.
+The default resource file is 'etc/puffrc'.  It needs to be modified to reflect where your data is.  Be sure to use absolute paths, the relative ones are only there for testing purposes and will fail once installed.  Note that you can set up your own $HOME/.puffrc file instead, which will be used by the command-line version of puff anyway.  You can mirror our data at http://puff.images.alaska.edu/data/
 
 Documentation is in texinfo format and not created by default since different systems will have different documentation processors.  To create documentation in a specific format, go into the doc/ directory and type 'make puff.html', 'make puff.ps', 'make puff.pdf', etc. depending on the desired format.  The distribution may already contain these files.
 
