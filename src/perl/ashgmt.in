@@ -29,11 +29,15 @@ GetOptions(
 	"conc-limits=s"=> \$opt{conc_range},
 	"contour"			=> \$opt{contour},
   "fallout"     => \$opt{fallout},
+	"fork"        => \$opt{'fork'},
   "grayscale"   => \$opt{grayscale},
   "gridlines=s" => \$opt{gridlines},
 	"no-gridlines"=> \$opt{no_gridlines},
 	"help"				=> \&print_help,
   "hgt-range=s" => \&parse_range,
+	"label=s"     => \&list_of_labels,
+	"label-file=s"=> sub {$opt{label_file}.= "@_[1]|";},
+	"labelfile=s" => sub {$opt{label_file}.= "@_[1]|";},
   "latlon=s"    => \$opt{latlon},
   "magnify=s"   => \$opt{magnify},
   "movie=s"     => \$opt{movie},
@@ -91,7 +95,9 @@ conc_range(\%opt, @file);
 my @pids;
 # loop here over all 'in' files
 foreach my $file (@file) {
-	if (my $pid = fork) {
+	my $pid = 0;
+#	if ($pid = fork) {
+	if ($opt{'fork'} and $pid = fork) {
 		# parent here
 		push @pids, $pid;
 	} elsif (defined $pid) {
@@ -102,6 +108,7 @@ foreach my $file (@file) {
 	`cp $basefile $opt{output}`;
   particles2(\%opt) if ($opt{filetype} eq "ash");
 	contours(\%opt) if ($opt{filetype} eq "conc");
+	add_labels(\%opt);
   annotation(\%opt) if $opt{stamp};
   
 	# convert to a PNG using ghostscript
@@ -109,8 +116,9 @@ foreach my $file (@file) {
   # clear the output file, not necessary if parallel mode
   undef($opt{output});
 	unlink($opt{cpt});
-	exit(0);
+	exit(0) if $opt{'fork'};
 	} # end if child process
+#	while (waitpid($pid,&WNOHANG) != -1) { sleep 1;}
   } # end of parent loop
   
 # flag for watching when child processes are all finished
@@ -514,7 +522,7 @@ sub particles2 {
 	$olat = $1;
 	if (defined $olon and defined $olat) {
 		my $cmd = "echo \"$olon $olat\" | $main::psxy_exe $main::maprange -O -K -Sa10p -G0 >> $opt{output}";
-		print $cmd if ($opt{verbose});
+		print "$cmd\n" if ($opt{verbose});
 	`$cmd`;
 	}
 
@@ -818,6 +826,34 @@ sub make_movie {
   return;
 }
 # # # # # # # # # # # # # # # # # # # # # # # #
+sub add_labels {
+	my $opt = shift;
+	return unless ($opt{label} or $opt{label_file});
+	my @labels = split /\|/, $opt{label};
+	foreach (@labels) {
+		$_ =~ m/(\d*\.?\d*),(\d*\.?\d*),(\w+),?(S?.*)/;
+		`echo \"$1 $2 12 0 0 1 $3\" | $main::pstext_exe $main::maprange -O -K >> $opt{output}`;
+		if (length ($4) > 0) {
+		`echo \"$1 $2\" | $main::psxy_exe $main::maprange -O -K -$4 -G0 >> $opt{output}`;
+		}
+		
+		}
+	return unless ($opt{label_file});
+	@labels = split /\|/, $opt{label_file};
+	foreach (@labels) {
+		open LFILE, "<$_" or print "WARNING: failed to open label file \"$_\" for reading\n";
+		while (<LFILE>) {
+		chomp $_;
+		`echo \"$_\" | $main::pstext_exe $main::maprange -O -K >> $opt{output}`;
+		# put a marker
+		my @v=split /\s/, $_;
+		`echo \"$v[0] $v[1]\" | $main::psxy_exe $main::maprange -Sa10p -G0 -O -K >> $opt{output}`;
+		}
+	}
+	return;
+			
+	}
+# # # # # # # # # # # # # # # # # # # # # # # #
 sub filetype {
 	my $infile = pop;
 
@@ -891,6 +927,17 @@ sub parse_range {
 	return;
 }
 # # # # # # # # # # # # # # # # # # # # # # # #
+sub list_of_labels {
+	my $label = pop;
+	$label =~ m/(\d*\.?\d*),(\d*\.?\d*),(\D+)/;
+	unless ($1 and $2 and $3) {
+		print "ERROR: --label=\"$label\"\nformat is --label=lon,lat,string\n";
+		return;
+	}
+	$opt{label} .= "$label|";
+	return;
+}
+# # # # # # # # # # # # # # # # # # # # # # # #
 # set default values for options not already set.  Listed in alphabetical
 # order
 sub defaults {
@@ -904,6 +951,7 @@ sub defaults {
 #	$opt->{conc_max} = 3 unless (defined ($opt{conc_max}));
 	$opt->{contour} = 0;
 	$opt->{fallout} = 0 unless (defined ($opt->{fallout}));
+	$opt->{'fork'} = 0 unless (defined ($opt->{'fork'}));
 	# default airborne and not fallout
 	if ($opt{fallout}) { $opt{airborne} = 0; }
 	else {$opt{fallout} = 0; }
@@ -961,11 +1009,15 @@ concentration files (*conc*.nc).
    setting.
 
 --contour
-	Use GMT's pscontour routine insted of plotting dots for concentration
+	Use GMT pscontour routine insted of plotting dots for concentration
 	plotting.
 
 --fallout
 	Only plot grounded particles.  This is exclusive of --airborne.
+
+--fork
+	Use perls fork() to process each ash file as a child process.  This can speedi
+  up processing of large numbers of files on muliprocessor machines.
 
 --gridlines=DX[[:TX]/DY[:TY]]
   Grid line spacing in degrees.  X and Y directions can be different.  The
@@ -979,6 +1031,21 @@ concentration files (*conc*.nc).
 
 --hgt-range=min/max
   Only plot particles or calculate concentration for this range (in meters).
+
+--label=lon,lat,string[,S...]
+	Put a text string to the lower-left of this location.  If the location is 
+	outside the bounding box, it is ignored.  This option can be specified more
+  than once, and several labels can be concatenated with the pipe "|" character.
+  An optional marker can also be plotted using the -S... marker as described 
+  in psxy.  For example, Sa10p plots a 10-pixel star.  See also --label-file 
+	for more control over text size and orientation.
+
+--label-file=filename
+	Specify a file containing 1 or more labels.  The format of the file is the
+	same as GMTs pstext, which is a space-delimited line containing
+		x y fontsize rotation fontnumber justify text
+	This option can be specified more than once.  Locations outside the bounding
+	box are ignored.
 
 --latlon=latmin/latmax/lonmin/lonmax
   Draw a map of this range, overriding default behavior which is a map that

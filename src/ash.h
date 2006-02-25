@@ -48,7 +48,7 @@ public:
     
     void clearStash();
     void findLimits();
-    void stashData();
+    void stashData(time_t now);
     int ground(long int idx);
     void horiz_spread(float width, float height, float bottom);
     void init_site(float lon, float lat, char *name);

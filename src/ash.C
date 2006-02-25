@@ -1072,13 +1072,14 @@ void Ash::clearStash()
 ////////////////////////////////////////////////////////////////////////
 // stash the data for this time in a record.
 ////////////////////////////////////////////////////////////////////////
-void Ash::stashData()
+void Ash::stashData(time_t now)
 {
   
   for (int i=0;i<ashN;i++)
   {
 		// only stash particles that exists (not out of bounds)
-		if (particle[i].exists)
+		// and have been "born"
+		if (particle[i].exists and particle[i].startTime <= now)
 		{
     	recParticle.push_back(particle[i]);
 		}

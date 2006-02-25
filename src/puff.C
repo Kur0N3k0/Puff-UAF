@@ -884,7 +884,7 @@ void write_ash (time_t ash_t, int nm_files)
   // write concentration data
   if (argument.gridOutput)
   {
-    ash.stashData();
+    ash.stashData(ash_t);
   }
   
   // Convert back to xy:
