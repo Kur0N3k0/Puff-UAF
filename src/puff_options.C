@@ -871,8 +871,9 @@ void show_help() {
   }
 
 //////////////////////////////////
-// parse the argument file.  It is called after all the command-line
-// options have been processed, and attempts to skip commented lines
+// parse the argument file.  It is called when the -argFile option is processed, so
+// it can overwrite or be overwritten by other options.  It can also be recursive,
+// calling another argument file.  It should respect commented lines beginning with #
 //////////////////////////////////
 void parse_file(const char* inFile, const struct option *opt_lng) {
   int i;  // counter
