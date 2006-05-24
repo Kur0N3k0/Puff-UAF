@@ -39,6 +39,13 @@ void ashxp_set_defaults(struct Ash *ash) {
   arguments.fallout = 0;
   /* autoconf should have defined this macro */
   arguments.fontfile = strdup(ASHXP_FONTFILE);
+	/* let environment override this */
+	env = (char*)getenv("ASHXP_FONTFILE");
+	if (env)
+	{
+		free(arguments.fontfile);
+		arguments.fontfile = strdup(env);
+	}
   arguments.fontsize = 12;
   arguments.grayscale = 0;
   arguments.hgtmax = -1.0;

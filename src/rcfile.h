@@ -17,15 +17,15 @@ class PuffRC {
   public:
     PuffRC();
     ~PuffRC();
-    void PuffRC::badMask(const std::string *mask);
-    int PuffRC::findNonLiteral(const std::string *mask, const char *c);
-    bool PuffRC::init(char *rcfileArg = (char*)NULL);
-    int PuffRC::loadResources(char* modelArg, const char *type);
-    const char* PuffRC::demType();
-    const char* PuffRC::getDemPath();
-    std::string PuffRC::getString(char *p);
-    std::string PuffRC::getString(const std::string* p);
-    const std::string PuffRC::mostRecentFile(const char *edate, char *var, double runHours = 0.0);
+    void badMask(const std::string *mask);
+    int findNonLiteral(const std::string *mask, const char *c);
+    bool init(char *rcfileArg = (char*)NULL);
+    int loadResources(char* modelArg, const char *type);
+    const char* demType();
+    const char* getDemPath();
+    std::string getString(char *p);
+    std::string getString(const std::string* p);
+    const std::string mostRecentFile(const char *edate, char *var, double runHours = 0.0);
     };
     
 #endif

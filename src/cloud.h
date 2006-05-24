@@ -36,23 +36,23 @@ class Cloud {
   std::vector<Segment> segment;
   char *restartFile;
 
-  void Cloud::build();
-  double Cloud::elevation(double, double);
-  void  Cloud::readPoints();
-  int   Cloud::inCloud(double, double);  
-  void  Cloud::makeSlopes();
-  int   Cloud::define(double, double);
-  float Cloud::distance(Particle);
-  void  Cloud::setLengthScale();
-  void  Cloud::sortElevations();
-  bool  Cloud::validRegion();
+  void build();
+  double elevation(double, double);
+  void  readPoints();
+  int   inCloud(double, double);  
+  void  makeSlopes();
+  int   define(double, double);
+  float distance(Particle);
+  void  setLengthScale();
+  void  sortElevations();
+  bool  validRegion();
   
 public:
-  Cloud::Cloud(long, char*);
-  Cloud::~Cloud();
-  void Cloud::fill(int);
-  double* Cloud::customCloud(long);
-  float Cloud::size();
+  Cloud(long, char*);
+  ~Cloud();
+  void fill(int);
+  double* customCloud(long);
+  float size();
 
 };
 

@@ -478,7 +478,8 @@ void option_switch(int opt, const char *optarg, const struct option *opt_lng) {
 //      argument.opath  = strdup(optarg);
 			// allocate enough space for the string, an extra \, and 
 			// a terminating \0
-			argument.opath = (char*)realloc(argument.opath,(strlen(optarg)+2)*sizeof(char));
+			// fixme: this leaks a little memory, maybe free argument.opath first?
+			argument.opath = (char*)malloc((strlen(optarg)+2)*sizeof(char));
 			strcpy(argument.opath,optarg);
       if ( argument.opath[strlen(argument.opath)-1] != '/')
         strcat(argument.opath, "/");
@@ -495,6 +496,10 @@ void option_switch(int opt, const char *optarg, const struct option *opt_lng) {
       break;
       
     case PATH:
+			// allocate enough space for the string, an extra \, and 
+			// a terminating \0
+			// fixme: this leaks a little memory, maybe free argument.path first?
+			argument.path = (char*)malloc((strlen(optarg)+2)*sizeof(char));
       argument.path = strdup(optarg);
       if (argument.path[strlen(argument.path)-1] !=  '/')
         strcat(argument.path, "/");

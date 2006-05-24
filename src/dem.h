@@ -39,8 +39,8 @@ class Dem {
     int tileNumber (double lat, double lon);
       
   public:
-    Dem::Dem();
-    Dem::~Dem();
+    Dem();
+    ~Dem();
     
     int initialize(const char *type);
     int setPath(const char* inPath);

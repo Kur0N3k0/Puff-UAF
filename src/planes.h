@@ -52,18 +52,18 @@ class Planes
     fs_mmap exposure;
 //    int num_flights;
   // private member functions
-  void Planes::newFlight(const struct flData* data);
-  void Planes::clearData(flData *data);
-  void Planes::readPlanesFile(std::ifstream *file);
-  void Planes::setEndTimes();
+  void newFlight(const struct flData* data);
+  void clearData(flData *data);
+  void readPlanesFile(std::ifstream *file);
+  void setEndTimes();
         
   public:
     // public member functions
-    Planes::Planes(std::vector<std::string> file);
-    int Planes::size() const { return flight.size(); }
-    int Planes::size(int idx) { return flight[idx].location.size(); }
-    void Planes::calculateExposure(CCloud *cc);
-    float Planes::abs_conc(CCloud *cc, const Location *loc);
+    Planes(std::vector<std::string> file);
+    int size() const { return flight.size(); }
+    int size(int idx) { return flight[idx].location.size(); }
+    void calculateExposure(CCloud *cc);
+    float abs_conc(CCloud *cc, const Location *loc);
 };
 
 
