@@ -116,6 +116,7 @@ private:
                             float *rel_fo_conc);
 
 	void rotateGrid(double *loc, float val, ID l);
+	void rotateGridPoint(double *loc, float val, ID l);
 
 };
 

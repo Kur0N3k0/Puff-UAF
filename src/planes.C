@@ -1,6 +1,6 @@
 /****************************************************************************
     puff - a volcanic ash tracking model
-    Copyright (C) 2004 Rorik Peterson <rorik@gi.alaska.edu>
+    Copyright (C) 2004-6 Rorik Peterson <rorik@gi.alaska.edu>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

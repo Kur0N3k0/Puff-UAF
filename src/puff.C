@@ -37,6 +37,10 @@
 #include <fstream>		/* log file */
 #include <cstdio>
 
+#ifdef MPI_ENABLED
+#include <mpi.h>
+#endif // MPI_ENABLED
+
 #include "puff.h"
 #include "puff_options.h"	/* puff options */
 #include "dem.h"
@@ -123,6 +127,15 @@ void (*meter2grid) (double &dx, double &dy, double &y);
 int main (int argc, char **argv)
 {
 
+	// non MPI has processor rank zero
+	int procRank = 0;
+
+#ifdef MPI_ENABLED
+	MPI_Init(&argc, &argv);
+	// let each process get its rank
+	MPI_Comm_rank(MPI_COMM_WORLD, &procRank);
+#endif // MPI_ENABLED
+
   parse_options (argc, argv);
   if (!resources.init(argument.rcfile)) {
     std::cerr << "No data resource file found\n";
@@ -155,7 +168,7 @@ int main (int argc, char **argv)
   }
 
   // restore the buffers
-	if (argument.logFile) 
+	if (argument.logFile)
 	{
   	std::cerr.rdbuf (errbuf);
   	std::cout.rdbuf (outbuf);
@@ -291,6 +304,12 @@ int run_puff ()
     // a boolean flag for premature ending, like when all particles are 
     // out-of-bounds or grounded.
     bool EarlyEndOfSimulation = false;
+
+#ifdef MPI_ENABLED
+		int procRank, procSize;
+		MPI_Comm_rank(MPI_COMM_WORLD, &procRank);
+		MPI_Comm_size(MPI_COMM_WORLD, &procSize);
+#endif // MPI_ENABLED
     
     for (clock_t = eruptDate_t; 
          clock_t <= endDate_t && !EarlyEndOfSimulation; 
@@ -314,7 +333,12 @@ int run_puff ()
 	// (2) particle is not on the ground 
 	     (!ash.isGrounded(i) ) &&
 	// (3) particle exists within the boundary of the wind data
-	     (ash.particleExists(i) ) )
+	     (ash.particleExists(i) ) 
+#ifdef MPI_ENABLED
+	//	(4) this processor's jobs 
+		&&		( i % procSize == procRank ) 
+#endif // MPI_ENABLED
+				)
 	{
 
 	    // variable diffusion:
@@ -402,16 +426,26 @@ int run_puff ()
 	}  // end loop over non-grounded particles
       }	 //  *** End of nash loop **    
 
+#ifdef MPI_ENABLED
+			// only 1 proc should print time and save files
+			if (procRank == 0)
+			{
+#endif //MPI_ENABLED
+
       // Dump ash data if requested:
-      if (printOut_t >= saveHours_t) {
-        refreshTime2 (clock_t);
-	write_ash (clock_t, repeat_count);
-	printOut_t = 0;
+      if (printOut_t >= saveHours_t) 
+			{
+				refreshTime2 (clock_t);
+				write_ash (clock_t, repeat_count);
+				printOut_t = 0;
       }
 
       // Update:
       printOut_t += dtMins_t;
       ash.clock () += dtMins_t;
+#ifdef MPI_ENABLED
+			}
+#endif //MPI_ENABLED
 
     }				// ***End Main Integration***
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -419,6 +453,10 @@ int run_puff ()
     // END MAIN INTEGRATION:
     // 
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+#ifdef MPI_ENABLED
+	MPI_Finalize();
+#endif // MPI_ENABLED
 
     // Always dump the last ash data:
     // commented out because this can cause un-uniform spacing between

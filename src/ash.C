@@ -603,14 +603,18 @@ void Ash::write(const char *filename) {
 	if ( isRotatedGrid() ) rotateGrid(loc, rotGrid.lon, LON);
   vp->put(loc, ashN);
   vp->add_att((NcToken)"units","degrees_E");
+	if ( isRotatedGrid() ) rotateGridPoint(&maxlon, rotGrid.lon, LON);
   vp->add_att((NcToken)"max_value",maxlon);
+	if ( isRotatedGrid() ) rotateGridPoint(&minlon, rotGrid.lon, LON);
   vp->add_att((NcToken)"min_value",minlon);
   
   for (int i = 0; i<ashN; i++) { loc[i]=particle[particle[i].order].y; }
   vp = ncfile.add_var((NcToken)"lat", ncDouble, dp);
 	if ( isRotatedGrid() ) rotateGrid(loc, rotGrid.lat, LAT);
   vp->add_att((NcToken)"units","degrees_N");
+	if ( isRotatedGrid() ) rotateGridPoint(&maxlat, rotGrid.lat, LAT);
   vp->add_att((NcToken)"max_value",maxlat);
+	if ( isRotatedGrid() ) rotateGridPoint(&minlat, rotGrid.lat, LAT);
   vp->add_att((NcToken)"min_value",minlat);
   vp->put(loc, ashN);
 
@@ -1699,5 +1703,20 @@ void Ash::rotateGrid(double *loc, float val, ID l)
 		if (l == LON)
 			loc[i] += (double)val;
 	}
+	return;
+}
+/////////////////////////////////////////////////////////////////////////
+//  move single point to the rotated grid location.  We assume that 
+//  no points will be moved over the pole.  This may give screwy
+//  results for rotations around the dateline
+/////////////////////////////////////////////////////////////////////////
+void Ash::rotateGridPoint(double *loc, float val, ID l)
+{
+	// values in the rotated grid are the location of the south pole when
+	// the grid is rotated.
+	if (l == LAT)
+		loc[0] += double(val+90.0);
+	if (l == LON)
+		loc[0] += (double)val;
 	return;
 }
