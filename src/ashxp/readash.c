@@ -28,7 +28,7 @@ int read_ash(struct Ash* ash, char* filename) {
   void sort(struct Ash*);
   
   /* allocate space for filename */
-//  ash->filename = (char*)calloc(strlen(basename(filename))+1,sizeof(char));
+/*  ash->filename = (char*)calloc(strlen(basename(filename))+1,sizeof(char)); */
   ash->filename = strdup(basename(filename) );
   
   error = nc_open(filename, NC_NOWRITE, &ncid);
@@ -388,18 +388,11 @@ void set_bbox(char* llstr, struct bg_img *bg) {
   while (lonmax >=360) { lonmax -= 360; }
   while (lonmax < 0)   { lonmax += 360; }
   while (lonmin >=360) { lonmin -= 360; }
-//  while (lonmin < 0)   { lonmin += 360;  }
+/*  while (lonmin < 0)   { lonmin += 360;  } */
   
   /* check minimum longitude */
 	/* this can be negative to cross the dateline */
-//  if (lonmin > 0 && lonmin < 360) {
     bg->lonmin = lonmin;
-//    }
-//  else {
-//    printf("bad minimum longitude value %f\n",lonmin);
-//      printf("LatMin must be between 0 and 360");
-//     exit(EXIT_FAILURE);
-//     }
     
   /* check maximum longitude */
   if (lonmax > 0 && lonmax < 360) {
@@ -461,7 +454,7 @@ float* set_range(char *rangestr)
   /* get first parameter */
   if (! (tok = strtok(rangestr, "/") )) range_fail(orig);
   if (strcmp(tok, "-") && sscanf(tok, "%f", &rangemin) == 0 ) range_fail(orig);
-//  rangemin = (float)atof(tok);
+/*  rangemin = (float)atof(tok); */
   if (! (tok = strtok(NULL, "/"))  ) range_fail(orig);
   if (strcmp(tok, "-") && sscanf(tok, "%f", &rangemax) == 0 ) range_fail(orig);
   

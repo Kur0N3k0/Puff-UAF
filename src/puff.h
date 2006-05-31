@@ -21,7 +21,9 @@ float  nrst_grid(float x, float dx);
 int    get_eruptDate(char *erupt_date, char *arg_eruptDate);
 //char   *outTime(time_t time);
 void   meter2sphere(double &dx, double &dy, double &y);
-int    run_puff();
+int    run_puff(int rank);
+
+inline bool isProcController(int rank) { return rank == 0; }
 
 // CONSTANT GLOBALS in puff_utils.C:
 extern const double	Re; 

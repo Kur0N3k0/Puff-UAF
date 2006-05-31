@@ -20,12 +20,15 @@ extern Argument argument;
 
 int readVolcList(VOLCANO_DATA volcList[], int maxListSize) {
    
+	double tempLat;
+	double tempLon;
+
    char volcFilename[MAXPATHLENGTH + 1] = "";
    char buffer[MAXLINELENGTH + 1];
    FILE *volcFilePtr;
    
-   double tempLat;
-   double tempLon;
+//   double tempLat;
+//   double tempLon;
    
    char latDir[MAXVOLCTEXTLEN + 1] = {""};
    char lonDir[MAXVOLCTEXTLEN + 1] = {""};

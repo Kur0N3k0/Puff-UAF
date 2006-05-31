@@ -19,7 +19,7 @@
 void make_projection (struct bg_img *bg)
 {
   struct bg_img bg_p; /* new bg image with projection */
-//  int *bg_p_cnt = NULL; /* array for counting pixels when mapping */
+/*  int *bg_p_cnt = NULL; */ /* array for counting pixels when mapping */
   int o_idx, m_idx, p_idx; /* original, magnify, and projection index */
   double tang_lon, tang_lat; /* tangent lat/lon for projection */
   int grid_scale;
@@ -129,7 +129,6 @@ void make_projection (struct bg_img *bg)
 
 
   /* determine the overall size of this new image by mapping the four corners*/
-//  get_image_size(bg, &bg_p);
 /*
  * 
  *       y3*********          *    y3               *y3*
@@ -216,7 +215,7 @@ void make_projection (struct bg_img *bg)
   bg_p.rgb = (JSAMPLE*)calloc(bg_p.length, sizeof(JSAMPLE));
   /* create an array that stores the number of old-image pixels that have 
    * been mapped to this pixel */
-//  bg_p_cnt = (int*)calloc(bg_p.length, sizeof(int));
+/*  bg_p_cnt = (int*)calloc(bg_p.length, sizeof(int)); */
   bg_p.mark = (int*)calloc(bg_p.length, sizeof(int));
   
   if (!bg_p.rgb || !bg_p.mark)

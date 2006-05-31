@@ -72,4 +72,8 @@ private:
 	void checkRotatedGridError();
 };
 
+#ifdef HAVE_EXP10
+extern "C" {double exp10(double a);}
+#endif
+
 #endif

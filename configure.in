@@ -102,13 +102,13 @@ dnl will choke.  The src/Makefile will add it where it is necessary.
 AC_MSG_CHECKING(for NcFile in libnetcdf_c++)
 puff_old_libs=$LIBS
 LIBS="-lnetcdf_c++ $LIBS"
-AC_TRY_LINK([#include <netcdfcpp.h>],
+AC_TRY_COMPILE([#include <netcdfcpp.h>],
   [NcFile   nc("file");],[puff_have_libnetcdf_cxx="yes"],[puff_have_libnetcdf_cxx="no"])
 if test $puff_have_libnetcdf_cxx == "yes"; then
   echo "yes"
   AC_DEFINE(HAVE_LIBNETCDF_CXX,1,define to 1 if you have libnetcdf_c++)
   # supress deprecated warnings from libnetcdf_c++ when using g++
-  AX_CXXFLAGS_GCC_OPTION(-Wno-deprecated)
+#  AX_CXXFLAGS_GCC_OPTION(-Wno-deprecated)
 else
   echo "no"
   echo "****************************"

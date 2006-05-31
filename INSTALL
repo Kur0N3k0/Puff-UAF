@@ -37,7 +37,10 @@ Again, I don't know if this is their problem or mine, but this seems to work.
 02/02/2006: I think I fixed this problem.
 
 ---------
+Portland Group Compilers
+It seems like the netCDF libraries (and UDUnits) need to also be compiled with pg compilers.  Also, shared libraries do not work, so use --disable-shared to 'configure' and CXXFLAGS="-Bstatic".  I'm sure this is my problem, not Unidata's.  
 
+---------
 Have fun, and let me know what you think.
 
 rorik

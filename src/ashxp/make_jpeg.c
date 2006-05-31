@@ -330,7 +330,7 @@ void frame(struct Ash *ash, struct bg_img *bg) {
   int xpixel, ypixel; /* (x,y) location with (0,0) in upper left! */
   float wgt, delta;  /* weight and a delta-degree holding variable */
 	struct bg_img frame;
-//  JSAMPLE *img = NULL; /* this image */
+/*  JSAMPLE *img = NULL; */ /* this image */
   double xFloat, yFloat; /* (x,y) location returned from conformal mapping */
   
   /* allocate shading index if necessary*/

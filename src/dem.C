@@ -1,6 +1,6 @@
 /****************************************************************************
     puff - a volcanic ash tracking model
-    Copyright (C) 2001-2003 Rorik Peterson <rorik@gi.alaska.edu>
+    Copyright (C) 2001-2006 Rorik Peterson <rorik@gi.alaska.edu>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -103,8 +103,13 @@ double Dem::elevation(double lat, double lon, maparam* proj_grid)
   if (! tile[idx].loaded) readTile(idx);
   
   // get the lower-left coordinates - 'i' to the right, 'j' down
-  const int  i = (int)floor( (lon - tile[idx].minLon)/(double)tile[idx].dx ) ;
-  const int  j = (int)ceil ( (tile[idx].maxLat - lat)/(double)tile[idx].dy ) ;
+  int  i = (int)floor( (lon - tile[idx].minLon)/(double)tile[idx].dx ) ;
+  int  j = (int)ceil ( (tile[idx].maxLat - lat)/(double)tile[idx].dy ) ;
+	// 'i' index can be negative near meridian because tile may span meridian
+	// so minLon < 360 but maxLon > 360.  Puff's values are 0 <= lon <= 360,
+	// so get a new index using a shifted lon value.
+	if (i < 0) 
+  	i = (int)floor( (lon+360 - tile[idx].minLon)/(double)tile[idx].dx ) ;
 
   if (i > xsize || j > ysize) {
     std::cerr << "DEM error finding lat,lon coordinates\n";
@@ -138,7 +143,9 @@ double Dem::elevation(double lat, double lon, maparam* proj_grid)
   t = ( lon-(i*tile[idx].dx+tile[idx].minLon) )/tile[idx].dx;
   // measure of how close 'lat' is to lower boundary; zero is close
   u = ( j*tile[idx].dy-(tile[idx].maxLat - lat ))/tile[idx].dy;
-  
+	// near the meridian, 't' value is wrong, see comments about index 'i' above.
+ 	if (t < 0 || t > 1) 
+  	t = ( lon+360-(i*tile[idx].dx+tile[idx].minLon) )/tile[idx].dx;
   // bilinear interpolation
   elev = (1-t)*(1-u)*e[0]+t*(1-u)*e[1]+t*u*e[2]+(1-t)*u*e[3];
   
@@ -184,12 +191,22 @@ int Dem::tileNumber(double lat, double lon) {
   for (i=0; i<ntiles; i++) {
     if (tile[i].exists) {
       minLat = tile[i].maxLat - tile[i].nrows*tile[i].dy;
+			// at meridian, this gives values > 360
       maxLon = tile[i].minLon + tile[i].ncols*tile[i].dx;
       if (minLat < lat && tile[i].maxLat > lat &&
           tile[i].minLon < lon && maxLon > lon ) {
 	   idx = i;
 	   i = ntiles;  // break out of loop
 	   };
+			// above fails near meridian, try another test by adding 360
+			// to 'lon'
+			if (maxLon >= 360) {
+      	if (minLat < lat && tile[i].maxLat > lat &&
+            tile[i].minLon < lon+360 && maxLon > lon+360 ) {
+	   		idx = i;
+	   		i = ntiles;  // break out of loop
+				}
+			}
     }
   }
   if (type == DTED0) {

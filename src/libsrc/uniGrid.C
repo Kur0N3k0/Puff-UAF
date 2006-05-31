@@ -64,11 +64,15 @@ void Grid::initialize ()
   fgData[LEVEL].range[0] = -1.e30;
   fgData[LEVEL].range[1] = 1.e30;
 
-  fgData[LAT].range[0] = -1.e30;;
-  fgData[LAT].range[1] = 1.e30;;
+  fgData[LAT].range[0] = -1.e30;
+  fgData[LAT].range[1] = 1.e30;
 
-  fgData[LON].range[0] = -1.e30;;
-  fgData[LON].range[1] = 1.e30;;
+  fgData[LON].range[0] = -1.e30;
+  fgData[LON].range[1] = 1.e30;
+
+	// min/max values, are they the same as range?
+	min_value[LON]=min_value[LAT]=min_value[LEVEL]=min_value[FRTIME]=min_value[VAR]=-1e-30;
+	max_value[LON]=max_value[LAT]=max_value[LEVEL]=max_value[FRTIME]=max_value[VAR]=1e-30;
 
   //added when merging Grids
   fgData[VAR].range[0] = -1.e30;

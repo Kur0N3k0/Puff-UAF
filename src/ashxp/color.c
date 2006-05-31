@@ -522,7 +522,7 @@ void add_colorbar(struct bg_img *img) {
   int bary = 15 ;
   float wgt;
 
-//  barx = (bg->xsize > 115 ? 100 : bg->xsize - 15);
+/*  barx = (bg->xsize > 115 ? 100 : bg->xsize - 15); */
   barx = (img->xsize > 115 ? 100 : img->xsize - 15);
   
   if (img->ysize < 25 || barx < 10 )

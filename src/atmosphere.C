@@ -127,7 +127,7 @@ float Atmosphere::fallVelocity(float time, Particle *p)
     const double lam2tran_diam = 1e-6*exp10(0.01554*height + 1.7); 
 #else
     const double exp_arg = 0.1554*height+1.7;
-    const double lam2tran_diam = 1e06*pow(10,exp_arg);
+    const double lam2tran_diam = 1e-6*pow(10,exp_arg);
 #endif // HAVE_EXP10
     // transitional->turbulent boundary value line
     // log(d) = 0.01607 * h + 3.0414
@@ -332,6 +332,11 @@ int Atmosphere::make_winds ()
       T.PtoH(1000, 7400, 100);
       std::cout << "done.\n";
     }
+
+	// Re-do min/max values for LEVEL
+	U.set_minimum(LEVEL); U.set_maximum(LEVEL);
+	V.set_minimum(LEVEL); V.set_maximum(LEVEL);
+	T.set_minimum(LEVEL); T.set_maximum(LEVEL);
   }
 
 // make sure both U and V have some data.  The read() function doesn't die
@@ -635,10 +640,13 @@ int Atmosphere::wind_create_W (Grid & U, Grid & V, Grid & W, Grid & Kh)
 	      Dy = C1 * 2 * (lat[jp] - lat[j]);
 	  }
 
+		// this gives a negative number on the first level, but the 1st level is
+		// only computing Kh, and 'off' will not be used
 	  off = W.offset (l, k - 1, j, i2);
-	  // ppW[off] has already been initialized since we are 
+	  // ppW[off] has already been initialized for all but the 1st level since 
 	  // looping upward in 'k', so the 'k-1' value has been done.
-	  temp_float = ppW[off] - Dz * (Du / Dx + Dv / Dy);
+		// However, W is not need on 1st level, so don't calculate 'temp_float'
+	  if (k != 0) temp_float = ppW[off] - Dz * (Du / Dx + Dv / Dy);
 	  // if we're at the pole in global data, this method will
 	  // not work to calculate W since Dx makes no sense and
 	  // Dv is ambiguous; negative and postive values are the same.

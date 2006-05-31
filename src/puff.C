@@ -127,6 +127,12 @@ void (*meter2grid) (double &dx, double &dy, double &y);
 int main (int argc, char **argv)
 {
 
+  // make buffer pointers and create the log file stream in the main scope
+  // although they might not be used
+  std::streambuf * errbuf;
+  std::streambuf * outbuf;
+  std::ofstream logFile;
+
 	// non MPI has processor rank zero
 	int procRank = 0;
 
@@ -136,18 +142,13 @@ int main (int argc, char **argv)
 	MPI_Comm_rank(MPI_COMM_WORLD, &procRank);
 #endif // MPI_ENABLED
 
+	if (isProcController(procRank) ) {
   parse_options (argc, argv);
   if (!resources.init(argument.rcfile)) {
     std::cerr << "No data resource file found\n";
     exit(1);
     }
   if (resources.loadResources(argument.model, "model=") != 0) exit(1);
-
-  // make buffer pointers and create the log file stream in the main scope
-  // although they might not be used
-  std::streambuf * errbuf;
-  std::streambuf * outbuf;
-  std::ofstream logFile;
 
   // open log file and redirect output if necessary
   if ( argument.logFile ) {
@@ -162,13 +163,15 @@ int main (int argc, char **argv)
     }
   }
 
-  // Run Puff:
-  if (run_puff () == PUFF_ERROR) {
+	} // isProcController
+
+  // all working processes run Puff:
+  if (run_puff (procRank) == PUFF_ERROR) {
     exit (1);
   }
 
   // restore the buffers
-	if (argument.logFile)
+	if (argument.logFile and isProcController(procRank) )
 	{
   	std::cerr.rdbuf (errbuf);
   	std::cout.rdbuf (outbuf);
@@ -181,8 +184,13 @@ int main (int argc, char **argv)
 // run puff:
 //
 //////////////////////////////////////////////////////////////////////////
-int run_puff ()
+int run_puff (int procRank)
 {
+#ifdef MPI_ENABLED
+	int procSize = 1;
+	MPI_Comm_size(MPI_COMM_WORLD, &procSize);
+#endif // MPI_ENABLED
+
   // Start message:
   time_t t = time (NULL);
   std::cout << "Begin:  " << asctime (localtime (&t)) << std::endl << std::flush;
@@ -305,12 +313,6 @@ int run_puff ()
     // out-of-bounds or grounded.
     bool EarlyEndOfSimulation = false;
 
-#ifdef MPI_ENABLED
-		int procRank, procSize;
-		MPI_Comm_rank(MPI_COMM_WORLD, &procRank);
-		MPI_Comm_size(MPI_COMM_WORLD, &procSize);
-#endif // MPI_ENABLED
-    
     for (clock_t = eruptDate_t; 
          clock_t <= endDate_t && !EarlyEndOfSimulation; 
 	 clock_t += dtMins_t) 

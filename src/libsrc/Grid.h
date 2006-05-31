@@ -73,6 +73,7 @@ protected:
     char	    fgTitle[FGMAXCHAR];
     char	    fgReftime[FGMAXCHAR];
     double          add_offset, scale_factor;
+	float min_value[5], max_value[5];
 
     int uniShiftWest;  // imported from uniGrid.h
     
@@ -187,6 +188,8 @@ public:
     void set_valid_range(float rlo, float rhi);
     void set_range(ID index, float rlo, float rhi);
     void set_fill_value(float fill) { fgFillValue = fill; }
+		void set_minimum(ID idx);
+		void set_maximum(ID idx);
     
     // SPLINE ROUTINES:
     void patch(ID line1=FRTIME, ID line2=LEVEL, ID line3=LAT, ID line4=LON);

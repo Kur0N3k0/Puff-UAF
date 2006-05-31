@@ -985,7 +985,7 @@ float Grid::nnint(float xx, float yy, float zz) {
 ////////////////////////////////////////////////////////////////////////
 float Grid::nnint(float xx, float yy, float zz, float tt) {
   // don't let this variable names fool you, they could be anything
-  static int counter = 0;
+//  static int counter = 0;
 
     if ( fgNdims != 4 ) {
 	fgErrorStrm << "nnint(float,float,float,float): Expects a 4D object." << std::endl;
@@ -1135,7 +1135,7 @@ float Grid::nnint(float xx, float yy, float zz, float tt) {
     
     pt = twlo*pt_tlo + twhi*pt_thi;
 
-    counter++;
+//    counter++;
     return pt;
 }
 

@@ -232,37 +232,36 @@ float Grid::pct_fill() {
 };
 
 // MINIMUM:
-float Grid::min(ID idx) {
-    if ( fgData[idx].size == 0 ) {
-	fgErrorStrm << "min(): Empty object";
-	fg_error();
-	return 0.0;
-    }
+void Grid::set_minimum(ID idx) {
+    if ( fgData[idx].size == 0 ) return;
     float minimum = fgData[idx].val[0];
     for (unsigned i=0; i<fgData[idx].size; i++) {
 	if ( fgData[idx].val[i] != fgFillValue && fgData[idx].val[i] < minimum) {
 	    minimum = fgData[idx].val[i];
 	}
     }
-    return minimum;
+	min_value[idx] = minimum;
 };
 
+float Grid::min(ID idx) {
+	return min_value[idx];
+}
+
 // MAXIMUM:
-float Grid::max( ID idx) {
-    if ( fgData[VAR].size == 0 ) {
-	fgErrorStrm << "max(): Empty object";
-	fg_error();
-	return 0.0;
-    }
+void Grid::set_maximum( ID idx) {
+    if ( fgData[VAR].size == 0 ) return;
     float maximum = fgData[idx].val[0];
     for (unsigned i=0; i<fgData[idx].size; i++) {
 	if ( fgData[idx].val[i] != fgFillValue && fgData[idx].val[i] > maximum) {
 	    maximum = fgData[idx].val[i];
 	}
     }
-    return maximum;
+	max_value[idx] = maximum;
 };
 
+float Grid::max(ID idx) {
+	return max_value[idx];
+}
 
 // MEAN:
 float Grid::mean() {

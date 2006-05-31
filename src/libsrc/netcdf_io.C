@@ -342,6 +342,19 @@ int Grid::read_cdf(const std::string* cdf_file,
   
   
   delete[] edges;
+
+	// set min/max values.  LEVEL may be redone if units change in PtoH()
+	set_minimum(LAT);
+	set_minimum(LON);
+	set_minimum(LEVEL);
+	set_minimum(FRTIME);
+	set_minimum(VAR);
+	set_maximum(LAT);
+	set_maximum(LON);
+	set_maximum(LEVEL);
+	set_maximum(FRTIME);
+	set_maximum(VAR);
+
   return FG_OK;
   }
 
