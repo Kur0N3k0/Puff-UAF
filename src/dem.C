@@ -28,7 +28,13 @@
 //////////////////////////////////
 Dem::~Dem(){
   if (path) delete [] path;
-  if (tile) delete [] tile;
+	if (tile) {
+		for (int i = 0; i< ntiles; i++) {
+			if (tile[i].data) delete[] tile[i].data;
+			if (tile[i].name) free(tile[i].name);
+		}
+	}
+  if (tile) free(tile);
 
   return;
   }
@@ -122,6 +128,8 @@ double Dem::elevation(double lat, double lon, maparam* proj_grid)
   
   // GTOPO30 data starts in the northwest and reads westward
   if (type == GTOPO30) {
+		if (j==ysize) j--; // no data on the tile's border! fixme
+		if (i==xsize-1) i--; // no data on the tile's border! fixme
     e[0] = tile[idx].data[j*xsize+i];
     e[1] = tile[idx].data[j*xsize+i+1];
     e[2] = tile[idx].data[(j-1)*xsize+i+1];
@@ -130,10 +138,10 @@ double Dem::elevation(double lat, double lon, maparam* proj_grid)
     
   // DTED0 data starts in the southwest and reads northward
   if (type == DTED0) {
-    e[0] = tile[idx].data[(i-1)*ysize + (ysize-j)];
-    e[1] = tile[idx].data[i*ysize + (ysize-j)];
-    e[2] = tile[idx].data[i*ysize + (ysize-j+1)];
-    e[3] = tile[idx].data[(i-1)*ysize + (ysize-j+1)];
+    e[0] = tile[idx].data[i*ysize + (ysize-j)];
+    e[1] = tile[idx].data[(i+1)*ysize + (ysize-j)];
+    e[2] = tile[idx].data[(i+1)*ysize + (ysize-j+1)];
+    e[3] = tile[idx].data[i*ysize + (ysize-j+1)];
     }
     
   // set no data values to zero
@@ -168,11 +176,13 @@ int Dem::tileNumber(double lat, double lon) {
   while (lon > 360) { lon -= 360.; }
   if (lat > 90 || lat < -90) return DEM_ERROR;
 
-  // try last index value first for speed
-    minLat = tile[idx].maxLat - tile[idx].nrows*tile[idx].dy;
-    maxLon = tile[idx].minLon + tile[idx].ncols*tile[idx].dx;
-    if (minLat < lat && tile[idx].maxLat > lat &&
-      tile[idx].minLon < lon && maxLon > lon ) return idx;
+  // try last index value (if defined) first for speed
+		if (idx != -1) {
+	    minLat = tile[idx].maxLat - tile[idx].nrows*tile[idx].dy;
+	    maxLon = tile[idx].minLon + tile[idx].ncols*tile[idx].dx;
+	    if (minLat < lat && tile[idx].maxLat > lat &&
+ 	     tile[idx].minLon < lon && maxLon > lon ) return idx;
+		}
       
   // try this algorithm for DTED0
   if (type == DTED0) {
@@ -209,7 +219,7 @@ int Dem::tileNumber(double lat, double lon) {
 			}
     }
   }
-  if (type == DTED0) {
+  if (type == DTED0 and idx != -1) {
     tileArray[numTilesRead]=idx;
     numTilesRead++;
     }
@@ -299,7 +309,7 @@ int Dem::readTile(int idx) {
         didx++;
       }
       // skip overlapping data value at end of column
-      demFile.seekg(1*sizeof(short int), std::ios::cur);
+//      demFile.seekg(1*sizeof(short int), std::ios::cur);
       // skip three junk values at the END of each column
       demFile.seekg(3*sizeof(short int), std::ios::cur);
       // skip entire cols - (nrows*skip)+6+1 is actual number of data values in
@@ -346,6 +356,15 @@ int Dem::setResolution(int res) {
   bool failed = false;  // flag for setting the resolution
   int nrowsLocal, ncolsLocal;  // local copy for printing error message
   if (res < 0) return DEM_ERROR;
+	// only use full resolution with dted0 because tile border values
+	// overlap and nrows/ncols are uneven.  Things run pretty quick with 
+	// dted0 anyway because the tiles are small, so no need for reduced
+	// resolution probably.
+	if (type == DTED0 and res != 0) {
+		std::cout << "DTED0 only runs at full resolution\n";
+		res = 0;
+		}
+
   static const int factor = (int)pow((double)2,(double)res);
   for (int idx = 0 ; idx < ntiles ; idx++ ) {
     if (tile[idx].exists &&
@@ -430,42 +449,49 @@ int Dem::readGtopo30Header(int idx) {
 // differ, you'll need to modify these values.
 int Dem::setGtopo30() {
   ntiles = 33;
-  tile = new Tile[ntiles];
-  for (int i=0; i<ntiles;i++) tile[i].loaded = false;
+  //tile = new Tile[ntiles];
+	// use malloc() instead of new[] to be consistent with dted0's allocation
+	// which uses realloc() to add each new tile.  Consistency is necessary
+	// for freeing memory in the destructor
+	tile=(Tile*)malloc(sizeof(Tile)*ntiles);
+  for (int i=0; i<ntiles;i++) {
+		tile[i].loaded = false;
+		tile[i].data = NULL;
+	}
   
-  tile[0].name = "W180N90.DEM";
-  tile[1].name = "W140N90.DEM";
-  tile[2].name = "W100N90.DEM";
-  tile[3].name = "W060N90.DEM";
-  tile[4].name = "W020N90.DEM";
-  tile[5].name = "E020N90.DEM";
-  tile[6].name = "E060N90.DEM";
-  tile[7].name = "E100N90.DEM";
-  tile[8].name = "E140N90.DEM";
-  tile[9].name = "W180N40.DEM";
-  tile[10].name = "W140N40.DEM";
-  tile[11].name = "W100N40.DEM";
-  tile[12].name = "W060N40.DEM";
-  tile[13].name = "W020N40.DEM";
-  tile[14].name = "E020N40.DEM";
-  tile[15].name = "E060N40.DEM";
-  tile[16].name = "E100N40.DEM";
-  tile[17].name = "E140N40.DEM";
-  tile[18].name = "W180S10.DEM";
-  tile[19].name = "W140S10.DEM";
-  tile[20].name = "W100S10.DEM";
-  tile[21].name = "W060S10.DEM";
-  tile[22].name = "W020S10.DEM";
-  tile[23].name = "E020S10.DEM";
-  tile[24].name = "E060S10.DEM";
-  tile[25].name = "E100S10.DEM";
-  tile[26].name = "E140S10.DEM";
-  tile[27].name = "W180S60.DEM";
-  tile[28].name = "W120S60.DEM";
-  tile[29].name = "W060S60.DEM";
-  tile[30].name = "W000S60.DEM";
-  tile[31].name = "E060S60.DEM";
-  tile[32].name = "E120S60.DEM";
+  tile[0].name = strdup("W180N90.DEM");
+  tile[1].name = strdup("W140N90.DEM");
+  tile[2].name = strdup("W100N90.DEM");
+  tile[3].name = strdup("W060N90.DEM");
+  tile[4].name = strdup("W020N90.DEM");
+  tile[5].name = strdup("E020N90.DEM");
+  tile[6].name = strdup("E060N90.DEM");
+  tile[7].name = strdup("E100N90.DEM");
+  tile[8].name = strdup("E140N90.DEM");
+  tile[9].name = strdup("W180N40.DEM");
+  tile[10].name = strdup("W140N40.DEM");
+  tile[11].name = strdup("W100N40.DEM");
+  tile[12].name = strdup("W060N40.DEM");
+  tile[13].name = strdup("W020N40.DEM");
+  tile[14].name = strdup("E020N40.DEM");
+  tile[15].name = strdup("E060N40.DEM");
+  tile[16].name = strdup("E100N40.DEM");
+  tile[17].name = strdup("E140N40.DEM");
+  tile[18].name = strdup("W180S10.DEM");
+  tile[19].name = strdup("W140S10.DEM");
+  tile[20].name = strdup("W100S10.DEM");
+  tile[21].name = strdup("W060S10.DEM");
+  tile[22].name = strdup("W020S10.DEM");
+  tile[23].name = strdup("E020S10.DEM");
+  tile[24].name = strdup("E060S10.DEM");
+  tile[25].name = strdup("E100S10.DEM");
+  tile[26].name = strdup("E140S10.DEM");
+  tile[27].name = strdup("W180S60.DEM");
+  tile[28].name = strdup("W120S60.DEM");
+  tile[29].name = strdup("W060S60.DEM");
+  tile[30].name = strdup("W000S60.DEM");
+  tile[31].name = strdup("E060S60.DEM");
+  tile[32].name = strdup("E120S60.DEM");
 
   // initialize the tiles that exist
   for (int i=0;i<ntiles;i++) {
@@ -504,6 +530,7 @@ int Dem::readDted0Header(int idx) {
 
   int num;  // temporarily hold integer values converted from the header
   char header[3];  // temporarily hold header characters
+	strcpy(header,"***"); // initialize this to anything for sscanf() later
  
   // 20-22 are arc-second resolution for longitude
   // 24-26 are arc-second resolution for latitude
@@ -579,11 +606,29 @@ int Dem::readDted0Header(int idx) {
   // to allow for changing resolution, the xsize and ysize need to be even,
   // at least initially, so forget the last set of points, which overlap the
   // next tile
-  if (tile[idx].nrows != 0 && tile[idx].nrows%2 == 1) tile[idx].nrows--;
-  if (tile[idx].ncols != 0 && tile[idx].ncols%2 == 1) tile[idx].ncols--;
+// DEBUG:
+// can we not do this since overlap is needed for interpolating elevations?
+//  if (tile[idx].nrows != 0 && tile[idx].nrows%2 == 1) tile[idx].nrows--;
+//  if (tile[idx].ncols != 0 && tile[idx].ncols%2 == 1) tile[idx].ncols--;
   
   return DEM_OK;
   }
+//////////////////////////////////
+void Dem::dtedTileExists(int *idx, char *n)
+{
+  std::string filename = path;
+  filename.append(n);
+	
+  std::ifstream file(filename.data(), std::ios::in);
+  if (!file) return;
+
+	tile=(Tile*)realloc(tile,sizeof(Tile)*(*idx+1));
+	tile[*idx].name=strdup(n);
+	tile[*idx].loaded=false;
+	tile[*idx].data = NULL;
+	(*idx)++;
+	return;
+}
 //////////////////////////////////
 // create file names and set number of tiles for DTED0.  If your filenames
 // and/or structure differ, you'll need to modify this function.  It is 
@@ -592,14 +637,15 @@ int Dem::readDted0Header(int idx) {
 int Dem::setDted0() {
 
   // tiles are 1-degree x 1-degree  
-  ntiles = 360*180;
-  tile = new Tile[ntiles];
+//  ntiles = 360*180;
+//  tile = new Tile[ntiles];
   int idx;  // tile index
   // allocate space for tile names
-  for(idx = 0; idx<ntiles; idx++) {
-    tile[idx].name = new char[13]; // i.e. w151/n34.dt0
-    tile[idx].loaded = false;
-    }
+//  for(idx = 0; idx<ntiles; idx++) {
+//    tile[idx].name = new char[13]; // i.e. w151/n34.dt0
+//    tile[idx].loaded = false;
+//    }
+	char name[13];   // i.e. w151/n34.dt0
     
   idx = 0;  // reset tile index to zero
 
@@ -614,21 +660,22 @@ int Dem::setDted0() {
   for (int lat_idx=0; lat_idx<90; lat_idx++) {
     for (int lon_idx=0; lon_idx<180; lon_idx++) {
       if (lat_idx < 10 && lon_idx < 10) { // e00x/n0x.dt0
-        sprintf(tile[idx].name,"e00%1i/n0%1i.dt0",lon_idx,lat_idx);
+        sprintf(name,"e00%1i/n0%1i.dt0",lon_idx,lat_idx);
       } else if (lat_idx < 10 && lon_idx < 100) { // e0xx/n0x.dt0
-        sprintf(tile[idx].name,"e0%2i/n0%1i.dt0",lon_idx,lat_idx);
+        sprintf(name,"e0%2i/n0%1i.dt0",lon_idx,lat_idx);
       } else if (lat_idx < 10 && lon_idx > 99)  {// exxx/n0x.dt0
-        sprintf(tile[idx].name,"e%3i/n0%1i.dt0",lon_idx,lat_idx);
+        sprintf(name,"e%3i/n0%1i.dt0",lon_idx,lat_idx);
       } else if (lat_idx >= 10 && lon_idx < 10) { // e00x/nxx.dt0
-        sprintf(tile[idx].name,"e00%1i/n%2i.dt0",lon_idx,lat_idx);
+        sprintf(name,"e00%1i/n%2i.dt0",lon_idx,lat_idx);
       } else if (lat_idx >= 10 && lon_idx < 100) { // e0xx/nxx.dt0
-        sprintf(tile[idx].name,"e0%2i/n%2i.dt0",lon_idx,lat_idx);
+        sprintf(name,"e0%2i/n%2i.dt0",lon_idx,lat_idx);
       } else if (lat_idx >= 10 && lon_idx > 99) { // exxx/nxx.dt0
-        sprintf(tile[idx].name,"e%3i/n%2i.dt0",lon_idx,lat_idx);
+        sprintf(name,"e%3i/n%2i.dt0",lon_idx,lat_idx);
       }  else { 
         std::cerr << "ERROR: did not assign idx " << idx << std::endl;
       }
-      idx++; // advance tile index
+//      idx++; // advance tile index
+			dtedTileExists(&idx,name);
       }
     }
 
@@ -636,21 +683,22 @@ int Dem::setDted0() {
   for (int lat_idx=0; lat_idx<90; lat_idx++) {
     for (int lon_idx=1; lon_idx<181; lon_idx++) {
       if (lat_idx < 10 && lon_idx < 10) { // w00x/n0x.dt0
-        sprintf(tile[idx].name,"w00%1i/n0%1i.dt0",lon_idx,lat_idx);
+        sprintf(name,"w00%1i/n0%1i.dt0",lon_idx,lat_idx);
       } else if (lat_idx < 10 && lon_idx < 100) { // w0xx/n0x.dt0
-        sprintf(tile[idx].name,"w0%2i/n0%1i.dt0",lon_idx,lat_idx);
+        sprintf(name,"w0%2i/n0%1i.dt0",lon_idx,lat_idx);
       } else if (lat_idx < 10 && lon_idx > 99)  {// wxxx/n0x.dt0
-        sprintf(tile[idx].name,"w%3i/n0%1i.dt0",lon_idx,lat_idx);
+        sprintf(name,"w%3i/n0%1i.dt0",lon_idx,lat_idx);
       } else if (lat_idx >= 10 && lon_idx < 10) { // w00x/nxx.dt0
-        sprintf(tile[idx].name,"w00%1i/n%2i.dt0",lon_idx,lat_idx);
+        sprintf(name,"w00%1i/n%2i.dt0",lon_idx,lat_idx);
       } else if (lat_idx >= 10 && lon_idx < 100) { // w0xx/nxx.dt0
-        sprintf(tile[idx].name,"w0%2i/n%2i.dt0",lon_idx,lat_idx);
+        sprintf(name,"w0%2i/n%2i.dt0",lon_idx,lat_idx);
       } else if (lat_idx >= 10 && lon_idx > 99) { // wxxx/nxx.dt0
-        sprintf(tile[idx].name,"w%3i/n%2i.dt0",lon_idx,lat_idx);
+        sprintf(name,"w%3i/n%2i.dt0",lon_idx,lat_idx);
       }  else { 
         std::cerr << "ERROR: did not assign idx " << idx << std::endl;
       }
-      idx++; // advance tile index
+//      idx++; // advance tile index
+			dtedTileExists(&idx,name);
       }
     }
 
@@ -658,21 +706,22 @@ int Dem::setDted0() {
   for (int lat_idx=1; lat_idx<91; lat_idx++) {
     for (int lon_idx=0; lon_idx<180; lon_idx++) {
       if (lat_idx < 10 && lon_idx < 10) { // e00x/s0x.dt0
-        sprintf(tile[idx].name,"e00%1i/s0%1i.dt0",lon_idx,lat_idx);
+        sprintf(name,"e00%1i/s0%1i.dt0",lon_idx,lat_idx);
       } else if (lat_idx < 10 && lon_idx < 100) { // e0xx/s0x.dt0
-        sprintf(tile[idx].name,"e0%2i/s0%1i.dt0",lon_idx,lat_idx);
+        sprintf(name,"e0%2i/s0%1i.dt0",lon_idx,lat_idx);
       } else if (lat_idx < 10 && lon_idx > 99)  {// exxx/s0x.dt0
-        sprintf(tile[idx].name,"e%3i/s0%1i.dt0",lon_idx,lat_idx);
+        sprintf(name,"e%3i/s0%1i.dt0",lon_idx,lat_idx);
       } else if (lat_idx >= 10 && lon_idx < 10) { // e00x/sxx.dt0
-        sprintf(tile[idx].name,"e00%1i/s%2i.dt0",lon_idx,lat_idx);
+        sprintf(name,"e00%1i/s%2i.dt0",lon_idx,lat_idx);
       } else if (lat_idx >= 10 && lon_idx < 100) { // e0xx/sxx.dt0
-        sprintf(tile[idx].name,"e0%2i/s%2i.dt0",lon_idx,lat_idx);
+        sprintf(name,"e0%2i/s%2i.dt0",lon_idx,lat_idx);
       } else if (lat_idx >= 10 && lon_idx > 99) { // exxx/sxx.dt0
-        sprintf(tile[idx].name,"e%3i/s%2i.dt0",lon_idx,lat_idx);
+        sprintf(name,"e%3i/s%2i.dt0",lon_idx,lat_idx);
       }  else { 
         std::cerr << "ERROR: did not assign idx " << idx << std::endl;
       }
-      idx++; // advance tile index
+//      idx++; // advance tile index
+			dtedTileExists(&idx,name);
       }
     }
 
@@ -680,23 +729,26 @@ int Dem::setDted0() {
   for (int lat_idx=1; lat_idx<91; lat_idx++) {
     for (int lon_idx=1; lon_idx<181; lon_idx++) {
       if (lat_idx < 10 && lon_idx < 10) { // w00x/n0x.dt0
-        sprintf(tile[idx].name,"w00%1i/s0%1i.dt0",lon_idx,lat_idx);
+        sprintf(name,"w00%1i/s0%1i.dt0",lon_idx,lat_idx);
       } else if (lat_idx < 10 && lon_idx < 100) { // w0xx/s0x.dt0
-        sprintf(tile[idx].name,"w0%2i/s0%1i.dt0",lon_idx,lat_idx);
+        sprintf(name,"w0%2i/s0%1i.dt0",lon_idx,lat_idx);
       } else if (lat_idx < 10 && lon_idx > 99)  {// wxxx/s0x.dt0
-        sprintf(tile[idx].name,"w%3i/s0%1i.dt0",lon_idx,lat_idx);
+        sprintf(name,"w%3i/s0%1i.dt0",lon_idx,lat_idx);
       } else if (lat_idx >= 10 && lon_idx < 10) { // w00x/sxx.dt0
-        sprintf(tile[idx].name,"w00%1i/s%2i.dt0",lon_idx,lat_idx);
+        sprintf(name,"w00%1i/s%2i.dt0",lon_idx,lat_idx);
       } else if (lat_idx >= 10 && lon_idx < 100) { // w0xx/sxx.dt0
-        sprintf(tile[idx].name,"w0%2i/s%2i.dt0",lon_idx,lat_idx);
+        sprintf(name,"w0%2i/s%2i.dt0",lon_idx,lat_idx);
       } else if (lat_idx >= 10 && lon_idx > 99) { // wxxx/sxx.dt0
-        sprintf(tile[idx].name,"w%3i/s%2i.dt0",lon_idx,lat_idx);
+        sprintf(name,"w%3i/s%2i.dt0",lon_idx,lat_idx);
       }  else { 
         std::cerr << "ERROR: did not assign idx " << idx << std::endl;
       }
-      idx++; // advance tile index
+//      idx++; // advance tile index
+			dtedTileExists(&idx,name);
       }
     }
+
+	ntiles = idx;
 
   // initialize the tiles that exist
   std::cout << "reading DTED0 headers ... " << std::flush;
