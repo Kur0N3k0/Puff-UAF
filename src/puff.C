@@ -403,15 +403,18 @@ int run_puff (int procRank)
 		ash.r[i].x -= 360;
 	      if (ash.r[i].x < atm->xMin() )
 		ash.r[i].x += 360;
-	      // now ceiling
-	      if (!atm->containsZPoint(ash.r[i].z)) 
+	      // now vertical bounds 
+	      if (int zb = atm->containsZPoint(ash.r[i].z))
 	      {
-	        // reset particle
-		ash.r[i].z = atm->zMax();
-		// check that this is not the last one moving
-		if (ash.outOfBounds(i) != 0)
-		  EarlyEndOfSimulation = true;
-        }
+					// particle may already be grounded below 'z' bounds, which is OK
+					if (ash.r[i].grounded) continue;
+	        // reset particle on min or max bounds
+					if (zb == -1) ash.r[i].z = atm->zMin();
+					if (zb == +1) ash.r[i].z = atm->zMax();
+					// check that this is not the last one moving
+					if (ash.outOfBounds(i) != 0)
+		  			EarlyEndOfSimulation = true;
+        	}
             
 	    // end of global windfield adjustments
 	    } else if (!atm->containsXYZPoint(ash.r[i].x, ash.r[i].y, ash.r[i].z) ) {

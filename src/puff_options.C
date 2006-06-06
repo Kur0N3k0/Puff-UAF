@@ -206,11 +206,15 @@ void option_switch(int opt, const char *optarg, const struct option *opt_lng) {
       break;
     case DEM:
       if (strcmp(optarg,"none") == 0) break;
+      if (strcmp(optarg,"None") == 0) break;
+      if (strcmp(optarg,"no") == 0) break;
+      if (strcmp(optarg,"false") == 0) break;
+      if (strcmp(optarg,"False") == 0) break;
       argument.dem = strdup(optarg);
       if (strchr(argument.dem,':') != NULL) {
         if(sscanf(strchr(argument.dem,':'), ":%i", &argument.dem_lvl) == 0) 
-	  std::cerr << "invalid value for dem level: " << optarg << std::endl;
-	strtok(argument.dem,":");
+	  std::cerr << "WARNING: invalid value for dem level: " << optarg << std::endl;
+		strtok(argument.dem,":");
       }
       break;
     case DIFFUSEH: 
@@ -220,7 +224,7 @@ void option_switch(int opt, const char *optarg, const struct option *opt_lng) {
 				break;
 			}
       if (sscanf(optarg, "%lf", &argument.diffuseH) == 0)
-        std::cerr << "invalid value for option diffuseH: " << optarg << std::endl;
+        std::cerr << "WARNING: invalid value for option diffuseH: " << optarg << std::endl;
 			if (argument.diffuseH < 0)
 			{
 				std::cerr << "WARNING: diffuseH cannot be less than 0, setting to 0\n";
@@ -749,7 +753,7 @@ void set_defaults(struct Argument *argument) {
   argument->ashLogSdev = 1;
   argument->averageOutput = false;
   argument->dem = (char)NULL;
-  argument->dem_lvl = 2;
+  argument->dem_lvl = 0;
   argument->diffuseH = 10000;
   argument->diffuseZ = 10;
 	argument->drag = 1.0;

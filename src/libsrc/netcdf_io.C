@@ -90,7 +90,7 @@ int Grid::read_cdf(const std::string* cdf_file,
   }
 
   // get the variable size 
-  long int *edges = vp->edges();
+//  long int *edges = vp->edges();
   
   // retrieve global attributes
   get_global_attributes(&ncfile);
@@ -122,7 +122,7 @@ int Grid::read_cdf(const std::string* cdf_file,
     // copy the name into the Grid object
     strcpy(fgData[dim_idx].name,dp->name());
     // get the size of the dimension, edges is declared 'long' above
-    edges = dp->edges();
+//    edges = dp->edges();
     // retrieve dimension attributes
     get_attributes(dp, dim_idx);
     //put the values into type NcValues and typecast later
@@ -138,6 +138,7 @@ int Grid::read_cdf(const std::string* cdf_file,
     }
 		o_d_size[dim_idx]=fgData[dim_idx].size;
 		adjust_dimensions(dim_offset, dim_idx);
+		delete values;
   }  
 
   // at this point, all the dimensions have been loaded in their entirety.
@@ -298,6 +299,7 @@ int Grid::read_cdf(const std::string* cdf_file,
 				fgData[VAR].val[v2_idx]=scale_factor*(float)v[i] + add_offset;
 				v2_idx++;
 			}
+		delete[] v;
 		}
 		if (type == ncFloat)
 		{
@@ -311,6 +313,7 @@ int Grid::read_cdf(const std::string* cdf_file,
 					fgData[VAR].val[v2_idx] = fgFillValue;
 				v2_idx++;
 			}
+			delete[] v;
 		}
 
 //		vp2->set_cur(dim_offset[LON],dim_offset[LAT],dim_offset[LEVEL],recIdx);
@@ -335,13 +338,13 @@ int Grid::read_cdf(const std::string* cdf_file,
 //					else fgData[VAR].val[v_idx] = fgFillValue;
 //		  } } } 
 
+		delete[] counts;
     }
   // delete values; 
 //	 delete vp2;
      
-  
-  
-  delete[] edges;
+ 	delete[] dim_offset; 
+//  delete[] edges;
 
 	// set min/max values.  LEVEL may be redone if units change in PtoH()
 	set_minimum(LAT);
@@ -451,9 +454,10 @@ void Grid::get_attributes(NcVar *vp, int idx) {
       }
             
     } else if (strcmp(attname,"units") == 0) {  // _FillValue
-      strcpy(fgData[idx].units, att->as_string(0));
-      
-      
+      //strcpy(fgData[idx].units, att->as_string(0));
+			char *s = att->as_string(0);
+			strcpy(fgData[idx].units, s);
+			delete[] s;
     } else if (strcmp(attname,"add_offset") == 0) { // add_offset
       if (att->num_vals() != 1 )
       {
@@ -475,6 +479,7 @@ void Grid::get_attributes(NcVar *vp, int idx) {
     } else {
       //cout << "attribute " << attname << " not used\n";
     }     
+	delete att;
   }
  
   return;
@@ -495,7 +500,12 @@ void Grid::get_global_attributes(NcFile *vp) {
     if (strcmp(attname,"title") == 0) { // title (global attribute)
       if (att->type() == ncChar ) 
       {
-        strncpy(fgTitle, att->as_string(0), att->num_vals() );
+				//strncpy(fgTitle, att->as_string(0), att->num_vals() );
+				char *s = att->as_string(0);
+				strcpy(fgTitle, s);
+				delete[] s;
+				// all this work is to avoid a memory leak using as_string() according
+				// to valgrind.  Am I really responsible for freeing this memory?
       } else {
         std::cerr << "WARNING: title attribute is not a character string\n";
       }
@@ -520,6 +530,7 @@ void Grid::get_global_attributes(NcFile *vp) {
     } else {
       //cout << "attribute " << attname << " not used\n";
     }     
+	delete att;
   }
  
   return;
@@ -541,29 +552,37 @@ int Grid::write_cdf(char *cdf_file) {
   // add dimension variables
   NcVar *vp;
   vp = ncfile.add_var((NcToken)fgData[FRTIME].name, ncFloat, d_time);
-  vp->put(&fgData[FRTIME].val[0],vp->edges());
+	// edges pointer, use for all variables then be sure to delete[]
+	long int *edges = vp->edges();
+  vp->put(&fgData[FRTIME].val[0],edges);
   vp->add_att((NcToken)"units",fgData[FRTIME].units);
   vp = ncfile.add_var((NcToken)fgData[LEVEL].name, ncFloat, d_lev);
-  vp->put(&fgData[LEVEL].val[0],vp->edges());
+	delete[] edges; edges = vp->edges();
+  vp->put(&fgData[LEVEL].val[0],edges);
   vp->add_att((NcToken)"units",fgData[LEVEL].units);
   vp = ncfile.add_var((NcToken)fgData[LAT].name, ncFloat, d_lat);
-  vp->put(&fgData[LAT].val[0],vp->edges());
+	delete[] edges; edges = vp->edges();
+  vp->put(&fgData[LAT].val[0],edges);
   vp->add_att((NcToken)"units",fgData[LAT].units);
   vp = ncfile.add_var((NcToken)fgData[LON].name, ncFloat, d_lon);
-  vp->put(&fgData[LON].val[0],vp->edges());
+	delete[] edges; edges = vp->edges();
+  vp->put(&fgData[LON].val[0],edges);
   vp->add_att((NcToken)"units",fgData[LON].units);
   vp = ncfile.add_var((NcToken)"reftime", ncChar, d_rtim);
-  vp->put(fgReftime, vp->edges());
+	delete[] edges; edges = vp->edges();
+  vp->put(fgReftime, edges);
   
   // add wind variable
   vp = ncfile.add_var((NcToken)fgData[0].name, ncFloat, d_time, d_lev, d_lat, d_lon);
-  vp->put(&fgData[VAR].val[0], vp->edges());
+	delete[] edges; edges = vp->edges();
+  vp->put(&fgData[VAR].val[0], edges);
   vp->add_att((NcToken)"units",fgData[0].units);
   
   // add global attributes
   ncfile.add_att((NcToken)"coverage",coverage);
   ncfile.add_att((NcToken)"title","Puff-generated windfield");
   
+	delete[] edges;
   return FG_OK;
   }
 ////////////////////////////////////////////////////////////////////////////
@@ -584,7 +603,9 @@ int Grid::append(std::string *file)
   // create a new variable
   vp = ncfile.add_var((NcToken)fgData[VAR].name, ncFloat, d_time, d_lev, d_lat, d_lon);
   // add the data
-  vp->put(&fgData[VAR].val[0], vp->edges());
+	long int *edges = vp->edges();
+  vp->put(&fgData[VAR].val[0], edges);
+	delete[] edges;
   vp->add_att((NcToken)"units", fgData[VAR].units);
   
   return FG_OK;
@@ -612,7 +633,9 @@ const double timeOffsetUsingUDUnits(NcVar *vp) {
   // get the unit attribute, should be "time since ...." 
   utUnit reftime_unit_sct;  // unit structure for reftime
   utUnit time_t_unit_sct;  // time_t unit structure
-  utScan(att->as_string(0), &reftime_unit_sct);
+	char *s = att->as_string(0);
+  utScan(s, &reftime_unit_sct);
+	delete[] s;
   utScan("hours since 1970-1-1", &time_t_unit_sct);
   // recheck attribute
   if (!utIsTime(&reftime_unit_sct) || !utHasOrigin(&reftime_unit_sct) ) {
@@ -623,6 +646,7 @@ const double timeOffsetUsingUDUnits(NcVar *vp) {
   const double offset = (reftime_unit_sct.origin) - (time_t_unit_sct.origin);
 
   utTerm();	   
+	delete att;
   return offset;
     
 #else
@@ -688,6 +712,7 @@ char *Grid::reftimeFromNcVar(NcVar *vp) {
       }
     }
   valtimeOffset = val[0];
+	delete[] edges;
   delete[] val;
   return time2unistr(time_t(3600*valtimeOffset)+(time_t)offset);
 

@@ -29,14 +29,18 @@ class Dem {
       bool loaded, exists;
       double *data;
       } *tile;
-    enum {GTOPO30, DTED0} type;
+    enum {GTOPO30, DTED0, NED} type;
         
+		void dtedTileExists(char *name);
     int setGtopo30();
     int setDted0();
+		int setNed();
     int readGtopo30Header(int idx);
     int readDted0Header(int idx);
+		int readNedHeader(int idx);
     int readTile(int idx);
     int tileNumber (double lat, double lon);
+		void addTile();
       
   public:
     Dem();

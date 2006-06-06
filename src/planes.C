@@ -63,6 +63,12 @@ Planes::Planes(std::vector<std::string> file_v)
 }
 
 ////////////////////////////////////////////
+// destructor
+Planes::~Planes()
+{
+	return;
+}
+////////////////////////////////////////////
 // set the start and end times tags assuming the times are in sequential order
 void Planes::setEndTimes()
 {
@@ -88,7 +94,10 @@ void Planes::readPlanesFile(std::ifstream *planesFile)
   {
     // skip bad data, or useless header stuff
     flData data = parseLine(line);
-    if (data.empty) continue;
+    if (data.empty) {
+			clearData(&data);
+			continue;
+			}
     if (cur == NULL) newFlight(&data);
     else if (strcmp(data.fltnum, cur->fltnum.c_str())) newFlight(&data);
 

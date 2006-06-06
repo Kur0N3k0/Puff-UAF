@@ -62,6 +62,7 @@ std::string PuffRC::cleanString(std::string str) {
   }
 ///////////////////////////////////////////////////////////////////////
 PuffRC::~PuffRC() {
+	if (fileName) delete[] fileName;
   return;
   }
 ///////////////////////////////////////////////////////////////////////
@@ -369,12 +370,14 @@ const std::string PuffRC::mostRecentFile(const char *edate, char *var, double ru
     // the most-recent possible
     std::list<std::string>::iterator fp;
     bool fileFound = false;
-    for (fp=fileList.begin(); (fp!= fileList.end() && !fileFound); ++fp) {
+    for (fp=fileList.begin(); 
+				(fp!= fileList.end() && !fileFound); 
+					++fp) {
       if (testFile >= *fp) {  // found the file we want
         retFile.append(dataPath);
         retFile.append(*fp);
 	// remove this file and all files older than it
-	fileList.erase(fp,fileList.end());
+//	fileList.erase(fp,fileList.end());
 	fileFound = true;
 	// add a file seperator if multiple files will be returned
         }
@@ -397,8 +400,13 @@ const std::string PuffRC::mostRecentFile(const char *edate, char *var, double ru
 int PuffRC::findNonLiteral(const std::string *mask, const char *c)
 {
   int loc = mask->find(c);  // location in string
+	// npos is 'ok', means it doesn't appear in the mask
+	if (loc == (int)std::string::npos ) return loc;
+	// Cannot be escaped if 1st character, so return and avoid [loc-1] error
+	if (loc == 0 ) return loc;
   // skip escaped literals
   while( (*mask)[loc-1] == '\\')
+//  while( (*mask)[1] == '\\')
   {
     loc = mask->find(c,loc+1);
     if (loc == (int)std::string::npos) badMask(mask);

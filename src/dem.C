@@ -22,6 +22,8 @@
 #include <cstdlib> 
 #include <cstdio>
 #include <cmath>
+#include <sys/types.h> // DIR
+#include <dirent.h>
 #include "dem.h"
 
 
@@ -70,6 +72,7 @@ int Dem::setPath(const char* inPath) {
 int Dem::initialize(const char *type) {
   if (strncmp(type, "gtopo30",7) == 0 )  return setGtopo30();
   if (strncmp(type, "dted0",5) == 0 ) return setDted0();
+	if (strncmp(type, "ned",3) == 0 ) return setNed();
   return DEM_ERROR;
   }
 //////////////////////////////////
@@ -79,7 +82,7 @@ int Dem::initialize(const char *type) {
 double Dem::elevation(double lat, double lon, maparam* proj_grid) 
 {
 
-  double elev;
+  double elev = 0;
   double e[4], t, u;
   
   if (! initialized) return 0;
@@ -127,7 +130,7 @@ double Dem::elevation(double lat, double lon, maparam* proj_grid)
   // N   e0  e1  East -->
   
   // GTOPO30 data starts in the northwest and reads westward
-  if (type == GTOPO30) {
+  if ((type == GTOPO30) or (type == NED)) {
 		if (j==ysize) j--; // no data on the tile's border! fixme
 		if (i==xsize-1) i--; // no data on the tile's border! fixme
     e[0] = tile[idx].data[j*xsize+i];
@@ -136,12 +139,12 @@ double Dem::elevation(double lat, double lon, maparam* proj_grid)
     e[3] = tile[idx].data[(j-1)*xsize+i];
     }
     
-  // DTED0 data starts in the southwest and reads northward
+  // DTED0 data starts in the southwest and reads northward row by row
   if (type == DTED0) {
-    e[0] = tile[idx].data[i*ysize + (ysize-j)];
-    e[1] = tile[idx].data[(i+1)*ysize + (ysize-j)];
-    e[2] = tile[idx].data[(i+1)*ysize + (ysize-j+1)];
-    e[3] = tile[idx].data[i*ysize + (ysize-j+1)];
+    e[0] = tile[idx].data[(ysize-j)*xsize+i];
+    e[1] = tile[idx].data[(ysize-j)*xsize+i+1];
+    e[2] = tile[idx].data[(ysize-j+1)*xsize+i+1];
+    e[3] = tile[idx].data[(ysize-j+1)*xsize+i];
     }
     
   // set no data values to zero
@@ -184,8 +187,8 @@ int Dem::tileNumber(double lat, double lon) {
  	     tile[idx].minLon < lon && maxLon > lon ) return idx;
 		}
       
-  // try this algorithm for DTED0
-  if (type == DTED0) {
+  // try this algorithm for DTED0 and NED
+  if ((type == DTED0) or (type == NED)) {
     for (int j=0; j<numTilesRead; j++) {
       idx=tileArray[j];
       minLat = tile[idx].maxLat - tile[idx].nrows*tile[idx].dy;
@@ -219,7 +222,9 @@ int Dem::tileNumber(double lat, double lon) {
 			}
     }
   }
-  if (type == DTED0 and idx != -1) {
+
+	// add this index value to the list of possible
+  if ((type == DTED0 or type == NED) and idx != -1) {
     tileArray[numTilesRead]=idx;
     numTilesRead++;
     }
@@ -325,6 +330,19 @@ int Dem::readTile(int idx) {
     
   } // end read DTED0
   
+	// NED data starts in southwest and reads northward
+	if (type == NED) {
+		// NED data in gridfloat is 32-bit float value
+		float fdata = no_data_value;
+		for (int jrow = 0; jrow < tile[idx].nrows; jrow++) {
+			for (int icol = 0; icol < tile[idx].ncols; icol++) {
+				demFile.read(reinterpret_cast<char*>(&fdata), sizeof(float));
+				// fixme: byte swapping here
+				tile[idx].data[didx++] = fdata;
+			}
+		}
+	} // end read NED
+
   //DEBUG - test that the end of file was reached
   demFile.read(reinterpret_cast<char*>(&ndata), sizeof(short int));
   if (! demFile.eof() ) {
@@ -614,7 +632,153 @@ int Dem::readDted0Header(int idx) {
   return DEM_OK;
   }
 //////////////////////////////////
-void Dem::dtedTileExists(int *idx, char *n)
+// National Elevation Dataset downloaded from the Seamless Data 
+// Distribution System (SDDS) at http://seamless.usgs.gov.
+// Files have random numerical names based on the data request, for example
+// 9993428.zip.  Inside is a header file *.hdr and the data in *.flt for 
+// GridFloat data.  It also comes in other formats that could possibly be
+// supported.  Assume all directories in the path are possible tiles, name
+// them after their number (although meaningless) and read their header.
+// The ASCII header is something like this
+// ncols         7277
+// nrows         3039
+// xllcorner     -151.80833333332
+// yllcorner     60.445555555564
+// cellsize      0.000555555555556
+// NODATA_value  -9999
+// byteorder     LSBFIRST
+// 
+int Dem::setNed()
+{
+	DIR *dp;	// pointer to directory entries
+	// attempt to open directory with NED dem data
+	dp = opendir(path);
+	if (!dp) {
+		std::cerr << "ERROR: Failed to open NED directory " << path << std::endl;
+		return DEM_ERROR;
+		}
+
+	struct dirent *ep;  // pointer to directory entry	
+	// loop through all entries, looking for header files
+	while ((ep = readdir(dp) )) {
+		std::string possibleDir = ep->d_name;
+		// don't do hidden files, this, or the parent dir
+		if (strncmp(ep->d_name, ".", 1) == 0) continue;
+		// look for header inside this directory
+		DIR *ddp; // pointer to subdirectory entry
+		// make this into full path name, trailing / already there from setPath()
+		std::string possibleDirFull = path + possibleDir;
+		ddp = opendir(possibleDirFull.c_str());
+		struct dirent *eep; // all subdirectory entries
+		while ((eep = readdir(ddp) )) {
+			std::string possibleFlt = eep->d_name; // possible .flt file
+			// see if the name matches
+			if (possibleFlt.find(".flt") != std::string::npos) {
+				addTile();
+				// name tile, include subdir, but not path
+				possibleFlt = possibleDir + "/" + possibleFlt;
+				tile[ntiles-1].name = strdup(possibleFlt.c_str()); 
+			  if (readNedHeader(ntiles-1) == DEM_OK) {
+					tile[ntiles-1].exists = true;
+					}
+				}
+			} 
+			(void)closedir(ddp);
+
+		}
+	(void)closedir(dp);
+  tileArray = new unsigned int[ntiles];
+  numTilesRead = 0;
+  initialized = true;
+	type = NED;
+
+	return DEM_OK;
+}
+			
+//////////////////////////////////
+void Dem::addTile()
+{
+	tile = (Tile*)realloc(tile,sizeof(Tile)*(ntiles+1));
+	tile[ntiles].name = NULL;
+	tile[ntiles].data = NULL;
+	tile[ntiles].loaded = false;
+	ntiles++;
+	return;
+}	
+//////////////////////////////////
+// 
+// The ASCII header is something like this
+// ncols         7277
+// nrows         3039
+// xllcorner     -151.80833333332
+// yllcorner     60.445555555564
+// cellsize      0.000555555555556
+// NODATA_value  -9999
+// byteorder     LSBFIRST
+//
+// reading is done similar to GTOPO30 headers
+int Dem::readNedHeader(int idx)
+{
+  std::string filename = path;
+  filename.append(tile[idx].name);
+  // create the header filename from the DEM filename
+  filename.replace(filename.find(".flt"),4,".hdr");
+  std::ifstream file(filename.data(), std::ios::in);
+  if (!file) return DEM_ERROR;
+  
+  std::string text;
+  while (! file.eof() ) {
+   file >> text;
+    if (text.compare("ncols") == 0 ) {
+      file >> text;
+      if (sscanf(text.data(),"%i",&tile[idx].ncols) != 1)
+        std::cerr << "failed to assign ncols from " << filename << std::endl;
+    } else if (text.compare("nrows") == 0 ) {
+      file >> text;
+      if (sscanf(text.data(),"%i",&tile[idx].nrows) != 1)
+        std::cerr << "failed to assign nrows from " << filename << std::endl;
+    } else if (text.compare("cellsize") == 0 ) {
+      file >> text;
+      if (sscanf(text.data(),"%lf",&tile[idx].dx) != 1)
+        std::cerr << "failed to assign cellsize from " << filename << std::endl;
+			tile[idx].dy = tile[idx].dx;
+    } else if (text.compare("NODATA_value") == 0 ) {
+      file >> text;
+      if (sscanf(text.data(),"%i",&no_data_value) != 1)
+        std::cerr << "failed to assign NODATA_value from " << filename << std::endl;
+      no_data_value = strtol(text.data(),(char**)NULL,10);
+    } else if (text.compare("xllcorner") == 0) {
+      file >> text;
+      if (sscanf(text.data(),"%lf",&tile[idx].minLon) != 1)
+        std::cerr << "failed to assign xllcorner from " << filename << std::endl;
+      while(tile[idx].minLon < 0) { tile[idx].minLon+=360.0;}
+    } else if (text.compare("yllcorner") == 0) {
+      file >> text;
+      if (sscanf(text.data(),"%lf",&tile[idx].maxLat) != 1)
+        std::cerr << "failed to assign yllcorner from " << filename << std::endl;
+    }
+     
+  }
+
+	// need to maxLat because minLat was actually read in, but had to wait for
+	// 'dy' to be read from cellsize
+ 	tile[idx].maxLat = tile[idx].maxLat + (tile[idx].nrows-1)*tile[idx].dy;
+
+	// clean up the object a little
+	tile[idx].data = NULL;
+	tile[idx].loaded = false;
+	// dem data file exists, that is how we got here from setNed()
+	tile[idx].exists = true;  	
+
+	file.close();
+	return DEM_OK;
+}
+//////////////////////////////////
+// this allocates space for the tile with addTile() only if the data file
+// exists. No header is read, nor is data loaded.  This is used to create a 
+// small list of possible tiles, contrary to GTOPO30 where all 32 tiles are 
+// in the list.  There would be 1000's of possible tiles for DTED0, otherwise.
+void Dem::dtedTileExists(char *n)
 {
   std::string filename = path;
   filename.append(n);
@@ -622,24 +786,24 @@ void Dem::dtedTileExists(int *idx, char *n)
   std::ifstream file(filename.data(), std::ios::in);
   if (!file) return;
 
-	tile=(Tile*)realloc(tile,sizeof(Tile)*(*idx+1));
-	tile[*idx].name=strdup(n);
-	tile[*idx].loaded=false;
-	tile[*idx].data = NULL;
-	(*idx)++;
+	addTile();
+	tile[ntiles-1].name = strdup(n);
 	return;
 }
 //////////////////////////////////
 // create file names and set number of tiles for DTED0.  If your filenames
 // and/or structure differ, you'll need to modify this function.  It is 
 // assumed the files are named things like w160/n63.dt0 or e002/s21.dt0
+// This could be done like NED where any file called *.dt0 is allowed, but
+// this was written beforehand in the image of GTOPO30, where we knew all
+// the file names.  We do here as well, the list is just long. fixme??
 
 int Dem::setDted0() {
 
   // tiles are 1-degree x 1-degree  
 //  ntiles = 360*180;
 //  tile = new Tile[ntiles];
-  int idx;  // tile index
+//  int idx;  // tile index
   // allocate space for tile names
 //  for(idx = 0; idx<ntiles; idx++) {
 //    tile[idx].name = new char[13]; // i.e. w151/n34.dt0
@@ -647,7 +811,7 @@ int Dem::setDted0() {
 //    }
 	char name[13];   // i.e. w151/n34.dt0
     
-  idx = 0;  // reset tile index to zero
+//  idx = 0;  // reset tile index to zero
 
   // create the DTED0 filenames based on geoengine.nima.mil names
   // filename corresponds to the lower-left corner of the grid
@@ -672,10 +836,10 @@ int Dem::setDted0() {
       } else if (lat_idx >= 10 && lon_idx > 99) { // exxx/nxx.dt0
         sprintf(name,"e%3i/n%2i.dt0",lon_idx,lat_idx);
       }  else { 
-        std::cerr << "ERROR: did not assign idx " << idx << std::endl;
+        std::cerr << "ERROR: did not assign DTED tile at " << lon_idx << "," << lat_idx << std::endl;
       }
 //      idx++; // advance tile index
-			dtedTileExists(&idx,name);
+			dtedTileExists(name);
       }
     }
 
@@ -695,10 +859,10 @@ int Dem::setDted0() {
       } else if (lat_idx >= 10 && lon_idx > 99) { // wxxx/nxx.dt0
         sprintf(name,"w%3i/n%2i.dt0",lon_idx,lat_idx);
       }  else { 
-        std::cerr << "ERROR: did not assign idx " << idx << std::endl;
+        std::cerr << "ERROR: did not assign DTED tile at " << lon_idx << "," << lat_idx << std::endl;
       }
 //      idx++; // advance tile index
-			dtedTileExists(&idx,name);
+			dtedTileExists(name);
       }
     }
 
@@ -718,10 +882,10 @@ int Dem::setDted0() {
       } else if (lat_idx >= 10 && lon_idx > 99) { // exxx/sxx.dt0
         sprintf(name,"e%3i/s%2i.dt0",lon_idx,lat_idx);
       }  else { 
-        std::cerr << "ERROR: did not assign idx " << idx << std::endl;
+        std::cerr << "ERROR: did not assign DTED tile at " << lon_idx << "," << lat_idx << std::endl;
       }
 //      idx++; // advance tile index
-			dtedTileExists(&idx,name);
+			dtedTileExists(name);
       }
     }
 
@@ -741,18 +905,18 @@ int Dem::setDted0() {
       } else if (lat_idx >= 10 && lon_idx > 99) { // wxxx/sxx.dt0
         sprintf(name,"w%3i/s%2i.dt0",lon_idx,lat_idx);
       }  else { 
-        std::cerr << "ERROR: did not assign idx " << idx << std::endl;
+        std::cerr << "ERROR: did not assign DTED tile at " << lon_idx << "," << lat_idx << std::endl;
       }
 //      idx++; // advance tile index
-			dtedTileExists(&idx,name);
+			dtedTileExists(name);
       }
     }
 
-	ntiles = idx;
+//	ntiles = idx;
 
   // initialize the tiles that exist
   std::cout << "reading DTED0 headers ... " << std::flush;
-  for (idx = 0; idx < ntiles; idx++ ) {
+  for (int idx = 0; idx < ntiles; idx++ ) {
     if (readDted0Header(idx) == DEM_OK) {
       tile[idx].exists = true;
     } else {

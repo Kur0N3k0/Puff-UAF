@@ -53,7 +53,7 @@ void Grid::initialize ()
   strcpy (fgData[FRTIME].name, "frtime");
   strcpy (fgData[FRTIME].units, "hours");
 
-  strcpy (fgTitle, "uniGrid object");
+  strcpy (fgTitle, "uniGrid object with real long name");
 
   // SET DEFUALT TO FALSE:
   uniShiftWest = 0;
@@ -70,15 +70,13 @@ void Grid::initialize ()
   fgData[LON].range[0] = -1.e30;
   fgData[LON].range[1] = 1.e30;
 
-	// min/max values, are they the same as range?
-	min_value[LON]=min_value[LAT]=min_value[LEVEL]=min_value[FRTIME]=min_value[VAR]=-1e-30;
-	max_value[LON]=max_value[LAT]=max_value[LEVEL]=max_value[FRTIME]=max_value[VAR]=1e-30;
-
   //added when merging Grids
   fgData[VAR].range[0] = -1.e30;
   fgData[VAR].range[1] = 1.e30;
 
-  uniErrorStrm << "uniGrid ERROR: ";
+	// min/max values, are they the same as range?
+	min_value[LON]=min_value[LAT]=min_value[LEVEL]=min_value[FRTIME]=min_value[VAR]=-1e-30;
+	max_value[LON]=max_value[LAT]=max_value[LEVEL]=max_value[FRTIME]=max_value[VAR]=1e-30;
 
   // Grid FIELDS:
   fgFillValue = -9999.0;
@@ -91,6 +89,7 @@ void Grid::initialize ()
 
   // ERROR STREAM:
   fgErrorStrm << "Grid ERROR: ";
+  uniErrorStrm << "Grid ERROR: ";
 
   // OUTPUT VALS, DEFAULTED IN HEADER:
   this->width ();
@@ -99,7 +98,6 @@ void Grid::initialize ()
   strcpy (fgSpace, " ");
   coverage = UNKNOWN;
 
-  
   fgData[VAR].val    = NULL;
   fgData[FRTIME].val = NULL;
   fgData[LEVEL].val  = NULL;

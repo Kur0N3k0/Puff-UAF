@@ -1038,6 +1038,9 @@ void Ash::setSortingProtocol(char* arg)
 int Ash::ground(long idx)
 {
   particle[idx].grounded = true;
+	if (!particle[idx].exists) {
+		std::cout << "grounding non-existant particle\n";
+		}
   numGrounded++;
   if ( (numOutOfBounds + numGrounded) >= ashN)
   {
@@ -1055,6 +1058,9 @@ int Ash::ground(long idx)
 int Ash::outOfBounds(int idx)
 {
   particle[idx].exists = false;
+	if (particle[idx].grounded) {
+		std::cout << "particle already grounded\n";
+		}
   numOutOfBounds++;
   if ( (numOutOfBounds + numGrounded) >= ashN)
   {
@@ -1437,23 +1443,28 @@ void Ash::writeGriddedData(
   vp->add_att((NcToken)"units","seconds since 1970-1-1");
   vp->add_att((NcToken)"long_name","time");
   vp = ncfile.add_var((NcToken)"level", ncFloat, d_lev);
-  vp->put(cc.zValues,vp->edges());
+	long int *edges = vp->edges(); // be sure to delete every time
+  vp->put(cc.zValues,edges);
   vp->add_att((NcToken)"units","meters");
   vp->add_att((NcToken)"long_name","level");
   vp->add_att((NcToken)"min_value",cc.zValues[0]);
   vp->add_att((NcToken)"max_value",cc.zValues[cc.zSize-1]);
   vp = ncfile.add_var((NcToken)"lat", ncFloat, d_lat);
-  vp->put(cc.yValues,vp->edges());
+	delete[] edges; edges = vp->edges();
+  vp->put(cc.yValues,edges);
   vp->add_att((NcToken)"units","degrees_north");
   vp->add_att((NcToken)"long_name","latitude");
   vp->add_att((NcToken)"min_value",cc.yValues[0]);
   vp->add_att((NcToken)"max_value",cc.yValues[cc.ySize-1]);
   vp = ncfile.add_var((NcToken)"lon", ncFloat, d_lon);
-  vp->put(cc.xValues,vp->edges());
+	delete[] edges; edges = vp->edges();
+  vp->put(cc.xValues,edges);
   vp->add_att((NcToken)"units","degrees_east");
   vp->add_att((NcToken)"long_name","longitude");
   vp->add_att((NcToken)"min_value",cc.xValues[0]);
   vp->add_att((NcToken)"max_value",cc.xValues[cc.xSize-1]);
+
+	delete[] edges;
 
   // add the relative airborne concentration data
   vp = ncfile.add_var((NcToken)"rel_air_conc", ncFloat, d_time, d_lev, d_lat, d_lon);

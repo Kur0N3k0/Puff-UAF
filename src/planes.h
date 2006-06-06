@@ -60,6 +60,7 @@ class Planes
   public:
     // public member functions
     Planes(std::vector<std::string> file);
+		~Planes();
     int size() const { return flight.size(); }
     int size(int idx) { return flight[idx].location.size(); }
     void calculateExposure(CCloud *cc);

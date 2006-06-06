@@ -49,7 +49,7 @@ public:
  
  // return a true/false whether this x,y point is within the atmospheric data
  bool containsXYPoint(float x, float y);
- bool containsZPoint(float z);
+ int containsZPoint(float z);
  bool containsXYZPoint(float x, float y, float z);
  
  bool isGlobal();

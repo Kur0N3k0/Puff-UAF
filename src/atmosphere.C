@@ -572,7 +572,7 @@ int Atmosphere::wind_create_W (Grid & U, Grid & V, Grid & W, Grid & Kh)
 	// calculate divergence
   //float C1 = Re*Deg2Rad;
   float C1 = 6371220.0 * 3.14159 / 180.0;	// about 111,198.67
-  float Dx, Dy, Dz, Du, Dv, temp_float;
+  float Dx, Dy, Dz, Du, Dv, temp_float = 0;
   int i2, ip, im, jp, jm;
   int offp, offm;
 
@@ -712,18 +712,17 @@ bool Atmosphere::containsXYPoint(float x, float y)
   return true;
 }
 ////////////////////////////////////////////////////////////////////////
-bool Atmosphere::containsZPoint(float z)
+// check is this location is within the vertical atmospheric bounds.  Return
+// 0 if so, otherwise +1 if greater than zmax, and -1 is less than zmin.
+int Atmosphere::containsZPoint(float z)
 {
   // Boundary check variables:
   float zmin = U.min(LEVEL);
   float zmax = U.max(LEVEL);
 
-
-  if (z < zmin || z > zmax)
-  {
-    return false;
-  }
-  return true;
+	if (z < zmin) return -1;
+	if (z > zmax) return +1;
+	return 0;
 }
 ////////////////////////////////////////////////////////////////////////
 bool Atmosphere::containsXYZPoint(float x, float y, float z)

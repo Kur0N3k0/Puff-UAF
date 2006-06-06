@@ -41,6 +41,10 @@ const int FG_OK = 0;
 ///////////////////////////////////////////////////////////////////
 Grid::Grid() {
     fgNdims = 0;
+    fgData[LAT].size = 0;
+    fgData[LON].size = 0;
+    fgData[LEVEL].size = 0;
+    fgData[FRTIME].size = 0;
     fgData[VAR].size = 0;
     initialize();
 }
