@@ -40,6 +40,9 @@
 #include <vector>
 #include <algorithm>
 #include <unistd.h> // access system call
+#include <sys/types.h> // open()/close()
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #ifdef HAVE_NETCDFCPP_H
 #include <netcdfcpp.h>
@@ -569,6 +572,8 @@ double Ash::fallVelocity(int idx) {
 // write netCDF file using C++ interface
 //
 //////////////////////////////////////////////////////////////////////
+#define PUFF_FILE_PERMISSIONS S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH
+#define PUFF_DIR_PERMISSIONS S_IRWXU|S_IRWXG|S_IRWXO
 void Ash::write(const char *filename) {
 
   std::cout << "Saving " << filename << std::endl;
@@ -576,7 +581,22 @@ void Ash::write(const char *filename) {
   if (sorting_protocol == ASH_SORT_YES) quicksort();
   findLimits();
 
+	// open/create file
+	int fd = open(filename, O_CREAT|O_APPEND,PUFF_FILE_PERMISSIONS);
+	// if failed, maybe directory doesn't exist
+	if (fd < 0) mkdir(argument.opath.c_str(),PUFF_DIR_PERMISSIONS);
+	// try again
+	if (fd < 0) fd = open(filename, O_CREAT,PUFF_FILE_PERMISSIONS);
+	if (fd > 0) { (void)close(fd);}
+	else {
+		std::cout << "ERROR: Failed to create output file " << filename << "\n";
+		exit(0);
+		}
   NcFile ncfile(filename, NcFile::Replace); // create/clobber a file
+	if (!ncfile.is_valid()) {
+		std::cerr << "ERROR: failed to create output file\n";
+		exit(0);
+		}
   // create a dimension
   NcDim *dp = ncfile.add_dim((NcToken)"nash", ashN);
   NcVar *vp;  // create a pointer to a NcVar object

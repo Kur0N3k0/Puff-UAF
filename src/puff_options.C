@@ -483,10 +483,8 @@ void option_switch(int opt, const char *optarg, const struct option *opt_lng) {
 			// allocate enough space for the string, an extra \, and 
 			// a terminating \0
 			// fixme: this leaks a little memory, maybe free argument.opath first?
-			argument.opath = (char*)malloc((strlen(optarg)+2)*sizeof(char));
-			strcpy(argument.opath,optarg);
-      if ( argument.opath[strlen(argument.opath)-1] != '/')
-        strcat(argument.opath, "/");
+			argument.opath = optarg ;
+			argument.opath.append("/");
       break;
     case PARTICLEOUTPUT:
       if ( (optarg) && strlen(optarg) > 0 ) {

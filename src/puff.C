@@ -53,7 +53,7 @@
 
 #include "atmosphere.h"
 // Local prototypes:
-std::string concFilename(char *oPath, int nm_files);
+std::string concFilename(std::string oPath, int nm_files);
 int make_puffargs (int argc, char **argv);
 //int make_winds ();
 int make_atmosphere(Atmosphere *atm);
@@ -493,7 +493,7 @@ int run_puff (int procRank)
 // build a filename for the gridded concentration data based on the eruption
 // data. 
 //////////////////////////////////////////////////////////////////////////
-std::string concFilename(char *opath, int nm_files)
+std::string concFilename(std::string opath, int nm_files)
 {
   std::string filename = opath;
   filename.append(argument.eruptDate);

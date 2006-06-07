@@ -31,6 +31,7 @@ enum Sedimentation {FALL_STOKES, FALL_REYNOLDS, FALL_CONSTANT};
 
 struct Argument {
   std::string command_line,
+							opath,
   						saveWfilename;
   char *argFile, 
        *dem, 
@@ -43,7 +44,7 @@ struct Argument {
        *gridOutputOptions, 
        *logFile, 
        *model, 
-       *opath, 
+      // *opath, 
        *path, 
        *phiDist,
        *plumeShape,
