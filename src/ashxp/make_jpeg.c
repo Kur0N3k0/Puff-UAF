@@ -157,7 +157,7 @@ void clip_bg(struct bg_img *bg) {
   {
     xright += (16 - offset );
     xsize += (16 - offset );
-    bg->lonmax += (float)offset*bg->dlon;
+    bg->lonmax += (float)(16 - offset)*bg->dlon;
   }
       
   while (xsize < arguments.minsize)
@@ -178,7 +178,7 @@ void clip_bg(struct bg_img *bg) {
   if (offset > 0)
   {
     ybottom += (16 - offset );
-    bg->latmin -= (float)offset*bg->dlat;
+    bg->latmin -= (float)(16 - offset)*bg->dlat;
   }
   
   /* make minimum size */
