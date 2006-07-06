@@ -11,6 +11,7 @@
 
 use CGI qw(:all);
 use strict;
+use File::Basename;
 use Webpuff;
 
 #the main application
@@ -85,6 +86,15 @@ sub createSession {
     return;
     }
   
+	# add remote host info
+	my $rh = $q->remote_host();
+	# only write alpha-numeric IP or hostname
+	unless ($rh =~ m/[^A-Za-z0-9\.]/) {
+		open RH, ">$Webpuff::home_abs/$runDir/$sessionID/remote_host";
+		print RH $rh;
+		close RH;
+		}
+
   $goToNewSession = 1;
   return;
 }
@@ -119,6 +129,8 @@ sub checkID {
   $failed = 1 if ($str =~ m[../]); 
   # don't allow working in the present directory
   $failed = 1 if ($str =~ m[./]); 
+	# don't allow hyphens
+	$failed = 1 if ($str =~ m[-]);
   # don't allow an empty name
   $failed = 1 if (length($str) == 0);
   if ($failed) {
@@ -139,6 +151,8 @@ return;
 }
 #---------------------
 sub loginScreen {
+	my @logins = find_logins();
+
   print $q->start_html(-title=>'Webpuff Login',
                        -background=>"$Webpuff::home_web/pix/puff_bg_dark.jpg",
 		       -head=>Link({-rel=>'stylesheet',
@@ -166,6 +180,14 @@ sub loginScreen {
   
   print "</table>";  
   print $q->end_form();
+
+	if (@logins) {
+		print $q->h1({-class=>'loginHeader'},"Quick links to previous sessions");
+		}
+	foreach (@logins) {
+		print "<a class='loginText' href=\"main.pl?sessionID=$_\">$_</a><br>";
+		}
+
   print "<br/><font color=\"red\">";
   if ($invalidID) {
     print "The ID entered is invalid. Please use only alphanumeric characters";
@@ -182,4 +204,22 @@ sub loginScreen {
   print "</font>";
   
   return;
+}
+#---------------------
+sub find_logins {
+	my @logins = ();
+	# get the remote host name or IP
+	my $host = $q->remote_host();
+	return @logins unless $host;
+	
+	# look through all the previous sessions for this remote host
+	my @sessions = glob("$Webpuff::home_abs/$runDir/*");
+	foreach (@sessions) {
+		if (-e "$_/remote_host") {
+			my $h = `cat $_/remote_host`;
+			chomp $h;
+			push @logins, basename($_) if ($h eq $host);
+			}
+	}
+	return @logins;
 }

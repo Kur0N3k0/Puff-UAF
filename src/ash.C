@@ -1058,10 +1058,11 @@ void Ash::setSortingProtocol(char* arg)
 int Ash::ground(long idx)
 {
   particle[idx].grounded = true;
-	if (!particle[idx].exists) {
-		std::cout << "grounding non-existant particle\n";
+	// add to counter for detecting early end of simulation, unless 'bounds'
+	// already did that
+	if (particle[idx].exists) {
+  	numGrounded++;
 		}
-  numGrounded++;
   if ( (numOutOfBounds + numGrounded) >= ashN)
   {
     std::cerr << "\nAll ash particles are either grounded or outside the bounds of wind data.\nGrounded: " << numGrounded << "\nOut of Bounds: " << numOutOfBounds << std::endl;
@@ -1078,10 +1079,11 @@ int Ash::ground(long idx)
 int Ash::outOfBounds(int idx)
 {
   particle[idx].exists = false;
-	if (particle[idx].grounded) {
-		std::cout << "particle already grounded\n";
+	// add to counter for detecting early end of simulation, unless 'grounding'
+	// already did that
+	if (!particle[idx].grounded) {
+  	numOutOfBounds++;
 		}
-  numOutOfBounds++;
   if ( (numOutOfBounds + numGrounded) >= ashN)
   {
     std::cerr << "\nAll ash particles are either grounded our outside the bounds of wind data.\nGrounded: " << numGrounded << "\nOut of Bounds: " << numOutOfBounds << std::endl;

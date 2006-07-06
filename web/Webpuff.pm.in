@@ -22,7 +22,7 @@ $home_exe=$home;
 # something like '/webpuff' would make sense.  No trailing slash.
 # For a localhost install, use simply "." since minihttpd is run from 
 # within the 'web' directory.  No leading or trailing slashes or else
-# unexpected behavior can result.
+# unexpected behavior can result; like loading of random web pages
 $home_web=".";
 # the cgi's need to know the absolute location of the webpages so things like
 # 'glob()' work
@@ -34,7 +34,7 @@ $home_abs="$home/web";
 
 # END OF WEB SERVER INSTALLATION CHANGES ----------
 
-$pidfile="webpuff.pid";
+$pidfile="$home_web/etc/webpuff.pid";
 $puff_exe="$home_exe/bin/puff ";
 $ashxp_exe="$home_exe/bin/ashxp ";
 $ashgmt_exe="$home_exe/bin/ashgmt --verbose --movie=movie.gif ";
@@ -42,13 +42,14 @@ $ashgmt_exe="$home_exe/bin/ashgmt --verbose --movie=movie.gif ";
 # This is the directory in which all sessions are stored, relative to this dir.
 # for a localhost install, you probably want simply
 $runDir="run";
+# 20060615 I'm not sure we need the following directive ever.
 # for a web-server install, add the web_home
-$runDir="$home_web/run";
+#$runDir="$home_web/run";
 
 # these are all default values exported to the various frames
 $puffOptionDefault{ashLogMean}=-6;
 $puffOptionDefault{ashLogSdev}=1;
-$puffOptionDefault{diffuseH}=20000;
+$puffOptionDefault{diffuseH}=10000;
 $puffOptionDefault{diffuseZ}=10;
 $puffOptionDefault{eruptHours}=3;
 $puffOptionDefault{eruptDate}=get_today();
@@ -60,6 +61,7 @@ $puffOptionDefault{plumeMax}=16000;
 $puffOptionDefault{plumeHwidth}=0;
 $puffOptionDefault{plumeZwidth}=3;
 $puffOptionDefault{quiet}="true";
+$puffOptionDefault{regionalWinds}=30;
 $puffOptionDefault{restartFile}="none";
 $puffOptionDefault{runHours}=24;
 $puffOptionDefault{saveHours}=6;

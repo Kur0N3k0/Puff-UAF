@@ -16,7 +16,7 @@ print "<head>";
 print "<title>WebPuff</title>";
 print "<link rel='shortcut icon' href='pix/puff_dragon.ico'>";
 print "</head>";
-print '<frameset rows="320,*">';
+print '<frameset rows="350,*">';
   print "<frame src=\"runParams.pl?sessionID=$sessionID\" name=runParams  frameborder=0>";
   print '<frameset cols="150,480">';
     print "<frame src=\"ashxpOptions.pl\" name=ashxpOptions frameborder=0>";

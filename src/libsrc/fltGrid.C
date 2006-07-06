@@ -267,30 +267,95 @@ float Grid::max(ID idx) {
 	return max_value[idx];
 }
 
-// MEAN:
-float Grid::mean() {
-    if ( fgData[VAR].size == 0 ) {
-	fgErrorStrm << "mean(): Empty object";
-	fg_error();
-	return 0.0;
-    }
-    float sum = 0;
-    int icount = 0;
-    for (unsigned i=0; i<fgData[VAR].size; i++) {
-        if ( fgData[VAR].val[i] != fgFillValue ) {
-	    sum += fgData[VAR].val[i];
-	    icount++;
+// mean, or average, value
+// without any arguments, average is over all dimensions
+float Grid::mean()
+{
+	float sum = 0;
+	unsigned int icount = 0;
+	// this could be done over any dimension
+	for (int i=0; i<fgData[LON].size; i++)
+	{
+		sum += mean_at_lon(i);
+		icount++;
 	}
-    }
-    if ( icount != 0 ) {
-	return sum/(float(icount));
-    }
-    else {
+	return sum/float(icount);
+}
+
+// average given a dimension and index
+float Grid::mean(ID dim, int idx) {
+	if ( fgData[VAR].size == 0 ) { return fgFillValue; }
+	if (dim == LON) return mean_at_lon(idx);
+	if (dim == LAT) return mean_at_lat(idx);
+	if (dim == LEVEL) return mean_at_level(idx);
+	if (dim == FRTIME) return mean_at_time(idx);
+	std::cerr << "ERROR: Grid::mean() bad dimension:"<<dim<<"\n";
 	return fgFillValue;
-    }
+}
 
-};
+float Grid::mean_at_lon(int idx)
+{
+	float sum = 0;
+	unsigned int icount = 0;
+		for (int j=0; j<fgData[LAT].size; j++) {
+		for (int k=0; k<fgData[LEVEL].size; k++ ) {
+		for (int l=0; l<fgData[FRTIME].size; l++) {
+			if (fgData[VAR].val[offset(l,k,j,idx)] != fgFillValue)
+			{
+				sum += fgData[VAR].val[offset(l,k,j,idx)];
+				icount++;
+			}
+		}}} 
+		return sum/float(icount);
+}
 
+float Grid::mean_at_lat(int idx)
+{
+	float sum = 0;
+	unsigned int icount = 0;
+		for (int i=0; i<fgData[LON].size; i++) {
+		for (int k=0; k<fgData[LEVEL].size; k++ ) {
+		for (int l=0; l<fgData[FRTIME].size; l++) {
+			if (fgData[VAR].val[offset(l,k,idx,i)] != fgFillValue)
+			{
+				sum += fgData[VAR].val[offset(l,k,idx,i)];
+				icount++;
+			}
+		}}} 
+		return sum/float(icount);
+}
+
+float Grid::mean_at_level(int idx)
+{
+	float sum = 0;
+	unsigned int icount = 0;
+		for (int i=0; i<fgData[LON].size; i++) {
+		for (int j=0; j<fgData[LAT].size; j++ ) {
+		for (int l=0; l<fgData[FRTIME].size; l++) {
+			if (fgData[VAR].val[offset(l,idx,j,i)] != fgFillValue)
+			{
+				sum += fgData[VAR].val[offset(l,idx,j,i)];
+				icount++;
+			}
+		}}} 
+		return sum/float(icount);
+}
+
+float Grid::mean_at_time(int idx)
+{
+	float sum = 0;
+	unsigned int icount = 0;
+		for (int i=0; i<fgData[LON].size; i++) {
+		for (int j=0; j<fgData[LAT].size; j++ ) {
+		for (int k=0; k<fgData[LEVEL].size; k++) {
+			if (fgData[VAR].val[offset(idx,k,j,i)] != fgFillValue)
+			{
+				sum += fgData[VAR].val[offset(idx,k,j,i)];
+				icount++;
+			}
+		}}} 
+		return sum/float(icount);
+}
 
 // VARIANCE:
 float Grid::variance() {

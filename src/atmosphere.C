@@ -294,6 +294,14 @@ int Atmosphere::make_winds ()
   // if the units are not meters, proceed
   if (units.find("meter") == std::string::npos) {
     Grid uniZ;
+
+		// variable name, default 'Z'
+    uniZ.set_name("Z");
+		// resource file may specify it
+  	uniZ.set_name((resources.getString("varZ")).c_str() );
+  	// override this value with the command-line argument if given
+  	if ( argument.varZ ) { uniZ.set_name(argument.varZ); }
+
     std::string Zfile;
     if ( !argument.fileZ ) {
       Zfile = resources.mostRecentFile(argument.eruptDate, "z", argument.runHours);
@@ -305,7 +313,6 @@ int Atmosphere::make_winds ()
     bool failedZfileRead = true;
     if ( Zfile.length() > 0 ) 
     {
-      uniZ.set_name("Z");
       read_uni(uniZ, &Zfile);
       // uniZ may contain no data because appropriate data was not available
       // and some other day's data got read in.
@@ -337,7 +344,7 @@ int Atmosphere::make_winds ()
 	U.set_minimum(LEVEL); U.set_maximum(LEVEL);
 	V.set_minimum(LEVEL); V.set_maximum(LEVEL);
 	T.set_minimum(LEVEL); T.set_maximum(LEVEL);
-  }
+  } // end of 'units were not in meters'
 
 // make sure both U and V have some data.  The read() function doesn't die
 // earlier since some variables, like T and Z can be empty and things still

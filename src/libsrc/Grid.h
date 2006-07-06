@@ -116,7 +116,8 @@ public:
     float pct_fill();
     float min(ID idx = VAR);
     float max(ID idx = VAR);
-    float mean();
+		float mean();
+    float mean(ID dim, int i);
     float variance();
     
     fgDataStruct & operator[](ID dimid) { return fgData[dimid]; }
@@ -270,6 +271,10 @@ private:
     void uni_error();
     void shellsort(float *arrPtr, int arrSize);
     int get_reftime(int cdfid);
+	float mean_at_lon(int i);
+	float mean_at_lat(int i);
+	float mean_at_level(int i);
+	float mean_at_time(int i);
     
 }; // END FLTGRID CLASS
 

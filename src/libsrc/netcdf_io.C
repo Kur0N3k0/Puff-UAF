@@ -89,9 +89,6 @@ int Grid::read_cdf(const std::string* cdf_file,
     fgNdims = 4;
   }
 
-  // get the variable size 
-//  long int *edges = vp->edges();
-  
   // retrieve global attributes
   get_global_attributes(&ncfile);
   // retrieve variable attributes
@@ -121,8 +118,6 @@ int Grid::read_cdf(const std::string* cdf_file,
     }
     // copy the name into the Grid object
     strcpy(fgData[dim_idx].name,dp->name());
-    // get the size of the dimension, edges is declared 'long' above
-//    edges = dp->edges();
     // retrieve dimension attributes
     get_attributes(dp, dim_idx);
     //put the values into type NcValues and typecast later
@@ -344,7 +339,6 @@ int Grid::read_cdf(const std::string* cdf_file,
 //	 delete vp2;
      
  	delete[] dim_offset; 
-//  delete[] edges;
 
 	// set min/max values.  LEVEL may be redone if units change in PtoH()
 	set_minimum(LAT);

@@ -252,7 +252,6 @@ void make_projection (struct bg_img *bg)
   }
   }
 
-  
   /* try to patch */
   if (arguments.patch != PATCH_USER_NO)
   {
@@ -281,7 +280,7 @@ void idx2xy(struct bg_img *bg, int idx, int *x, int *y)
   *x = (int)((idx/3)%bg->xsize );
   if (*x < 0 || *x > bg->xsize-1 || *y < 0 || *y > bg->ysize-1)
   {
-    puts("ERROR: indx2xy() failed");
+    puts("ERROR: idx2xy() failed");
     exit(0);
   }
   return;

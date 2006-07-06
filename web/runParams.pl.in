@@ -88,11 +88,14 @@ if ($q->param('puffrun')) {
 
 #---------------------
 sub delete_previous {
-	# don't delete anything unless something was given
 	my $dir = $q->param('previous');
-	return unless ($dir =~ m/[A-Z]/);
+	# don't delete anything unless something was given
+	return unless ($dir);
+	# only delete regular named folders
+	return if ($dir =~ m/[^A-Za-z0-9_]/);
+	# get the full path name of this directory
 	$dir = "$Webpuff::home_abs/$runDir/$sessionID/" . $dir;
-	if (-d $dir) {
+	if (-d $dir) { 
 		`rm -rf $dir`;
 		}
 	return;
@@ -250,6 +253,12 @@ print "<tr>";
 makeScrollField();
 makeTextField("diffuseH","Horz. diffusion[m&sup2;/s]");
 makeTextField("diffuseZ","Vert. diffusion[m&sup2;/s]");
+print "</tr>";
+
+print "<tr>";
+makeScrollField();
+makeTextField("regionalWinds","Local Wind[deg]");
+makeTextField();
 
 print "</table>"; # end of the advanced options table
 # one row table of extra buttons/options
@@ -310,7 +319,7 @@ sub process_form {
 		if (scalar @dirs) {
 			sort @dirs;
 			my $last = pop @dirs;
-			$last =~ m/[A-Z_]*(\d+)/;
+			$last =~ m/[A-Z_]*(\d+)$/;
 			my $n=$1+1;
 			$dir = "$val"."$n";
 		} else {
@@ -453,6 +462,12 @@ sub makeTextField {
   # string is the text field description, ie. "Eruption duration[hrs]"
   my ($param, $string) = @_;
 
+	# this could be empty
+	if (!$param) {
+		print "<td></td><td></td>";
+		return;
+	}
+
   my $maxLength = 6;
   # make a pseudo-switch for maximum entry length
   SWITCH: {
@@ -478,6 +493,7 @@ sub makeTextField {
                         );
   }
   print "</td>";
+	return;
 }      
  
 #---------------------

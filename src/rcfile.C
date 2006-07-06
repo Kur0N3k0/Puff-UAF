@@ -74,7 +74,13 @@ bool PuffRC::init(char* rcfileArg) {
 
   // check specified resources file if given
   if (rcfileArg) {
-    fileName = strdup(rcfileArg);
+//    fileName = strdup(rcfileArg);
+		if (strlen(rcfileArg) < 256)  {
+			strcpy(fileName, rcfileArg);
+		} else {
+			std::cerr << "ERROR: rcfile length > 256. Fix me!\n";
+			exit(0);
+		}
     ret = stat(rcfileArg, &fileStatus);
     if (ret == 0) return true;
     }

@@ -187,13 +187,18 @@ flData parseLine(char* line)
   date.tm_min  = 10*mm+m;
   // replace / with space for parsing
   while (char *c = strchr(field[1], '/')) *c = ' ';
-  ret = sscanf(field[1],"%i %s %i", &date.tm_mday, monthAbr, &date.tm_year);
-  if (ret != 3) return data;
+	// same difficulty with zeros as above 
+  //ret = sscanf(field[1],"%i %s %i", &date.tm_mday, monthAbr, &date.tm_year);
+  ret = sscanf(field[1],"%1i%1i %s %1i%1i", &hh, &h, monthAbr, &mm, &m);
+  if (ret != 5) return data;
+	date.tm_mday = 10*hh+h;
+	date.tm_year = 10*mm+m;
   // date is relative to 1900, so '99' is ok, but '01' should be 101
   if (date.tm_year < 50) date.tm_year += 100;
   date.tm_mon = monthAbrToNum(monthAbr); 
   date.tm_sec = 0;
   date.tm_isdst = 0;
+	//date.tm_zone = "UTC";
   
   data.loc.time = mktime(&date);
 	// whew! should be done with the date now

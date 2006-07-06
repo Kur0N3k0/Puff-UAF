@@ -355,7 +355,7 @@ int Grid::uni_shift_west ()
 /////////////////////////////////////////////////////////////////////
 //
 // convert pressure heights from millibars to meters:
-// sets warm value if interpolation is outside valid range
+// sets warn value if interpolation is outside valid range
 //
 /////////////////////////////////////////////////////////////////////
 int Grid::PtoH (Grid & H, int dz, int &iwarn)
@@ -413,17 +413,17 @@ int Grid::PtoH (Grid & H, int dz, int &iwarn)
   const unsigned int nz = fgData[LEVEL].size;
 
   // MAXIMIZE DZ:
-  if (dz == 0 && nz != 1) {
-    dz = int (H.max () * scale / 1000) * 1000 / (nz - 1);
+//  if (dz == 0 && nz != 1) {
+//    dz = int (H.max () * scale / 1000) * 1000 / (nz - 1);
 
-    // Round to nearest 100:
-    float dzr = 100.0 * int (dz / 100.0);
-    if ((dz - dzr) > 50.0) {
-      dzr += 100.0;
-    }
+//    // Round to nearest 100:
+//    float dzr = 100.0 * int (dz / 100.0);
+//    if ((dz - dzr) > 50.0) {
+//      dzr += 100.0;
+//    }
 
-    dz = int (dzr);
-  }
+//   dz = int (dzr);
+//  }
 
   // create temporary arrays
   float *xa = new float[nz + 2];
@@ -435,6 +435,15 @@ int Grid::PtoH (Grid & H, int dz, int &iwarn)
     return FG_ERROR;
   }
 
+	// the vertical levels we will interpolate to will be the average
+	// geopotential heights at each pressure level.  
+	// Set these new level values now, they are used in the spline()
+	// function within the huge, nested loop below
+	for (int i=0; i<fgData[LEVEL].size; i++)
+	{
+		fgData[LEVEL].val[i] = H.mean(LEVEL,i);
+	}
+
   // for each grid location in lat, lon, and time, prepare an array of
   // points to which a spline function will be defined:
   unsigned int npts;
@@ -443,7 +452,8 @@ int Grid::PtoH (Grid & H, int dz, int &iwarn)
   for (l = 0; l < fgData[FRTIME].size; l++) {
     for (j = 0; j < fgData[LAT].size; j++) {
       for (i = 0; i < fgData[LON].size; i++) {
-	//npts = 0;
+	// start with the 2nd value, there is a additional point at both ends
+	// i.e. nz+2, that is set below
 	npts = 1;
 	for (k = 0; k < nz; k++) {
 	  index = offset (l, k, j, i);
@@ -475,7 +485,8 @@ int Grid::PtoH (Grid & H, int dz, int &iwarn)
 	unsigned int iz, il;
 //	for (iz = il = 0; iz < nz; iz++, il = il + dz) {
 	for (iz = il = 0; iz < nz; iz++) {
-	  x = (float)( (-7400)*log(fgData[LEVEL].val[iz]/1000.0) );
+//	  x = (float)( (-7400)*log(fgData[LEVEL].val[iz]/1000.0) );
+	  x = (float)fgData[LEVEL].val[iz];
 	  splint (xa, ya, y2, npts, x, y);
 	  if (y < fgData[VAR].range[0] || y > fgData[VAR].range[1]) {
 	    iwarn = 1;
@@ -495,10 +506,10 @@ int Grid::PtoH (Grid & H, int dz, int &iwarn)
   } // l
   
   // change the vertical dimension values
-  for (unsigned int i = 0; i<fgData[LEVEL].size; i++) 
-  {
-    fgData[LEVEL].val[i] = (-7400)*log(fgData[LEVEL].val[i]/1000.0);
-  }
+//  for (unsigned int i = 0; i<fgData[LEVEL].size; i++) 
+//  {
+//    fgData[LEVEL].val[i] = (-7400)*log(fgData[LEVEL].val[i]/1000.0);
+//  }
 
   // finish up:
   strcpy (fgData[LEVEL].units, "meters");

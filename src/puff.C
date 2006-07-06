@@ -429,6 +429,10 @@ int run_puff (int procRank)
 	  }  // end checking boundaries
 
 	}  // end loop over non-grounded particles
+		// do not end early with repeat runs, otherwise there might be an
+		// inconsistent time dimension size
+		 if (argument.repeat > 0) EarlyEndOfSimulation = false;
+
       }	 //  *** End of nash loop **    
 
 #ifdef MPI_ENABLED

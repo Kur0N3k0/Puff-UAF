@@ -20,6 +20,9 @@ $main::version = "@VERSION@";
 
 my %opt;
 
+# store the command line before parsing
+store_history();
+
 GetOptions(
   "airborne"    => \$opt{airborne},
 	"basemap=s"   => \$opt{basemap},
@@ -28,6 +31,7 @@ GetOptions(
 	"conc-range=s"=> \&parse_range,
 	"conc-limits=s"=> \$opt{conc_range},
 	"contour"			=> \$opt{contour},
+	"contours"		=> \$opt{contour},
   "fallout"     => \$opt{fallout},
 	"fork"        => \$opt{'fork'},
   "grayscale"   => \$opt{grayscale},
@@ -711,7 +715,7 @@ sub ps2png {
 		return;
 	}
 	# trim and rotate the PNG file.
-	$command = "$main::convert_exe -trim -rotate 90 $pngfile $pngfile > /dev/null";
+	$command = "$main::convert_exe -comment '$opt{history}' -trim -rotate 90 $pngfile $pngfile > /dev/null";
 	print STDERR "$command\n" if $opt{verbose};
 	`$command`;
 	# if we are making a movie, make a GIF also
@@ -847,7 +851,7 @@ sub add_labels {
 		`echo \"$_\" | $main::pstext_exe $main::maprange -O -K >> $opt{output}`;
 		# put a marker
 		my @v=split /\s/, $_;
-		`echo \"$v[0] $v[1]\" | $main::psxy_exe $main::maprange -Sa10p -G0 -O -K >> $opt{output}`;
+		`echo \"$v[0] $v[1]\" | $main::psxy_exe $main::maprange -Sc4p -G0 -O -K >> $opt{output}`;
 		}
 	}
 	return;
@@ -949,7 +953,7 @@ sub defaults {
 	$opt->{cpt} = tmpnam() unless (defined ($opt{cpt}));
 	$opt->{conc_min} = 0.05 unless (defined ($opt{conc_min}));
 #	$opt->{conc_max} = 3 unless (defined ($opt{conc_max}));
-	$opt->{contour} = 0;
+	$opt->{contour} = 0 unless (defined ($opt->{contour}));
 	$opt->{fallout} = 0 unless (defined ($opt->{fallout}));
 	$opt->{'fork'} = 0 unless (defined ($opt->{'fork'}));
 	# default airborne and not fallout
@@ -981,6 +985,17 @@ sub defaults {
   return;
 }
 
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub store_history {
+
+	my $hist = "$0 ";
+	foreach(@ARGV){
+		$hist .= "$_ ";
+		}
+
+	$opt{history} = $hist;
+	return;
+} 
 # # # # # # # # # # # # # # # # # # # # # # # #
 sub print_help {
 

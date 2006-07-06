@@ -111,6 +111,7 @@ void parse_options(int argc, char **argv)
     {"sorted",required_argument,0,SORTED},
     {"varU",required_argument,0,VARU},
     {"varV",required_argument,0,VARV},
+    {"varZ",required_argument,0,VARZ},
     {"verbose",optional_argument,0,VERBOSE},
     {"version",no_argument,0,PUFF_VERSION},
     {"volc",required_argument,0,VOLC},
@@ -394,6 +395,7 @@ void option_switch(int opt, const char *optarg, const struct option *opt_lng) {
 			// convert to north and (positive)east values
 			if (toupper((int)north) == 'S') argument.volcLat *= -1;
 		  if (toupper((int)east) == 'W') argument.volcLon = 360 - argument.volcLon;	
+			while(argument.volcLon>360) argument.volcLon -=360;
 			if (strcmp(argument.volc,"none") == 0) 
 			{
 				strcpy(argument.volc, "unknown");
@@ -430,6 +432,7 @@ void option_switch(int opt, const char *optarg, const struct option *opt_lng) {
 			// convert to north and (positive)east values
 			if (toupper((int)north) == 'S') argument.volcLat *= -1;
 		  if (toupper((int)east) == 'W') argument.volcLon = 360 - argument.volcLon;	
+			while(argument.volcLon>360) argument.volcLon -=360;
 			if (strcmp(argument.volc,"none") == 0) 
 			{
 				strcpy(argument.volc, "unknown");
@@ -685,6 +688,9 @@ void option_switch(int opt, const char *optarg, const struct option *opt_lng) {
     case VARV:
       argument.varV = strdup(optarg);
       break;
+    case VARZ:
+      argument.varZ = strdup(optarg);
+      break;
     case VERBOSE:
       if ( (optarg) && strlen(optarg) > 0 ) {
         if (toupper(optarg[0]) == 70) argument.verbose = false;
@@ -867,6 +873,7 @@ void show_help() {
   std::cout << "  -sorted       yes/no/never  (string)\n";
   std::cout << "  -varU         name       (string)\n";
   std::cout << "  -varV         name       (string)\n";
+  std::cout << "  -varZ         name       (string)\n";
   std::cout << "  -verbose\n";
   std::cout << "  -version\n";
   std::cout << "  -volc         name       (string)\n";

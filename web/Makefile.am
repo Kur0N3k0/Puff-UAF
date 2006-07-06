@@ -26,6 +26,7 @@ HELP_FILES = help/ashLogMean.html \
   help/plumeMax.html \
   help/plumeMin.html \
   help/previous.html \
+	help/regionalWinds.html \
   help/restartFile.html \
   help/runHours.html \
   help/saveHours.html \
