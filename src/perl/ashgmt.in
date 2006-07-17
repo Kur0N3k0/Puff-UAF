@@ -832,6 +832,8 @@ sub make_movie {
 # # # # # # # # # # # # # # # # # # # # # # # #
 sub add_labels {
 	my $opt = shift;
+	
+	my ($pen, $color);
 	return unless ($opt{label} or $opt{label_file});
 	my @labels = split /\|/, $opt{label};
 	foreach (@labels) {
@@ -845,13 +847,22 @@ sub add_labels {
 	return unless ($opt{label_file});
 	@labels = split /\|/, $opt{label_file};
 	foreach (@labels) {
+  # default pen and color
+	$color = "-G0"; # black
+	$pen = "-Sc4p"; # 4-pixel circle
 		open LFILE, "<$_" or print "WARNING: failed to open label file \"$_\" for reading\n";
 		while (<LFILE>) {
+		# could be OPTION line
+		if ($_ =~ m/^OPTION/) {
+			$color = $1 if ($_ =~ m/(-G\S+)/);
+			$pen = $1 if ($_ =~ m/(-S\S+)/);
+			next;
+			}
 		chomp $_;
-		`echo \"$_\" | $main::pstext_exe $main::maprange -O -K >> $opt{output}`;
+		`echo \"$_\" | $main::pstext_exe $main::maprange $color -O -K >> $opt{output}`;
 		# put a marker
 		my @v=split /\s/, $_;
-		`echo \"$v[0] $v[1]\" | $main::psxy_exe $main::maprange -Sc4p -G0 -O -K >> $opt{output}`;
+		`echo \"$v[0] $v[1]\" | $main::psxy_exe $main::maprange $pen $color -O -K >> $opt{output}`;
 		}
 	}
 	return;
@@ -1048,12 +1059,12 @@ concentration files (*conc*.nc).
   Only plot particles or calculate concentration for this range (in meters).
 
 --label=lon,lat,string[,S...]
-	Put a text string to the lower-left of this location.  If the location is 
+	Put a text string to the lower-right of this location.  If the location is 
 	outside the bounding box, it is ignored.  This option can be specified more
   than once, and several labels can be concatenated with the pipe "|" character.
   An optional marker can also be plotted using the -S... marker as described 
   in psxy.  For example, Sa10p plots a 10-pixel star.  See also --label-file 
-	for more control over text size and orientation.
+	for more control over text size, orientation, and color.
 
 --label-file=filename
 	Specify a file containing 1 or more labels.  The format of the file is the
@@ -1061,6 +1072,13 @@ concentration files (*conc*.nc).
 		x y fontsize rotation fontnumber justify text
 	This option can be specified more than once.  Locations outside the bounding
 	box are ignored.
+	Default pen color is black, and a 4-pixel circle at the location.  This
+	can be changed by setting either/both options by putting a line above the
+	label such as
+	OPTION -G255/0/0 -Sh9p
+	This would change the text color to red and use a 9-pixel hexagon as a marker.
+	The color and marker remain the same until another OPTION line is encountered
+	or EOF, when the defaults are restored.
 
 --latlon=latmin/latmax/lonmin/lonmax
   Draw a map of this range, overriding default behavior which is a map that
@@ -1092,7 +1110,9 @@ concentration files (*conc*.nc).
   Print a time stamp on this image.  --no-stamp does the opposite.
 
 --time=YYYYmmDDhhMM[:YYYYmmDDhhMM]
-  Only produce maps for this time range from the concentration file.
+  Only produce maps for this time range from the concentration file. If
+	only the first date/time is specified, all times from then onward are
+	processed.
 
 --usage
 	Print usage information and exit.

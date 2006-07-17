@@ -211,6 +211,10 @@ flData parseLine(char* line)
   data.loc.level = (float)feet * 100.0 / 3.281;
   ret = sscanf(field[5], "%i", &data.loc.speed);
   if (ret != 1) return data;
+	// convert knots (nautical miles per hour) to meters per second
+	// 1 naut.mile = 1852 meters and 1 hr = 3600 s
+	// so naut.mile per hour is 0.5144444444 meters per second
+	data.loc.speed = 0.514444444 * data.loc.speed;
   
   // all field are now full
   data.empty = false;
@@ -237,7 +241,9 @@ void Planes::calculateExposure (CCloud *cc)
     for (unsigned int i = 0; i < (*f).location.size()-1; i++)
     {
       float dose = 0.5*(abs_conc(cc, &((*f).location[i])) + abs_conc(cc, &((*f).location[i+1])));
-      exp += dose*((*f).location[i+1].time-(*f).location[i].time)/60.0;
+			// exposure increases by dose * time * speed
+			// g/m^3 * s * m/s = g/m^2
+      exp += dose*((*f).location[i+1].time-(*f).location[i].time) * (*f).location[i].speed;
       e_time += (*f).location[i+1].time - (*f).location[i].time;
     }
     // only report non-zero values
@@ -248,7 +254,7 @@ void Planes::calculateExposure (CCloud *cc)
    // print results
    for (fs_mmap::const_iterator i = exposure.begin(); i != exposure.end(); i++)
    {
-     std::cout << i->first << "\t" << i->second << "\t" << "\n";
+     std::cout << i->first << " => " << i->second << "\t" << "\n";
    }
   return;
 }

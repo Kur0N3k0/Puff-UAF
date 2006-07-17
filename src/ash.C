@@ -1109,12 +1109,13 @@ void Ash::stashData(time_t now)
   
   for (int i=0;i<ashN;i++)
   {
-		// only stash particles that exists (not out of bounds)
-		// and have been "born"
-		if (particle[i].exists and particle[i].startTime <= now)
-		{
+		// stash all particles, even if they do not exist, otherwise the grid will
+		// be uneven in the time direction and bining if difficult.  However, mark
+		// those that have not been "born" non-existing so they are not counted in
+		// the concentration grids.
+			if (particle[i].startTime > now) particle[i].exists = false;
+			
     	recParticle.push_back(particle[i]);
-		}
   }
   // advance the record counter
   recAshN++;
@@ -1167,7 +1168,7 @@ void Ash::writeGriddedData(
   if ((dHorz > dVert) && !(force)) 
   {
     std::cerr << "\nWARNING: swapping -gridOutput options to DX=" << dVert <<
-      " and DY=" << dHorz << ".  Use -gridOutput=DXxDY! to override\n";
+      " and DZ=" << dHorz << ".  Use -gridOutput=DXxDZ! to override\n";
     // swap values
     float t = dHorz; dHorz = dVert; dVert = t;
   }
@@ -1262,6 +1263,9 @@ void Ash::writeGriddedData(
        pIdx < recParticle.size(); 
        pIdx++)
   {
+			// don't count particles that do not exist
+			if (!recParticle[pIdx].exists) continue;
+
       // rint() rounds to the nearest integer, return a double, so typecast to 
       // an int.  It is defined in the cmath header
       xIdx = (int)floor((recParticle[pIdx].x-minX)/dHorz);
