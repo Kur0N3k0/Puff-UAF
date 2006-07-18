@@ -873,7 +873,7 @@ int make_ash (int repeat_count)
 ////////////////////////////////////////////////////////////////////////
 void write_ash (time_t ash_t, int nm_files)
 {
-  
+
   std::string ashFilename;
   static double xlon, ylat;
 
@@ -921,7 +921,8 @@ void write_ash (time_t ash_t, int nm_files)
   }
   // Write:
   // don't bother if we are not writing particle files
-  if (argument.averageOutput && nm_files != argument.repeat) 
+  if ((argument.averageOutput && nm_files != argument.repeat) or
+			(argument.ashOutput == false) )
   {
     // do nothing
   } else {

@@ -1113,9 +1113,9 @@ void Ash::stashData(time_t now)
 		// be uneven in the time direction and bining if difficult.  However, mark
 		// those that have not been "born" non-existing so they are not counted in
 		// the concentration grids.
-			if (particle[i].startTime > now) particle[i].exists = false;
 			
     	recParticle.push_back(particle[i]);
+			if (particle[i].startTime > now) recParticle[i].exists = false;
   }
   // advance the record counter
   recAshN++;

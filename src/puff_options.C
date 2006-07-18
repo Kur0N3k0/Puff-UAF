@@ -51,6 +51,7 @@ void parse_options(int argc, char **argv)
     {"argFile",required_argument,0,ARGFILE},
     {"ashLogMean",required_argument,0,ASHLOGMEAN},  
     {"ashLogSdev",required_argument,0,ASHLOGSDEV},
+		{"ashOutput",optional_argument,0,ASHOUTPUT},
     {"averageOutput",optional_argument,0,AVERAGEOUTPUT},
     {"dem",required_argument,0,DEM},
     {"diffuseH",required_argument,0,DIFFUSEH},
@@ -195,6 +196,15 @@ void option_switch(int opt, const char *optarg, const struct option *opt_lng) {
     case ASHLOGSDEV: 
       if (sscanf(optarg, "%lf", &argument.ashLogSdev) == 0)
         std::cerr << "invalid value for option ashLogSdev: " << optarg << std::endl;
+      break;
+		case ASHOUTPUT:
+      if ( (optarg) && strlen(optarg) > 0 ) {
+        if (toupper(optarg[0]) == 70) argument.ashOutput = false;
+ 	else if (toupper(optarg[0]) == 84) argument.ashOutput = true; 
+ 	else 
+ 	  std::cout << "unrecognized boolean option -ashOutput=" << optarg << std::endl;
+         }  // if ( (optarg) && strlen(optarg) > 0 )
+      else { argument.ashOutput = true; }
       break;
     case AVERAGEOUTPUT:
       if ( (optarg) && strlen(optarg) > 0 ) {
@@ -755,6 +765,7 @@ void set_defaults(struct Argument *argument) {
 	argument->argFile = (char)NULL;
   argument->ashLogMean = -6;
   argument->ashLogSdev = 1;
+	argument->ashOutput = true;
   argument->averageOutput = false;
   argument->dem = (char)NULL;
   argument->dem_lvl = 0;
@@ -824,6 +835,7 @@ void show_help() {
   std::cout << "  -argFile      filename   (string)\n";
   std::cout << "  -ashLogMean   value      (float)\n";
   std::cout << "  -ashLogSdev   value      (float)\n";
+	std::cout << "  -ashOutput    true/false\n";
 	std::cout << "  -averageOutput\n";
   std::cout << "  -dem          name       (string)\n";
   std::cout << "  -diffuseH     value      (float)\n";
