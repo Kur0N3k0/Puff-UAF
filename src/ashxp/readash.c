@@ -355,7 +355,7 @@ void get_bbox(char** cmdline, int index, struct Ash *ash, struct bg_img *bg) {
   bg->latmax = all_latmax;
   bg->hgtmax = all_hgtmax;
  
-  if (bg->hgtmax > MAX_CLIP_HEIGHT) bg->hgtmax = MAX_CLIP_HEIGHT;
+/*  if (bg->hgtmax > MAX_CLIP_HEIGHT) bg->hgtmax = MAX_CLIP_HEIGHT;  */
   /* if a maximum height was set and the current max height is greater than
    * this, make the maximum height the specified value 
    */

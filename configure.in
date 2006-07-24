@@ -1,4 +1,4 @@
-AC_INIT([puff],[2.1.8],[rorik@gi.alaska.edu],[puff-uaf])
+AC_INIT([puff],[2.1.9],[rorik@gi.alaska.edu],[puff-uaf])
 
 # print GNU copyright in configure script
 AC_COPYRIGHT
@@ -258,7 +258,7 @@ if test "$with_statistics" = "yes"; then
 fi
 #############################################
 # give the option not to build documentation
-AC_ARG_WITH(documentation,AC_HELP_STRING([--with-documentation],[make/install docs(default is yes)]),with_documentation=$withval,with_documentation=yes)
+AC_ARG_WITH(documentation,AC_HELP_STRING([--with-documentation],[make/install docs(default is yes)]),with_documentation=$withval,with_documentation=no)
 
 AM_CONDITIONAL(BUILD_INSTALL_DOCS, test "$with_documentation" == "yes")
 #############################################
@@ -281,9 +281,12 @@ AC_CONFIG_FILES([src/perl/ashdump.pl],[chmod +x src/perl/ashdump.pl])
 AC_CONFIG_FILES([src/perl/grib2pf],[chmod +x src/perl/grib2pf])
 AC_CONFIG_FILES([src/perl/ashgmt],[chmod +x src/perl/ashgmt])
 AC_CONFIG_FILES([test/test00.sh],[chmod +x test/test00.sh])
+AC_CONFIG_FILES([test/test00b.sh],[chmod +x test/test00b.sh])
 AC_CONFIG_FILES([Makefile src/Makefile src/libsrc/Makefile test/Makefile])
 AC_CONFIG_FILES([src/perl/Makefile web/Makefile])
+if test "$with_documentation" == "yes"; then
 AC_CONFIG_FILES([doc/Makefile])
+fi
 AC_CONFIG_FILES([web/mini_httpd/Makefile])
 AC_CONFIG_FILES([src/libsrc/dmapf-c/Makefile])
 AC_CONFIG_FILES([src/ashxp/Makefile])

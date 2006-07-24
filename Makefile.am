@@ -6,7 +6,13 @@ doc_files = license.terms INSTALL
 
 EXTRA_DIST = $(data_files) $(etc_files) $(doc_files)
 
-SUBDIRS = doc man src test web 
+if BUILD_INSTALL_DOCS
+  DOCS=
+else
+  DOCS=
+endif
+
+SUBDIRS = $(DOCS) man src test web 
 	
 install-data-local:
 	$(mkinstalldirs) $(prefix)/etc

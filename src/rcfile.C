@@ -171,6 +171,7 @@ int PuffRC::loadResources(char *modelArg, const char *type) {
 	  modelName=value; 
 	} else if(param == "path") { 
 	  dataPath=value; 
+		envReplace(&dataPath);
 	} else if(param == "mask") {
 	  tmpMask=value; 
 	} else if(param == "record") { 
@@ -217,6 +218,7 @@ int PuffRC::loadResources(char *modelArg, const char *type) {
 	  demName=value;
 	} else if(param == "path") {
 	  demPath=value;
+		envReplace(&demPath);
 	} else {
 	  std::cerr << "ERROR: bad resource file specification\n"
 	  << "unknown parameter value: " << param << " on line "
@@ -451,6 +453,28 @@ std::string PuffRC::getString(const std::string *p)
   }
 }
 ///////////////////////////////////////////////////////////////////////
+// replace $HOME variable.  This could be generalized for other env variables
+void PuffRC::envReplace(std::string *s) 
+{
+	const char *env_home = "$HOME";
+	unsigned int loc = (*s).find(env_home);
+	if (loc >= (*s).length() ) return;
+	char *home = NULL;
+	home = getenv("HOME");
+	if (home == NULL)
+	{
+		std::cerr << "ERROR: $HOME is not defined but appears in rcfile\n";
+		return;
+	}
+
+	size_t length = strlen(home);
+	// bail if this returns something stupid, we'll crash later
+	if (length <= 0) return;
+	(*s).replace(loc,strlen(env_home),home,0,length);
+
+	return;
+}
+
 // redirect
 ///////////////////////////////////////////////////////////////////////
 std::string PuffRC::getString(char *p)

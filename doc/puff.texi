@@ -95,7 +95,7 @@ The Puff suite contains the following different executables.
 @item @command{webpuff} Perl script that starts @command{minihttpd} on localhost so @command{puff} can be run locally using a web browser.
 @end enumerate
 
-@image{images/flow3}
+@image{images/flow2.0}
 
 @node Installation, Tutorial, Introduction, Top
 @comment node, next, previous, up
@@ -452,11 +452,11 @@ The initial distribution of particles in the vertical dimension can be specified
 @i{Exponential Ash Distribution} @option{-plumeMax} represents the approximate top of the ash. @option{-plumeMin} is not used. The following formula is used to place sample ash particles in the vertical distribution: 
 
 @tex
-$
-S = 0.25\, \cdot$ plumeZwidth $\cdot\, R$
 
-height = plumeMax - plumeZwidth $\cdot\, E + S
-$
+$S = 0.25\, \cdot$ plumeZwidth $\cdot\, R$
+
+$height = plumeMax - plumeZwidth $\cdot\, E + S$
+
 @end tex
 
 @ifnottex
@@ -1053,3 +1053,4 @@ April 1999
 @printindex cp
 
 @bye
+

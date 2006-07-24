@@ -9,7 +9,7 @@ else
 fi
 cd ../data/
 if test -z @WGET@; then
-  echo "cannot find wget" > $wget_log
+  echo "cannot find wget" >> $wget_log
 else
 # if these data files do not exist, use wget to retrieve them, logging errors
   for file in $datfiles; do

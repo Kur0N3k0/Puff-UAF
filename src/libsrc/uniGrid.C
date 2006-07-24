@@ -388,14 +388,17 @@ int Grid::PtoH (Grid & H, int dz, int &iwarn)
   }
 
   // check units:
-
-  std::string valid_units (";geopotential meters;gp m;gpm;gpDekameters;");
-
-//    if ( strstr(valid_units.str(), H[VAR].units) == NULL ) {
-  if (valid_units.find (H[VAR].units) == std::string::npos) {
-    uniErrorStrm << "PtoH() : Unknown geopotential units, expected: "
-      << std::endl << valid_units << std::endl;
-    uni_error ();
+	// geopotential must be divided by gravity, assume initially we do not
+	// need to, and change 'grav' if required.
+	float grav = 1.0;
+	std::string geopotential (";m2/s2;m^2/s^2;m**2/s**2;m**2s**-1;");
+  std::string geo_meters (";geopotential meters;gp m;gpm;gpDekameters;");
+	if (geopotential.find(H[VAR].units) != std::string::npos)
+	{
+		grav=9.807;
+	} else if (geo_meters.find(H[VAR].units) == std::string::npos) {
+    std::cout << "PtoH() : Unknown geopotential units, expected: "
+      << std::endl << geo_meters << "\n" << geopotential << std::endl;
     return FG_ERROR;
   }
 
@@ -510,6 +513,12 @@ int Grid::PtoH (Grid & H, int dz, int &iwarn)
 //  {
 //    fgData[LEVEL].val[i] = (-7400)*log(fgData[LEVEL].val[i]/1000.0);
 //  }
+
+	// if H units were geopotential, i.e. m^2/s^2, convert LEVEL units now.
+	// If done earlier, the spline would be incorrect.
+	for (int i = 0; i<fgData[LEVEL].size; i++) {
+		fgData[LEVEL].val[i] /= grav;
+		}
 
   // finish up:
   strcpy (fgData[LEVEL].units, "meters");

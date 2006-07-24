@@ -38,7 +38,7 @@ host_triplet = @host@
 target_triplet = @target@
 subdir = test
 DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
-	$(srcdir)/test00.sh.in
+	$(srcdir)/test00.sh.in $(srcdir)/test00b.sh.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.in
@@ -46,7 +46,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/auto/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
-CONFIG_CLEAN_FILES = test00.sh
+CONFIG_CLEAN_FILES = test00.sh test00b.sh
 SOURCES =
 DIST_SOURCES =
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -179,7 +179,7 @@ target_alias = @target_alias@
 target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
-TESTS = test00.sh test01.sh test02.sh test03.sh test04.sh test05.sh \
+TESTS = test00.sh test00b.sh test01.sh test02.sh test03.sh test04.sh test05.sh \
 test06.sh test07.sh test08.sh test09.sh test10.sh
 
 EXTRA_DIST = $(TESTS) example.cloud README
@@ -216,6 +216,8 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 test00.sh: $(top_builddir)/config.status $(srcdir)/test00.sh.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+test00b.sh: $(top_builddir)/config.status $(srcdir)/test00b.sh.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 
 mostlyclean-libtool:

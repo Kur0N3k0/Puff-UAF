@@ -13,6 +13,7 @@ class PuffRC {
     char *fileName;
     bool fourDdata;
     std::string getMask(char *var);
+		void envReplace(std::string *s);
        
   public:
     PuffRC();

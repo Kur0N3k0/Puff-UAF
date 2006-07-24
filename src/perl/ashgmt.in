@@ -715,7 +715,7 @@ sub ps2png {
 		return;
 	}
 	# trim and rotate the PNG file.
-	$command = "$main::convert_exe -comment '$opt{history}' -trim -rotate 90 $pngfile $pngfile > /dev/null";
+	$command = "$main::convert_exe -comment '$opt{history}' -trim -rotate 90 +repage $pngfile $pngfile > /dev/null";
 	print STDERR "$command\n" if $opt{verbose};
 	`$command`;
 	# if we are making a movie, make a GIF also
