@@ -40,7 +40,7 @@ target_triplet = @target@
 subdir = src/perl
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(srcdir)/ashdump.pl.in $(srcdir)/ashgmt.in \
-	$(srcdir)/grib2pf.in
+	$(srcdir)/grib2pf.in $(srcdir)/rereference.pl.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.in
@@ -48,7 +48,7 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/auto/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config.h
-CONFIG_CLEAN_FILES = ashdump.pl grib2pf ashgmt
+CONFIG_CLEAN_FILES = ashdump.pl grib2pf ashgmt rereference.pl
 am__installdirs = "$(DESTDIR)$(bindir)"
 binSCRIPT_INSTALL = $(INSTALL_SCRIPT)
 SCRIPTS = $(bin_SCRIPTS)
@@ -109,6 +109,8 @@ MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKECPT = @MAKECPT@
 MAKEINFO = @MAKEINFO@
+NCAP = @NCAP@
+NCATTED = @NCATTED@
 NCKS = @NCKS@
 NETCDF_INC = @NETCDF_INC@
 NETCDF_LIB = @NETCDF_LIB@
@@ -184,7 +186,7 @@ target_alias = @target_alias@
 target_cpu = @target_cpu@
 target_os = @target_os@
 target_vendor = @target_vendor@
-bin_SCRIPTS = ashdump.pl ashgmt grib2pf
+bin_SCRIPTS = ashdump.pl ashgmt grib2pf rereference.pl
 all: all-am
 
 .SUFFIXES:
@@ -222,6 +224,8 @@ ashdump.pl: $(top_builddir)/config.status $(srcdir)/ashdump.pl.in
 grib2pf: $(top_builddir)/config.status $(srcdir)/grib2pf.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 ashgmt: $(top_builddir)/config.status $(srcdir)/ashgmt.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+rereference.pl: $(top_builddir)/config.status $(srcdir)/rereference.pl.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 install-binSCRIPTS: $(bin_SCRIPTS)
 	@$(NORMAL_INSTALL)

@@ -1,6 +1,6 @@
 #!/bin/sh
 # not really a test, but downloads necessary data files if the do not exist
-datfiles="2002092500_avn-U.cdf 2002092500_avn-V.cdf 2003042300_cmc.cdf"
+datfiles="2006072506_gfs.nc 2006071400_nam216.nc"
 wget_log="wget.log"
 if (test -d ../data/); then
   :

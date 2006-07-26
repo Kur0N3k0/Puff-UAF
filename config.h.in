@@ -12,6 +12,9 @@
 /* Autoconf-generated architecture */
 #undef BUILD_OS
 
+/* Enable shared libraries */
+#undef ENABLE_SHARED
+
 /* Define to 1 if you have the <algorithm> header file. */
 #undef HAVE_ALGORITHM
 

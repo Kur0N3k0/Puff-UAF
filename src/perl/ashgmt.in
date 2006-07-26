@@ -16,6 +16,8 @@ $main::pscontour_exe = "@PSCONTOUR@";
 $main::pstext_exe = "@PSTEXT@";
 $main::psxy_exe = "@PSXY@";
 $main::makecpt_exe = "@MAKECPT@";
+# end of user modifications
+
 $main::version = "@VERSION@";
 
 my %opt;

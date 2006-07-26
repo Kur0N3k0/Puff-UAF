@@ -60,6 +60,7 @@ void ashxp_set_defaults(struct Ash *ash) {
   arguments.nobg = 0;
   arguments.output_file = 0x0;
   arguments.patch = PATCH_NO;
+  arguments.pixels = 2;
   arguments.print_datetime_stamp = 1;
   arguments.projection = MERCATOR;
   arguments.quiet = 0;
@@ -70,7 +71,6 @@ void ashxp_set_defaults(struct Ash *ash) {
   arguments.sorted = 0;
   arguments.temp = 0;
   arguments.verbose = 0;
-  arguments.pixels = 2;
   arguments.whole = 0;
   arguments.xgridline_pixels = 1;
   arguments.xgridlines = -1;

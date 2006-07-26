@@ -50,6 +50,8 @@ float Atmosphere::zSpeed (float time, Particle *p) {
 //////////////////////////////////////////////////////////////////////////
 float Atmosphere::temperature (float time, Particle *p) {
   if (T.empty()) return 273.15f;
+	// if the standard atmosphere approximation is used, T is
+	// 2-dimensional
   if (T.ndims() == 2) return T.nnint(time, (*p).z);
   return T.nnint(time, (*p).z, (*p).y, (*p).x);
 }

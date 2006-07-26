@@ -1,4 +1,4 @@
-AC_INIT([puff],[2.1.9],[rorik@gi.alaska.edu],[puff-uaf])
+AC_INIT([puff],[2.2.0],[rorik@gi.alaska.edu],[puff-uaf])
 
 # print GNU copyright in configure script
 AC_COPYRIGHT
@@ -202,7 +202,8 @@ AC_PATH_PROG(GIFSICLE, gifsicle,,)
 AC_ARG_VAR(GIFSICLE, path to gifsicle)
 
 AC_PATH_PROG(NCKS, ncks,,)
-#AC_ARG_VAR(NCKS, path to ncks)
+AC_PATH_PROG(NCAP, ncap,,)
+AC_PATH_PROG(NCATTED, ncatted,,)
 
 AC_PATH_PROG(GHOSTSCRIPT, gs,,)
 
@@ -280,6 +281,7 @@ echo "disabling shared libraries..."
 AC_CONFIG_FILES([src/perl/ashdump.pl],[chmod +x src/perl/ashdump.pl])
 AC_CONFIG_FILES([src/perl/grib2pf],[chmod +x src/perl/grib2pf])
 AC_CONFIG_FILES([src/perl/ashgmt],[chmod +x src/perl/ashgmt])
+AC_CONFIG_FILES([src/perl/rereference.pl],[chmod +x src/perl/rereference.pl])
 AC_CONFIG_FILES([test/test00.sh],[chmod +x test/test00.sh])
 AC_CONFIG_FILES([test/test00b.sh],[chmod +x test/test00b.sh])
 AC_CONFIG_FILES([Makefile src/Makefile src/libsrc/Makefile test/Makefile])

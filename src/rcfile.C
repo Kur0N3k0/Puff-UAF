@@ -453,24 +453,34 @@ std::string PuffRC::getString(const std::string *p)
   }
 }
 ///////////////////////////////////////////////////////////////////////
-// replace $HOME variable.  This could be generalized for other env variables
+// replace environment variables. Fatal errors result for non-defined
+// variables that appear in the rcfile. 
 void PuffRC::envReplace(std::string *s) 
 {
-	const char *env_home = "$HOME";
-	unsigned int loc = (*s).find(env_home);
-	if (loc >= (*s).length() ) return;
-	char *home = NULL;
-	home = getenv("HOME");
-	if (home == NULL)
-	{
-		std::cerr << "ERROR: $HOME is not defined but appears in rcfile\n";
-		return;
-	}
+	std::list<std::string> varList;
+	varList.push_back("HOME");
+	varList.push_back("PUFFHOME");
 
-	size_t length = strlen(home);
-	// bail if this returns something stupid, we'll crash later
-	if (length <= 0) return;
-	(*s).replace(loc,strlen(env_home),home,0,length);
+  std::list<std::string>::iterator fp;
+	for (fp=varList.begin(); fp!= varList.end(); fp++)
+	{ 
+		std::string var = "$" + *fp; 
+		const char *env_var = var.c_str();
+		unsigned int loc = (*s).find(env_var);
+		if (loc >= (*s).length() ) continue;
+		char *value = NULL;
+		value = getenv(fp->c_str());
+		if (value == NULL)
+		{
+			std::cerr << "ERROR: "<< fp->c_str()<< " is not defined but appears in rcfile\n";
+			exit(1);
+		}
+
+		size_t length = strlen(value);
+		// bail if this returns something stupid
+		if (length <= 0) continue;
+		(*s).replace(loc,strlen(env_var),value,0,length);
+	}
 
 	return;
 }
