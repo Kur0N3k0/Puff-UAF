@@ -39,8 +39,9 @@ void parse_options(int argc, char **argv)
   int opt;
   static struct option opt_lng[] = {
     {"age",optional_argument,0,ASHDUMP_AGE},
-    {"active",optional_argument,0,ACTIVE},  
+		{"airborne",optional_argument,0,AIRBORNE},
     {"infile",required_argument,0,INFILE},
+		{"fallout",optional_argument,0,FALLOUT},
     {"feet",optional_argument,0,FEET},
     {"hdr",optional_argument,0,HDR},
     {"header",optional_argument,0,HDR},
@@ -53,7 +54,6 @@ void parse_options(int argc, char **argv)
     {"range",required_argument,0,RANGE},
     {"size",optional_argument,0,SIZE},
     {"stats",optional_argument,0,STATS},
-    {"shiftWest",optional_argument,0,SHIFTWEST},
     {"showParams",optional_argument,0,SHOWPARAMS},
     {"showparams",optional_argument,0,SHOWPARAMS},
     {"show-params",optional_argument,0,SHOWPARAMS},
@@ -72,15 +72,15 @@ void parse_options(int argc, char **argv)
   while((opt = getopt_long_only(argc,argv,opt_sng,opt_lng,&opt_idx)) != EOF){
   switch (opt)
     {
-    case ACTIVE: 
-      if (optarg) {
-        if (toupper(optarg[0]) == 70) argument.active = false;
- 	else if (toupper(optarg[0]) == 84) argument.active = true; 
- 	else 
- 	  std::cout << "unrecognized boolean option -active=" << optarg << std::endl;
-         }  // if (optarg)
-      else { argument.active = true; }
-      break;
+		case AIRBORNE:
+			if (optarg) {
+				if (toupper(optarg[0]) == 70) argument.airborne = false;
+				else if (toupper(optarg[0]) == 70) argument.airborne = true;
+				else
+					std::cout <<"unrecognized boolean option -airborne=" << optarg << std::endl;
+				} // if optarg
+				else { argument.airborne = true; }
+				break;
      case ASHDUMP_AGE: 
       if (optarg && strlen(optarg) > 0 ) 
 			{
@@ -91,6 +91,15 @@ void parse_options(int argc, char **argv)
          }  // if (optarg)
       else { argument.age = true; }
       break;
+		case FALLOUT:
+			if (optarg) {
+				if (toupper(optarg[0]) == 70) argument.fallout = false;
+				else if (toupper(optarg[0]) == 70) argument.fallout = true;
+				else
+					std::cout <<"unrecognized boolean option -fallout=" << optarg << std::endl;
+				} // if optarg
+				else { argument.fallout = true; }
+				break;
     case FEET: 
       if (optarg) {
         if (toupper(optarg[0]) == 70) argument.feet = false;
@@ -158,15 +167,6 @@ void parse_options(int argc, char **argv)
 		argument.size = strdup(optarg);
          }  // if (optarg)
       else { argument.showSize = true; }
-      break;
-   case SHIFTWEST:
-      if (optarg) {
-        if (toupper(optarg[0]) == 70) argument.shiftWest = false;
- 	else if (toupper(optarg[0]) == 84) argument.shiftWest = true; 
- 	else 
- 	  std::cout << "unrecognized boolean option -shiftWest=" << optarg << std::endl;
-         }  // if (optarg)
-      else { argument.shiftWest = true; }
       break;
 		case VARIABLE_LIST:
 			if ( strstr(optarg, "age") ) argument.age = true;
@@ -258,8 +258,9 @@ void set_defaults(struct Argument *argument)
 {
 
   argument->age = false;
-  argument->active = false;
+	argument->airborne = true;
 	argument->infile = (char)NULL;
+	argument->fallout = true;
   argument->feet = false;
   argument->hdr = false;
   argument->height = (char)NULL;
@@ -269,7 +270,6 @@ void set_defaults(struct Argument *argument)
   argument->range = (char)NULL;
   argument->size = (char)NULL;
   argument->stats = false;
-  argument->shiftWest = true;
   argument->showParams = false;
   argument->showSize = false;
   argument->width = 14;
@@ -285,8 +285,9 @@ void show_help()
 {
   std::cout << "Valid options are: (see documentation for futher details)\n";
   std::cout << "\t-age\n";
-  std::cout << "\t-active\n";
+	std::cout << "\t-airborne\n";
   std::cout << "\t-infile     filename   (string)\n";
+	std::cout << "\t-fallout\n";
   std::cout << "\t-feet\n";
   std::cout << "\t-hdr\n";
   std::cout << "\t-height     [Z1/Z2]    (optional string)\n";
@@ -296,7 +297,6 @@ void show_help()
   std::cout << "\t-range       Y1/Y2/X1/X2 (string)\n";
   std::cout << "\t-size       [S1/S2]     (optional string)\n";
   std::cout << "\t-stats\n";
-  std::cout << "\t-shiftWest\n";
   std::cout << "\t-showParams\n";
   std::cout << "\t-sz                     (deprecated)\n";
   std::cout << "\t-usage\n";

@@ -786,6 +786,7 @@ int Ash::read(char *filename) {
   // array
 
   double *loc = new double[ashN];
+	ncbyte *byt = new ncbyte[ashN];
   
   vp = ncfile.get_var((NcToken)"lon");
   vp->get(loc,vp->edges());
@@ -802,6 +803,12 @@ int Ash::read(char *filename) {
   vp = ncfile.get_var((NcToken)"age");
   vp->get(loc,vp->edges());
   for (int i = 0; i<ashN; i++) { particle[i].startTime=loc[i]; }
+  vp = ncfile.get_var((NcToken)"grounded");
+  vp->get(byt,vp->edges());
+  for (int i = 0; i<ashN; i++) { particle[i].grounded=byt[i]; }
+  vp = ncfile.get_var((NcToken)"exists");
+  vp->get(byt,vp->edges());
+  for (int i = 0; i<ashN; i++) { particle[i].exists=byt[i]; }
   
 	// done with this array
 	if (loc) delete[] loc;

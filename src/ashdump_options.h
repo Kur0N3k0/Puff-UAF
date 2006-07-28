@@ -20,7 +20,7 @@
 #ifndef ASHDUMP_OPTIONS_H
 #define ASHDUMP_OPTIONS_H
 struct Argument {
-  bool age, active, feet, hdr, lat, lon, stats, shiftWest, showHeight;
+  bool age, airborne, fallout, feet, hdr, lat, lon, stats, showHeight;
   bool showParams, showSize;
   char *height, *infile, *range, *size; 
   int precision, width;
@@ -31,6 +31,6 @@ void set_defaults(struct Argument *argument);
 void show_help();
 void ashdump_usage();
 
-enum keyWords { ASHDUMP_AGE, ACTIVE, INFILE, FEET, HDR, HEIGHT, HELP, ASHDUMP_LAT, ASHDUMP_LON, PRECISION, RANGE, SHIFTWEST, SHOWPARAMS, SIZE, STATS, ASHDUMP_SZ, USAGE, VARIABLE_LIST, VERSION_ASHDUMP, WIDTH, ASHDUMP_Z };
+enum keyWords { ASHDUMP_AGE, AIRBORNE, INFILE, FALLOUT, FEET, HDR, HEIGHT, HELP, ASHDUMP_LAT, ASHDUMP_LON, PRECISION, RANGE, SHOWPARAMS, SIZE, STATS, ASHDUMP_SZ, USAGE, VARIABLE_LIST, VERSION_ASHDUMP, WIDTH, ASHDUMP_Z };
 
 #endif /* ASHDUMP_OPTIONS_H */

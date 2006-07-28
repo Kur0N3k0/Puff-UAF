@@ -59,10 +59,11 @@ void conaz(double pe, double re, double ps, double rs, double &del);
 void get_stats();
 void parse_flags();
 void parse_ranges();
+int filter_range();
 extern char *time2unistr(time_t time);
 
 // global variables used for printing different ash fields
-enum {F_LAT, F_LON, F_LEVEL, F_SIZE, F_AGE, F_ALL, F_NONE, F_STATS, F_HEADER, F_ACTIVE, F_ARGUMENTS};
+enum {F_LAT, F_LON, F_LEVEL, F_SIZE, F_AGE, F_ALL, F_NONE, F_STATS, F_HEADER, F_ARGUMENTS};
 
 bool flag[12];
 
@@ -82,8 +83,7 @@ int main(int argc, char **argv)
 	flag[F_SIZE] = false;
 	flag[F_AGE] = false;
 	flag[F_STATS] = false;
-	flag[F_HEADER] = false;
-	flag[F_ACTIVE] = false;
+	flag[F_HEADER] = true;
 	flag[F_ARGUMENTS] = false;
     
     xRange[0] = -float(FLT_MAX);
@@ -112,22 +112,25 @@ int main(int argc, char **argv)
 		// read in the ash object, die if it fails
 	if ( ash.read(argument.infile) == ASH_ERROR ) exit(1);
 
-    // Convert to feet:
-    if ( argument.feet ) 
+    // Convert to feet, this means the height range (if set) will also be in feet
+  if ( argument.feet ) 
+	{
+    for (int i=0; i<ash.n(); i++) 
 		{
-      for (int i=0; i<ash.n(); i++) 
-			{
-				ash.r[i].z = ash.r[i].z * 3.28084;
-      }
-    }
+			ash.r[i].z = ash.r[i].z * 3.28084;
+     }
+   }
+
+	// filter by range, this sets the 'exists' flag
+	int nrange = filter_range();
     
-    int fieldWidth = argument.width;
+   int fieldWidth = argument.width;
    
-		// print header information
-		if (flag[F_ALL] || flag[F_HEADER] || flag[F_STATS] || flag[F_ARGUMENTS])
-		{
-	std::cout << "Ash Object: " << argument.infile << std::endl;
-	std::cout << std::endl;
+	// print header information
+	if (flag[F_HEADER])
+	{
+		std::cout << "Ash Object: " << argument.infile << std::endl;
+		std::cout << std::endl;
 	
 	// uppercase the name
 	if (strlen(ash.origname()) > 0) {
@@ -181,24 +184,6 @@ int main(int argc, char **argv)
 	std::cout << diffStrm.str();
 	std::cout << std::endl;
 	
-	// count number that are active, in range, and both active & in range 
-	int nactive = 0;
-	int nactiverange = 0;
-	int nrange = 0;
-	for (int i=0; i<ash.n(); i++) 
-	{
-
-    if ( ash.age(i) > 0 ) nactive++;
-	    
-    if ( ash.r[i].x >= xRange[0] && ash.r[i].x <= xRange[1] &&
-    		 ash.r[i].y >= yRange[0] && ash.r[i].y <= yRange[1] &&
-	    	 ash.r[i].z >= zRange[0] && ash.r[i].z <= zRange[1] ) 
-		 {
-		   nrange++;
-		   if ( ash.age(i) > 0 ) nactiverange++;
-	   }
-	}
-	
 	iWidth = int(log10((double)ash.n())) + 1;
 	std::cout.unsetf(std::ios::left);
 	std::cout.setf(std::ios::right, std::ios::adjustfield);
@@ -209,14 +194,6 @@ int main(int argc, char **argv)
 	std::cout.width(iWidth);
 	std::cout << ash.n();
 	std::cout << " Total particles.";
-	std::cout << std::endl;
-	
-	std::cout << '\t';
-	std::cout.width(iWidth);
-	std::cout << nactive;
-	std::cout << " Active particles.";
-	std::cout << std::endl;
-	
 	std::cout << std::endl;
 	
 	std::cout << '\t';
@@ -298,12 +275,6 @@ int main(int argc, char **argv)
 	std::cout << " Particles in specified range.";
 	std::cout << std::endl;
 	
-	std::cout << '\t';
-	std::cout.width(iWidth);
-	std::cout << nactiverange;
-	std::cout << " Filtered particles (active & in range).";
-	std::cout << std::endl;
-	
 	std::cout << std::endl;
 	
 	// calculate statistics
@@ -372,33 +343,15 @@ int main(int argc, char **argv)
     std::cout.precision(int(argument.precision));
     
     float secs2hrs = 1.0/3600.0;
-    int writeFlag;
     
     std::cout.unsetf(std::ios::scientific);
     std::cout.setf(std::ios::fixed);
     
     for (int i=0; i<ash.n(); i++) 
 		{
-	writeFlag = 0;
 	
-	// filter the range
-	if ( ash.r[i].x >= xRange[0] && ash.r[i].x <= xRange[1] &&
-	     ash.r[i].y >= yRange[0] && ash.r[i].y <= yRange[1] &&
-	     ash.r[i].z >= zRange[0] && ash.r[i].z <= zRange[1] &&
-	     ash.getSize(i) >= sRange[0] && ash.getSize(i) <= sRange[1]) {
-	     
-	     // FILTER AGE:
-	     if ( !flag[F_ACTIVE] ) {
-		 writeFlag = 1;
-	     }
-	     else {
-		 if ( ash.age(i) >= 0 ) {
-		     writeFlag = 1;
-		 }
-	     }
-	}
+		if ( !ash.r[i].exists ) continue;
 	
-	if ( writeFlag) {	
 	    if (flag[F_ALL] || flag[F_LON]) {
 		std::cout.width(fieldWidth);
 		std::cout << ash.r[i].x << ' ';
@@ -431,7 +384,6 @@ int main(int argc, char **argv)
 	    }
 		 
 	    std::cout << std::endl;
-	}    // END WRITEFLAG
 	
 	
     } // END OF NASH LOOP
@@ -439,6 +391,31 @@ int main(int argc, char **argv)
     return 0;
 }
 
+///////////////////////////////////////////////////////////////////////////	
+// filter particles by setting 'exists' flag
+int filter_range()
+{
+	int nactive = 0;
+	for (int i = 0; i < ash.n(); i++)
+	{
+	if ( !ash.r[i].exists ) continue;
+	if ( ash.r[i].x < xRange[0] ) {ash.r[i].exists = false; continue ; }
+	if ( ash.r[i].x > xRange[1] ) {ash.r[i].exists = false; continue ; }
+	if ( ash.r[i].y < yRange[0] ) {ash.r[i].exists = false; continue ; }
+	if ( ash.r[i].y > yRange[1] ) {ash.r[i].exists = false; continue ; }
+	if ( ash.r[i].z < zRange[0] ) {ash.r[i].exists = false; continue ; }
+	if ( ash.r[i].z > zRange[1] ) {ash.r[i].exists = false; continue ; }
+	if ( ash.getSize(i) < sRange[0] ) {ash.r[i].exists = false; continue ; }
+	if ( ash.getSize(i) > sRange[1] ) {ash.r[i].exists = false; continue ; }
+	if ( ash.age(i) < 0 ) {ash.r[i].exists = false; continue ; }
+	if ( ash.r[i].grounded and !argument.fallout) {ash.r[i].exists = false; continue ; }
+	if ( !ash.r[i].grounded and !argument.airborne) {ash.r[i].exists = false; continue ; }
+	nactive++;
+
+	}
+	return nactive;
+}
+		
 ///////////////////////////////////////////////////////////////////////////	
 //
 // PARSE FLAGS:
@@ -487,11 +464,6 @@ void parse_flags()
 	{
 		flag[F_STATS] = true;
   	flag[F_ALL] = false;
-  }
-    
-  if ( argument.active ) 
-	{
-		flag[F_ACTIVE] = true;
   }
     
   if ( argument.showParams ) 
