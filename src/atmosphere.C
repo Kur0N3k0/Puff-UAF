@@ -1,5 +1,6 @@
 #include <string> // std::string
 #include <iostream> // std::cout, cerr, etc.
+#include <list>
 #include "atmosphere.h"
 #include "puff_options.h" // Argument structure
 #include "rcfile.h" // Resources class
@@ -13,6 +14,8 @@
 
 extern Argument argument;
 extern PuffRC resources;
+
+void verifyUnits(char *s);
 //////////////////////////////////////////////////////////////////////////
 Atmosphere::Atmosphere() {
   return;
@@ -484,34 +487,7 @@ int Atmosphere::wind_create_W (Grid & U, Grid & V, Grid & W, Grid & Kh)
 
   std::cout << "Making vertical wind ... " << std::flush;
  
-  // check the units of the horizontal velocities
-  bool good = false;
-  if (strcmp (U.units (), "m/sec") == 0)
-  {
-    good = true;
-  } else if (strcmp (U.units (), "meters/second") == 0) {
-    good = true;
-  } else if (strcmp (U.units (), "m/s") == 0) {
-    good = true;
-  }
-  if (!good) {
-    std::cout << "ERROR: U is not in \"m/sec\"\nFAILED\n";
-    return PUFF_ERROR;
-  }
-
-  good = false;
-  if (strcmp (V.units (), "m/sec") == 0)
-  {
-    good = true;
-  } else if (strcmp (V.units (), "meters/second") == 0) {
-    good = true;
-  } else if (strcmp (V.units (), "m/s") == 0) {
-    good = 1;
-  }
-  if (!good) {
-    std::cout << "ERROR: V is not in \"m/sec\"\nFAILED\n";
-    return PUFF_ERROR;
-  }
+	verifyUnits(U.units());
 
   // some local variables
   int nx = U.n (LON);
@@ -814,6 +790,34 @@ void Atmosphere::checkRotatedGrid(const char *file)
 
 	std::cout << "WARNING: operating on a rotated grid.  Volcano lat/lon values may be reported incorrectly\n";
 
+	return;
+}
+////////////////////////////////////////////////////////////////////////////
+// make sure the wind units are in meters per second. Return if OK, die 
+// if not. UDUNITS could probably do this better than us.
+void verifyUnits(char *units)
+{
+	std::string s = units;
+	std::list<std::string> valid;
+
+	valid.push_back("m/s");
+	valid.push_back("m s^-1");
+	valid.push_back("m s**-1");
+	valid.push_back("meter/sec");
+	valid.push_back("meters/sec");
+	valid.push_back("meters/second");
+	valid.push_back("meter per second");
+	valid.push_back("meters per second");
+
+  std::list<std::string>::const_iterator p;
+	for (p=valid.begin(); p!=valid.end(); p++) 
+	{
+		if (s == *p) return; // units are OK
+	}
+
+	// units are not in the list above, warn and die.
+	std::cerr << "ERROR: wind units are not m/s: " << s << std::endl;
+	exit(PUFF_ERROR);
 	return;
 }
 ////////////////////////////////////////////////////////////////////////////
