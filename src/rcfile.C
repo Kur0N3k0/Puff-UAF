@@ -100,12 +100,16 @@ bool PuffRC::init(char* rcfileArg) {
    if (ret == 0) return true;
    }
 
-  // check global next
+  // check PUFFHOME directory next
   if (ret == -1) {
-    strcpy(fileName, "/usr/local/puff/etc/puffrc");
-    ret = stat(fileName, &fileStatus);
-    if (ret == 0) return true;
-    }
+	  if (getenv("PUFFHOME")==NULL){
+		return false;
+		}
+   strcpy(fileName,getenv("PUFFHOME") );
+   strcat(fileName,"/etc/puffrc");  
+   ret = stat(fileName, &fileStatus);
+   if (ret == 0) return true;
+   }
 
   // leave if there is still no file found
   if (ret == -1) fileName = (char)NULL;

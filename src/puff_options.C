@@ -139,9 +139,17 @@ void parse_options(int argc, char **argv)
     // uses it also
     option_switch(opt, optarg, opt_lng);
     } /* end while loop */
-  /* parse the argument file */
-//  if ( argument.argFile ) parse_file(argument.argFile, opt_lng);
   
+	// warn if extra arguments remain, probably due by mistake
+	if (argc > optind)
+	{
+		std::cerr << "WARNING: entire command line not parsed properly. \"";
+		for (int i=optind; i<argc; i++) {
+			std::cout << argv[i] << " ";
+			}
+		std::cout << "\" ignored.\n";
+	}
+
   // check that the minimum number of arguments has been specified 
   
   // exit if no restartFile or volcano name or lon/lat specified
@@ -183,6 +191,7 @@ void option_switch(int opt, const char *optarg, const struct option *opt_lng) {
   extern struct Argument argument;
   static bool eruptMass_set = false;
 	char east, north;  // used by --lonLat and --latLon options
+	double scale =1.0;  // used by any option
   switch (opt)
     {
     case ARGFILE: 
@@ -251,8 +260,17 @@ void option_switch(int opt, const char *optarg, const struct option *opt_lng) {
 					std::cerr << "invalid value for option 'drag': "<< optarg << std::endl;
 				break;
     case DTMINS: 
-      if (sscanf(optarg, "%lf", &argument.dtMins) == 0)
-        std::cerr << "invalid value for option dtMins: " << optarg << std::endl;
+			scale = 1.0;
+			if (strstr(optarg,".")) {
+				std::cerr << "WARNING: dtMins must be integer value.  Maybe use 90sec?\n";break; }
+			if (sscanf(optarg, "%lf", &argument.dtMins) != 1) {
+         std::cerr << "invalid value for option dtMins: " << optarg << std::endl; 
+			break;
+			}
+			if (strstr(optarg,"sec") != NULL) {
+				scale = 60.0;
+			}
+			argument.dtMins = argument.dtMins / scale;
       break;
     case ERUPTDATE: 
       if (optarg[0] == '+' || optarg[0] == '-')
