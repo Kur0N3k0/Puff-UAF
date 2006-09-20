@@ -34,7 +34,7 @@ $home_abs="$home/web";
 
 # END OF WEB SERVER INSTALLATION CHANGES ----------
 
-$pidfile="$home_web/etc/webpuff.pid";
+$pidfile="$home_exe/etc/webpuff.pid";
 $puff_exe="$home_exe/bin/puff ";
 $ashxp_exe="$home_exe/bin/ashxp ";
 $ashgmt_exe="$home_exe/bin/ashgmt --verbose --movie=movie.gif ";
@@ -81,6 +81,7 @@ $ashxpOptionDefault{magnify}=1;
 $ashxpOptionDefault{pixels}=3;
 $ashxpOptionDefault{projection}="mercator";
 $ashxpOptionDefault{color}="rainbow";
+# format options are GIF JPEG BLOCK CONTOUR
 $ashxpOptionDefault{format}="GIF";
 
 #---------------------

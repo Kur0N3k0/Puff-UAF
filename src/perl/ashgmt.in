@@ -46,6 +46,7 @@ GetOptions(
 	"labelfile=s" => sub {$opt{label_file}.= "@_[1]|";},
   "latlon=s"    => \$opt{latlon},
   "magnify=s"   => \$opt{magnify},
+  "meridian"    => \$opt{meridian},
   "movie=s"     => \$opt{movie},
 	"num-levels=i"=> \$opt{num_levels},
   "output=s"    => \$opt{output},
@@ -486,12 +487,30 @@ sub particles2 {
 		}
 	}
 
+  # if data is crossing the merdian, things are more difficult.
+	# User must specify a negative and positive lon pair (i.e. -20/20)
+	# so GMT produces the correct map.  Puff lon is always 0-360, so 
+	# manually check each lon value to see if it might be in the new +/-
+	# range. For lon>180 particles, see if 360-lon is OK.  Don't need to
+	# check 0<lon<180 because their lon values will be OK.
+	foreach my $i (0..scalar @{$part{lon}}-1){
+	if ($opt{meridian}) {
+		if (($part{lon}[$i] > 180) and ($part{lon}[$i]-360 < $lim{lonmin}))
+			{$part{exists}[$i] = 0;}
+		if (($part{lon}[$i] < 180) and ($part{lon}[$i] > $lim{lonmax}))
+			{$part{exists}[$i] = 0;}
+	} else {
+		$part{exists}[$i] = 0 if ($part{lon}[$i] < $lim{lonmin});
+		$part{exists}[$i] = 0 if ($part{lon}[$i] > $lim{lonmax});
+	}
+	}
+
 	# filter by unmarking the 'exists' flag
 	foreach my $i (0..scalar @{$part{lon}}-1){
 		$part{exists}[$i] = 0 if ($part{hgt}[$i] < $opt{hgt_min});
 		$part{exists}[$i] = 0 if ($part{hgt}[$i] > $opt{hgt_max});
-		$part{exists}[$i] = 0 if ($part{lon}[$i] < $lim{lonmin});
-		$part{exists}[$i] = 0 if ($part{lon}[$i] > $lim{lonmax});
+#		$part{exists}[$i] = 0 if ($part{lon}[$i] < $lim{lonmin});
+#		$part{exists}[$i] = 0 if ($part{lon}[$i] > $lim{lonmax});
 		$part{exists}[$i] = 0 if ($part{lat}[$i] < $lim{latmin});
 		$part{exists}[$i] = 0 if ($part{lat}[$i] > $lim{latmax});
 		$part{exists}[$i] = 0 if ($part{grounded}[$i] and $opt{airborne});
@@ -976,6 +995,8 @@ sub defaults {
 	$opt->{hgt_max} = "16000.0" unless (defined($opt->{hgt_max}));
 	$opt->{hgt_min} = "0.0" unless (defined($opt->{hgt_min}));
   $opt->{magnify} = 1 unless (defined ($opt->{magnify} ));
+	if ($opt{merdian} and not $opt{latlon}) {
+		print "WARNING: the --meridian option should only be used with the --latlon option and mapping may be incorrect\n"; }
 	if (not defined $opt{num_levels}) {
 		$opt->{num_levels} = 3 if ($opt{filetype} eq 'conc');
 		$opt->{num_levels} = 24 if ($opt{filetype} eq 'ash');
@@ -1088,6 +1109,12 @@ concentration files (*conc*.nc).
 
 --magnify=amount
   Magnify the image this amount, default is 1, doubling is 2.
+
+--meridian
+	Use this option when data crosses the meridian.  Also use --latlon to 
+	explicitly set the bounding box, using a negative and positive east
+	pair.  Without these options, ashgmt has difficulty determining an
+	appropriate bounding box and many particles may not be mapped.
 
 --movie=file
   Create an animated GIF image with name 'file'.  This requires ImageMagick

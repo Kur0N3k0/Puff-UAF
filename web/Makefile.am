@@ -16,6 +16,7 @@ HELP_FILES = help/ashLogMean.html \
   help/diffuseH.html \
   help/diffuseZ.html \
   help/eruptHours.html \
+	help/format.html \
   help/gridlines.html \
   help/latlon.html \
   help/model.html \

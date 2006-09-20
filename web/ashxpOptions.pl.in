@@ -15,6 +15,20 @@ my $previous = $q->param('previous');
 # autoflush on
 $|=1;
 
+# all scroll options are a hash of arrays, see camel book 275
+my %scrollOptions = (
+  color				=> ["gray", "rainbow", "red", "isopach"],
+	projection	=> ["mercator", "lambert", "polar"],
+	format			=> ["GIF", "JPEG" ,"BLOCK", "CONTOUR"]
+	);
+
+my $formatLabels = {
+	GIF	=> 'particle(GIF)',
+	JPEG	=> 'particle(JPG)',
+	BLOCK	=> 'conc(blocks)',
+	CONTOUR=> 'conc(contours)'
+	};
+
 # parse options from previous form
 my %ashxpOption;
 
@@ -182,26 +196,24 @@ print $q->textfield(-name=>"latlon",
 		    );
 print "</td></tr>";
 		    
-my @colors = qw(gray rainbow red isopach);
 print "<tr>";
 print "<td class=\"labelText\">";
 print "color:";
 print "</td><td>";
 print $q->scrolling_list(-name=>'colorProtocol',
-                         -value=>[@colors],
+			-value=>$scrollOptions{color},
 			 -size=>1,
 			 -class=>"tableEntry",
-			 -default=>$colors[0],
+			-default=>$scrollOptions{color}[0],
 			 );
 print "</td></tr>";
 
-my @projections = qw(mercator lambert polar);
 print "<tr>";
 print "<td class=\"labelText\">";
 print "projection:";
 print "</td><td>";
 print $q->scrolling_list(-name=>'projection',
-                         -value=>[@projections],
+				-value=>$scrollOptions{projection},
 			 -size=>1,
 			 -class=>"tableEntry",
 			 -default=>$ashxpOption{projection},
@@ -245,11 +257,22 @@ print $q->submit(-name=>'reset', -value=>"RESET");
 print "</td></tr>";
 
 print "<tr>";
-print "<td colspan='2'>";
-print $q->radio_group(-name=>'imageFormat',
-                      -values=>['JPEG','GIF','conc'],
-		      -default=>$ashxpOption{format},
-		      );
+#print "<td colspan='2'>";
+#print $q->radio_group(-name=>'imageFormat',
+#                      -values=>['JPEG','GIF','conc'],
+#		      -default=>$ashxpOption{format},
+#		      );
+
+print "<td class='labelText'>";
+print "<b><a href=\"#\" onclick=\"openHelp('$Webpuff::home_web/help/format.html')\" class=\"helpLink\" title=\"click for option explanation\"> format</a></b>";
+print "</td><td>";
+print $q->scrolling_list(-name=>'imageFormat',
+			-value=>$scrollOptions{format},
+			-labels=>$formatLabels,
+			-size=>1,
+			-class=>"tableEntry",
+			-default=>$ashxpOption{format},
+			);
 print "</td></tr>";
 		 
 print "</table>";
@@ -371,17 +394,19 @@ sub process_form {
   foreach(@ncFiles) { $filelist.=" " . basename($_); }
 
 	# conc. clouds use the .nc file
-	if ($q->param('imageFormat') eq "conc") {
+	if ($q->param('imageFormat') =~ m/BLOCK|CONTOUR/) {
 		$filelist = basename(glob("$Webpuff::home_abs/$runDir/$sessionID/$previous/*.nc"));
 	}
-  
+
   my $command;
   if ($q->param('imageFormat') eq "JPEG") {
     $command = $Webpuff::ashxp_exe;
   } elsif ($q->param('imageFormat') eq "GIF") {
     $command = "$Webpuff::ashgmt_exe";
-  } elsif ($q->param('imageFormat') eq "conc") {
+  } elsif ($q->param('imageFormat') eq "BLOCK") {
 		$command = "$Webpuff::ashgmt_exe";
+	} elsif ($q->param('imageFormat') eq "CONTOUR") {
+		$command = "$Webpuff::ashgmt_exe --contours ";
 	}
   
   # hash of possible options
@@ -449,7 +474,7 @@ sub jpg_listing {
     $ext = "ash*.png";
   } elsif ($ashxpOption{format} eq "JPEG") {
     $ext = "ash*.jpg";
-  } elsif ($ashxpOption{format} eq "conc") {
+  } elsif ($ashxpOption{format} =~ m/BLOCK|CONTOUR/) {
 		$ext = "conc*.png";
 	}
   
@@ -499,7 +524,9 @@ sub parse_previous {
   } 
 
 	# ashgmt may have processed conc. files, so check for that
-	$ashxpOption{format} = "conc" if ($command =~ m/conc\d*\.nc$/);
+	$ashxpOption{format} = "BLOCK" if ($command =~ m/conc\d*\.nc$/);
+	# adjust once again if a contour plot was made
+	$ashxpOption{format} = "CONTOUR" if ($command =~ m/--contours/);
   
   # the last token has a list of files after the last switch, remove them
   # do not do this, however, if no log exists and, thus, no tokens.
