@@ -746,10 +746,13 @@ int Ash::read(char *filename) {
     return ASH_ERROR;
     }
 
+	// number of records (or particles) in this file
+	long int nRec = (ncfile.get_dim((NcToken)"nash"))->size();
+
   // allocate space if ash object is empty
   if (need_allocation) 
 	{ 
-    ashN = (ncfile.get_dim((NcToken)"nash"))->size();
+    ashN = nRec;
   	allocate(); 
 	}
     
@@ -785,30 +788,30 @@ int Ash::read(char *filename) {
   // they are stored in the an object and cannot be directly accessed as an
   // array
 
-  double *loc = new double[ashN];
-	ncbyte *byt = new ncbyte[ashN];
+  double *loc = new double[nRec];
+	ncbyte *byt = new ncbyte[nRec];
   
   vp = ncfile.get_var((NcToken)"lon");
   vp->get(loc,vp->edges());
-  for (int i = 0; i<ashN; i++) { particle[i].x=loc[i]; }
+  for (int i = 0; i<nRec; i++) { particle[i].x=loc[i]; }
   vp = ncfile.get_var((NcToken)"lat");
   vp->get(loc,vp->edges());
-  for (int i = 0; i<ashN; i++) { particle[i].y=loc[i]; }
+  for (int i = 0; i<nRec; i++) { particle[i].y=loc[i]; }
   vp = ncfile.get_var((NcToken)"hgt");
   vp->get(loc,vp->edges());
-  for (int i = 0; i<ashN; i++) { particle[i].z=loc[i]; }
+  for (int i = 0; i<nRec; i++) { particle[i].z=loc[i]; }
   vp = ncfile.get_var((NcToken)"size");
   vp->get(loc,vp->edges());
-  for (int i = 0; i<ashN; i++) { particle[i].size=loc[i]; }
+  for (int i = 0; i<nRec; i++) { particle[i].size=loc[i]; }
   vp = ncfile.get_var((NcToken)"age");
   vp->get(loc,vp->edges());
-  for (int i = 0; i<ashN; i++) { particle[i].startTime=loc[i]; }
+  for (int i = 0; i<nRec; i++) { particle[i].startTime=loc[i]; }
   vp = ncfile.get_var((NcToken)"grounded");
   vp->get(byt,vp->edges());
-  for (int i = 0; i<ashN; i++) { particle[i].grounded=byt[i]; }
+  for (int i = 0; i<nRec; i++) { particle[i].grounded=byt[i]; }
   vp = ncfile.get_var((NcToken)"exists");
   vp->get(byt,vp->edges());
-  for (int i = 0; i<ashN; i++) { particle[i].exists=byt[i]; }
+  for (int i = 0; i<nRec; i++) { particle[i].exists=byt[i]; }
   
 	// done with this array
 	if (loc) delete[] loc;
