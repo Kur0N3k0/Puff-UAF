@@ -388,15 +388,19 @@ sub process_form {
 
   # get a listing of any available netCDF files
   my @ncFiles=();
-  foreach (glob("$Webpuff::home_abs/$runDir/$sessionID/$previous/*.cdf")) { push @ncFiles, $_; }
+	
+	my $suf = ".cdf";
+	if ($q->param('imageFormat') =~ m/BLOCK|CONTOUR/) {$suf=".nc";}
+
+  foreach (glob("$Webpuff::home_abs/$runDir/$sessionID/$previous/*${suf}")) { push @ncFiles, $_; }
 
   my $filelist="";
   foreach(@ncFiles) { $filelist.=" " . basename($_); }
 
 	# conc. clouds use the .nc file
-	if ($q->param('imageFormat') =~ m/BLOCK|CONTOUR/) {
-		$filelist = basename(glob("$Webpuff::home_abs/$runDir/$sessionID/$previous/*.nc"));
-	}
+#	if ($q->param('imageFormat') =~ m/BLOCK|CONTOUR/) {
+#		$filelist = basename(glob("$Webpuff::home_abs/$runDir/$sessionID/$previous/*.nc"));
+#	}
 
   my $command;
   if ($q->param('imageFormat') eq "JPEG") {
