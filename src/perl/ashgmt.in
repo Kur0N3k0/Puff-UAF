@@ -125,7 +125,6 @@ foreach my $file (@file) {
 	unlink($opt{cpt});
 	exit(0) if $opt{'fork'};
 	} # end if child process
-#	while (waitpid($pid,&WNOHANG) != -1) { sleep 1;}
   } # end of parent loop
   
 # flag for watching when child processes are all finished
@@ -143,7 +142,6 @@ while ($children) {
 
 	# unlink the temporary basemap and color palette files
 	unlink($basefile);
-#	unlink($opt{cpt});
 # # # # # # # # # # # # # # # # # # # # # # # #
 sub check_utilities {
 	unless ($main::gmtset_exe and 
@@ -339,6 +337,7 @@ sub contours {
 # this value
 #	my $max_conc = 0;
 
+	# grab meta data from netCDF file for min/max conc. values
 	open ASHFILE, "$main::ncks_exe -m $opt{ashfile} |";
    while (<ASHFILE>) {
 		if ($_ =~ m/$opt{var}.*max_value.*value = (-?\d*\.?\d*)/) {
@@ -358,7 +357,7 @@ sub contours {
 	while (<PIPE>){
 		next unless ($_ =~ m/^time\[/);
 		#$_ =~ m/level\[\d+\]=(-?\d*\.?\d*) lat\[\d+\]=(-?\d*\.?\d*) lon\[\d*\]=(\d*\.?\d*) $var\[\d*\]=(\d*\.?\d*)/;
-		$_ =~ m/lat\[\d+\]=(-?\d*\.?\d*) lon\[\d*\]=(\d*\.?\d*) $var\[\d*\]=(\d*\.?\d*)/;
+		$_ =~ m/lat\[\d+\]=(-?\d*\.?\d*) lon\[\d*\]=(-?\d*\.?\d*) $var\[\d*\]=(\d*\.?\d*)/;
 		#$z=$1; $y=$2; $x=$3; $v=$4;
 		$y=$1; $x=$2; $v=$3;
 		next if ($v < $opt{conc_min});
@@ -399,10 +398,7 @@ sub contours {
 
 	# make a color palette, hgt spec's can change here
 	# calculate the interval
-#	my $cintv = $max_conc/$opt{num_levels};
 	my $cintv = $opt{conc_max}/$opt{num_levels};
-#	my $cpt = tmpnam();
-#	`$main::makecpt_exe -T$opt{conc_min}/$max_conc/$cintv > $opt{cpt}`;
 	`$main::makecpt_exe -T$opt{conc_min}/$opt{conc_max}/$cintv > $opt{cpt}`;
 		
 	my $command = "$main::pscontour_exe $xyzfile $main::maprange -C$opt{cpt} -I -O -K >> $opt{output}";
@@ -517,10 +513,7 @@ sub particles2 {
 		$part{exists}[$i] = 0 if (!$part{grounded}[$i] and $opt{fallout});
 		}
 
-
 	# make a color palette, hgt spec's can change here
-#	my $cpt = tmpnam();
-#	`$main::makecpt_exe -T0/16000/8 > $opt{cpt}`;
 	`$main::makecpt_exe -T$opt{hgt_min}/$opt{hgt_max}/8 > $opt{cpt}`;
 
 	my $xyfile = tmpnam();
@@ -531,11 +524,9 @@ sub particles2 {
 		}
 	close XYFILE;
 
-#    print STDOUT  `$main::psxy_exe $xyfile $main::maprange -C$cpt -Sc -O -K`;
     `$main::psxy_exe $xyfile $main::maprange -C$opt{cpt} -Sc$opt{pixels}p -O -K >> $opt{output}`;
 
 	unlink($xyfile); 
-#	unlink($cpt);
 
 	# mark the volcano location
 	my ($olon, $olat, $ret);
@@ -553,43 +544,6 @@ sub particles2 {
 
 	return;
 }
-# # # # # # # # # # # # # # # # # # # # # # # #
-#sub particles {
-#  my $opt = pop;
-#  
-#  my @levels=@main::levels;
-#  my @red=@main::red;
-#  my @green=@main::green;
-#  my @blue=@main::blue;
-#  my ($bottom, $top);
-#
-#  # add an additional filter if --hgt-range was specified, make it empty
-#  # otherwise
-#  my $filter = "";
-#  if (defined($opt->{hgt_range}) ) {
-#    $opt->{hgt_range} =~ m[(-?\d+\.?\d*)/(-?\d+\.?\d*)];
-#    if (defined($1) and defined($2) ) {
-#      $filter = "--range hgt=$1/$2";
-#    } 
-#  }
-#  
-#  # add an airborne or fallout filter
-#  if (defined($opt->{airborne})) {
-#    $filter .= " --range grounded=0/0";
-#  }
-#  
-#  if (defined($opt->{fallout})) {
-#    $filter .= " --range grounded=1/1";
-#  }
-#    
-#  # map the ash particles for each level in a different color
-#  my $num_levels=scalar @levels;
-#  for (my $i=0; $i<$num_levels-1; $i++) {
-#
-#    print STDOUT  `@ASHDUMP@ --quiet --noheader --var lon,lat --range hgt=$levels[$i]/$levels[$i+1] $filter $opt{ashfile} |@PSXY@ $main::maprange -Sc$opt{pixels}p -G$red[$i]/$green[$i]/$blue[$i] -O -K`;
-#  }
-#  return;
-#}
 # # # # # # # # # # # # # # # # # # # # # # # #
 sub annotation {
   my $opt = pop;
@@ -751,26 +705,6 @@ sub ps2png {
 
 	return;
 	}
-# # # # # # # # # # # # # # # # # # # # # # # #
-#sub ps2gif {
-#  my $opt = shift;
-#  
-#  my $psfile = $opt->{output};
-#  (my $giffile = $psfile) =~ s/\.ps$/.gif/;
-#  
-#  # convert the postscript to a GIF, trim the excess space GMT generates
-#  # to make it a portrait size
-#  my $command = "$main::convert_exe -trim $psfile GIF:$giffile > /dev/null";
-#  print STDERR "$command\n" if $opt{verbose};
-#  `$command`;
-#  
-#  # set the image in the upper, right corner and trim the leftover transparency
-#  $command = "$main::gifsicle_exe --no-position --crop-transparency --output $giffile $giffile";
-#  print STDERR "$command\n" if $opt{verbose};
-#  `$command`;
-#  
-#  return;
-#}
 # # # # # # # # # # # # # # # # # # # # # # # #
 # find the minimum bounding box for each file and set $opt->{latlon} to it
 sub boundingbox {
@@ -1141,7 +1075,8 @@ concentration files (*conc*.nc).
 --time=YYYYmmDDhhMM[:YYYYmmDDhhMM]
   Only produce maps for this time range from the concentration file. If
 	only the first date/time is specified, all times from then onward are
-	processed.
+	processed. For only a single frame, use the same time for both start
+  and finish.
 
 --usage
 	Print usage information and exit.
