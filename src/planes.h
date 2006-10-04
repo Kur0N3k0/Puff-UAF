@@ -22,14 +22,14 @@ struct Location
 
 struct flData
 {
-  char *fltnum, *origin, *dest, *make;
+  char *cname, *fltnum, *origin, *dest, *make;
   struct Location loc;
   bool empty;
 };
 
 struct Flight
 {
-  std::string orig, dest, fltnum, make;
+  std::string orig, dest, cname, fltnum, make;
   time_t start_time, end_time;
   std::vector<Location> location;
 };

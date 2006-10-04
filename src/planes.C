@@ -98,8 +98,10 @@ void Planes::readPlanesFile(std::ifstream *planesFile)
 			clearData(&data);
 			continue;
 			}
+		// new flights when call name (cname) changes.  Do not use fltnum since
+		// date could change for overnight flights
     if (cur == NULL) newFlight(&data);
-    else if (strcmp(data.fltnum, cur->fltnum.c_str())) newFlight(&data);
+    else if (strcmp(data.cname, cur->cname.c_str())) newFlight(&data);
 
     // now point 'cur' to the last flight in the list
     cur = &(*this).flight[(*this).flight.size()-1];
@@ -121,6 +123,7 @@ void Planes::newFlight(const struct flData* data)
   flight->dest = data->dest;
   flight->make = data->make;
   flight->fltnum = data->fltnum;
+  flight->cname = data->cname;
   
   (*this).flight.push_back(*flight);
 	if (argument.verbose)
@@ -162,6 +165,7 @@ flData parseLine(char* line)
   strcpy(data.fltnum, field[0]);
   strcat(data.fltnum, "-");
   strcat(data.fltnum, field[1]);
+  data.cname = strdup(field[0]);
   data.origin = strdup(field[3]);
   data.dest = strdup(field[4]);
   data.make = strdup(field[9]);
@@ -235,6 +239,7 @@ void Planes::calculateExposure (CCloud *cc)
     if ((*f).start_time > (time_t)cc->tValues[cc->tSize-1]) continue;
     if ((*f).end_time < (time_t)cc->tValues[0]) continue;
     float exp = 0; // the net exposure for this flight
+		float exp_c = 0; // conc. exposure for stationary sites
     float e_time = 0; // time this flight is exposed, used for debugging
 		                  // when some flights have sparse data
     
@@ -244,17 +249,23 @@ void Planes::calculateExposure (CCloud *cc)
 			// exposure increases by dose * time * speed
 			// g/m^3 * s * m/s = g/m^2
       exp += dose*((*f).location[i+1].time-(*f).location[i].time) * (*f).location[i].speed;
+      exp_c += dose*((*f).location[i+1].time-(*f).location[i].time);
       e_time += (*f).location[i+1].time - (*f).location[i].time;
     }
     // only report non-zero values
 //    if (exp > 1) 
-						exposure.insert(fs_mmap::value_type(exp, (*f).fltnum));      
+//						exposure.insert(fs_mmap::value_type(exp, (*f).fltnum));      
 //   std::cout << (*f).fltnum << "(" << e_time << ")\n";
+		std::cout << (*f).fltnum << " => ";
+	// stationary sites have zero exp due to zero speed, but exp_c is nonzero
+	if ((exp == 0) and (exp_c != 0)) {std::cout <<exp_c<<" g*s/m^3\n";}
+	else {std::cout <<exp<< " g/m^2\n";}
+
    }
    // print results
    for (fs_mmap::const_iterator i = exposure.begin(); i != exposure.end(); i++)
    {
-     std::cout << i->first << " => " << i->second << "\t" << "\n";
+//     std::cout << i->first << " => " << i->second << "\t" << "\n";
    }
   return;
 }
@@ -264,6 +275,7 @@ void Planes::clearData(flData* data)
 {
 
     if (data->fltnum) free(data->fltnum);
+    if (data->cname) free(data->cname);
     if (data->origin) free(data->origin);
     if (data->dest) free(data->dest);
     if (data->make) free(data->make);
