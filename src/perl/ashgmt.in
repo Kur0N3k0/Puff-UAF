@@ -275,7 +275,7 @@ sub basemap {
 		else { die_basemap($optmap);}
 		if ($optmap =~ m/(-R\S+)/) { $range = $1; }
 		else { die_basemap($optmap);}
-		while ($optmap =~ m/(-[^JR]\S+)/) { 
+		while ($optmap =~ m/(-[a-zA-IK-QS-Z]\S+)/) { 
 			$xtra_opts .= "$1 "; 
 			$optmap=~s/$1//;
 			}
@@ -954,21 +954,30 @@ sub defaults {
 }
 
 # # # # # # # # # # # # # # # # # # # # # # # #
+# only store options, not file names, otherwise large file globs
+# may exceed the maximum length
 sub store_history {
+
+# file count
+my $fc = 0;
 
 	my $hist = "$0 ";
 	foreach(@ARGV){
-		$hist .= "$_ ";
+		if ($_ =~ m/cdf$|nc$/) {
+			$fc++;
+		} else {
+		  $hist .= "$_ " 
 		}
+	}
 
-	$opt{history} = $hist;
+	$opt{history} = "$hist <$fc file(s)>" ;
 	return;
 } 
 # # # # # # # # # # # # # # # # # # # # # # # #
 sub print_help {
 
 print << "EOF";
-usage: ashgmt [options] file[s]
+usage: ashgmt [options] <file(s)>
 
 The file or file list may be either particle files (*ash*.cdf) or
 concentration files (*conc*.nc).  
@@ -977,34 +986,25 @@ concentration files (*conc*.nc).
 	display only airborne particles (default)
 
 --basemap="-R... -J..."
-	specify a custom GMT basemap.  This string should include both the
-	projection (-J) and range (-R) flags, and needs to be quoted since there is
-	a space between the two.  Example: "-R205/220/50/65 -JS210/90/7i".  You can
-	see the default basemap using the --verbose option.  Other 'pscoast' options like
-	-I or -G can also be added to this option.
+	specify a custom GMT basemap.  This string should include both the projection (-J) and range (-R) flags, and needs to be quoted since there is a space between the two.  Example: "-R205/220/50/65 -JS210/90/7i".  You can see the default basemap using the --verbose option.  Other 'pscoast' options like -I or -G can also be added to this option, and will supercede any defaults.
 
 --conc-range=min/max
 	specify the concentration range.
 
 --conc-limits=min/max
-	Specify the limits of the color bar, overriding the default range.  Often
-   used in conjunction with the --conc-range to override the default range
-   setting.
+	Specify the limits of the color bar, overriding the default range.  Often used in conjunction with the --conc-range to override the default range setting.
 
 --contour
-	Use GMT pscontour routine insted of plotting dots for concentration
-	plotting.
+	Use GMT pscontour routine insted of plotting dots for concentration plotting.
 
 --fallout
 	Only plot grounded particles.  This is exclusive of --airborne.
 
 --fork
-	Use perls fork() to process each ash file as a child process.  This can speedi
-  up processing of large numbers of files on muliprocessor machines.
+	Use perls fork() to process each ash file as a child process.  This can speed up processing of large numbers of files on multiprocessor machines.
 
 --gridlines=DX[[:TX]/DY[:TY]]
-  Grid line spacing in degrees.  X and Y directions can be different.  The
-  thickness specification TX and TY is ignored.
+  Grid line spacing in degrees.  X and Y directions can be different.  The  thickness specification TX and TY is ignored.
 
 --no-gridlines
   Do not draw gridlines
@@ -1016,67 +1016,44 @@ concentration files (*conc*.nc).
   Only plot particles or calculate concentration for this range (in meters).
 
 --label=lon,lat,string[,S...]
-	Put a text string to the lower-right of this location.  If the location is 
-	outside the bounding box, it is ignored.  This option can be specified more
-  than once, and several labels can be concatenated with the pipe "|" character.
-  An optional marker can also be plotted using the -S... marker as described 
-  in psxy.  For example, Sa10p plots a 10-pixel star.  See also --label-file 
-	for more control over text size, orientation, and color.
+	Put a text string to the lower-right of this location.  If the location is outside the bounding box, it is ignored.  This option can be specified more than once, and several labels can be concatenated with the pipe "|" character. An optional marker can also be plotted using the -S... marker as described in psxy.  For example, Sa10p plots a 10-pixel star.  See also --label-file for more control over text size, orientation, and color.
 
 --label-file=filename
-	Specify a file containing 1 or more labels.  The format of the file is the
-	same as GMTs pstext, which is a space-delimited line containing
-		x y fontsize rotation fontnumber justify text
-	This option can be specified more than once.  Locations outside the bounding
-	box are ignored.
-	Default pen color is black, and a 4-pixel circle at the location.  This
-	can be changed by setting either/both options by putting a line above the
-	label such as
-	OPTION -G255/0/0 -Sh9p
-	This would change the text color to red and use a 9-pixel hexagon as a marker.
-	The color and marker remain the same until another OPTION line is encountered
-	or EOF, when the defaults are restored.
+	Specify a file containing 1 or more labels.  The format of the file is the same as GMTs pstext, which is a space-delimited line containing 
+x y fontsize rotation fontnumber justify text 
+This option can be specified more than once.  Locations outside the bounding box are ignored. Default pen color is black, and a 4-pixel circle at the location.  This can be changed by setting either/both options by putting a line above the label such as
+OPTION -G255/0/0 -Sh9p
+This would change the text color to red and use a 9-pixel hexagon as a marker. The color and marker remain the same until another OPTION line is encountered or EOF, when the defaults are restored.
 
 --latlon=latmin/latmax/lonmin/lonmax
-  Draw a map of this range, overriding default behavior which is a map that
-  includes all particles.
+  Draw a map of this range, overriding default behavior which is a map that includes all particles.
 
 --magnify=amount
   Magnify the image this amount, default is 1, doubling is 2.
 
 --meridian
-	Use this option when data crosses the meridian.  Also use --latlon to 
-	explicitly set the bounding box, using a negative and positive east
-	pair.  Without these options, ashgmt has difficulty determining an
-	appropriate bounding box and many particles may not be mapped.
+	Use this option when data crosses the meridian.  Also use --latlon to explicitly set the bounding box, using a negative and positive degrees east pair.  Without these options, ashgmt has difficulty determining an appropriate bounding box and many particles may not be mapped.
 
 --movie=file
-  Create an animated GIF image with name 'file'.  This requires ImageMagick
-	'convert' and 'gifsicle'.
+  Create an animated GIF image with name 'file'.  This requires ImageMagick 'convert' and 'gifsicle'.
 
 --num-levels=number
-  Use this number of levels in the concentration plot.  Ignored for particle
-  maps.
+  Use this number of levels in the concentration plot.  Ignored for particle maps.
 
 --pixels=number
   Draw particles this number pixels in diameter (approximately).
 
 --projection=mercator|polar|lambert
-  Use this projection instead of the default.  If the map crosses the equator,
-  only mercator can be used.
+  Use this projection instead of the default.  If the map crosses the equator, only mercator can be used.
 
 --save-postscript
-  Keep the intermediate postscript file that GMT generates.  --save-ps also
-  works.
+  Keep the intermediate postscript file that GMT generates.  --save-ps also works.
 
 --stamp
   Print a time stamp on this image.  --no-stamp does the opposite.
 
 --time=YYYYmmDDhhMM[:YYYYmmDDhhMM]
-  Only produce maps for this time range from the concentration file. If
-	only the first date/time is specified, all times from then onward are
-	processed. For only a single frame, use the same time for both start
-  and finish.
+  Only produce maps for this time range from the concentration file. If only the first date/time is specified, all times from then onward are processed. For only a single frame, use the same time for both start and finish.
 
 --usage
 	Print usage information and exit.
@@ -1085,8 +1062,7 @@ concentration files (*conc*.nc).
   Plot the data in this variable instead of the default (no yet implemented).
 
 --verbose
-  Print to STDERR all the GMT commands (and others) being used.  This is 
-  helpful for fine-tuning the basemap or lat/lon range from the default.
+  Print to STDERR all the GMT commands (and others) being used.  This is helpful for fine-tuning the basemap or lat/long range from the default.
 
 --version
 	Print the version number and exit.
