@@ -646,7 +646,7 @@ KORANGA                      :New Guinea          : 7.33 :S :146.708:E :-99999
 KORATH RANGE                 :Ethiopia            : 5.10 :N : 35.88 :E :  912 
 KORO                         :Fiji Is-SW Pacific  :17.32 :S :179.40 :E :  522 
 KOROSI                       :Africa-E            : 0.77 :N : 36.12 :E : 1446
-KOROVIN                      :Aleutian Is         :52.38 :N :174.15 :E : 1533
+KOROVIN                      :Aleutian Is         :52.38 :N :174.15 :W : 1533
 KORYAKSKY                    :Kamchatka           :53.32 :N :158.688:E : 3456 
 KOS                          :Greece              :36.829:N : 27.257:E :  430 
 KOSHELEV                     :Kamchatka           :51.357:N :156.75 :E : 1812 
