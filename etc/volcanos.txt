@@ -631,6 +631,7 @@ KISKA                        :Aleutian Is         :52.10 :N :177.60 :E : 1220
 KITA-IWO-JIMA                :Volcano Is-Japan    :25.43 :N :141.23 :E :  792 
 KIZIMEN                      :Kamchatka           :55.13 :N :160.32 :E : 2485 
 KLABAT                       :Sulawesi-Indonesia  : 1.47 :N :125.03 :E : 1995 
+KLIUCHEF                     :Aleutian Is         :52.38 :N :174.15 :W : 1533 
 KLIUCHEVSKOI                 :Kamchatka           :56.057:N :160.638:E : 4835 
 KOLBEINSEY RIDGE             :Iceland-N of        :66.67 :N : 18.50 :W :-99999
 KOLKHOZHNY                   :Kamchatka           :55.07 :N :160.77 :E : 2161 
