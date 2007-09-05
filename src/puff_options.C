@@ -877,6 +877,8 @@ void show_help() {
   std::cout << "  -dtMins       value      (float)\n";
   std::cout << "  -eruptDate    \"YYYY MM DD HH:MM\" (string)\n";
   std::cout << "  -eruptHours   value      (float)\n";
+	std::cout << "  -eruptMass    value      (float) [kg]\n";
+	std::cout << "  -eruptVolume  value      (float) [m^3]\n";
 	std::cout << "  -fileAll      filename   (string)\n";
   std::cout << "  -fileT        filename   (string)\n";
   std::cout << "  -fileU        filename   (string)\n";
@@ -906,7 +908,7 @@ void show_help() {
   std::cout << "  -plumeShape   shape      (string) e/p/l\n";
   std::cout << "  -quiet\n";
   std::cout << "  -rcfile       filename   (string)\n";
-	std::cout << "  -regionalWinds  values   (float)\n";
+	std::cout << "  -regionalWinds  value    (float)\n";
   std::cout << "  -repeat       value      (integer)\n";
   std::cout << "  -restartFile  filename   (string)\n";
   std::cout << "  -runHours     value      (float)\n";
