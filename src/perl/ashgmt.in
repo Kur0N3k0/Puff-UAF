@@ -417,7 +417,7 @@ sub elipse_size {
 
 # maprange should already be in this format even if --basemap
 # was specified.
-	$mr =~ m[-R(.+)/(.+)/(.+)/(\d*\.?\d*)(r?) -J.*(\d+[ci])];
+	$mr =~ m[-R(.+)/(.+)/(.+)/(-?\d*\.?\d*)(r?) -J.*(\d+[ci])];
   my $ln1=$1;my $ln2=$2;
   my $lt1=$3;my $lt2=$4;
 	my $sz=$6;
@@ -785,6 +785,11 @@ sub make_movie {
   return;
 }
 # # # # # # # # # # # # # # # # # # # # # # # #
+# labels given on the command line with --label=x,y,text are written in 12-pt
+# font, with an optional marker given after the text.
+# With the --label-file option, the font name, size, rotation, and centering
+# must be specified and therefore can be changed.  The text color and marker
+# can be specified using OPTION -G.. -S.. on a line within the file.
 sub add_labels {
 	my $opt = shift;
 	
