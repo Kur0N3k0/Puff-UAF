@@ -1,4 +1,4 @@
-AC_INIT([puff],[2.2.0],[rorik@gi.alaska.edu],[puff-uaf])
+AC_INIT([puff],[2.2.1],[rorik@gi.alaska.edu],[puff-uaf])
 
 # print GNU copyright in configure script
 AC_COPYRIGHT

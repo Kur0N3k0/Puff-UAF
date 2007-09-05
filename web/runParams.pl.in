@@ -92,7 +92,7 @@ sub delete_previous {
 	# don't delete anything unless something was given
 	return unless ($dir);
 	# only delete regular named folders
-	return if ($dir =~ m/[^A-Za-z0-9_]/);
+	return if ($dir =~ m/[^A-Za-z0-9_-]/);
 	# get the full path name of this directory
 	$dir = "$Webpuff::home_abs/$runDir/$sessionID/" . $dir;
 	if (-d $dir) { 
@@ -124,7 +124,7 @@ print $q->start_form(-name=>"runParamsForm",
 
 #add hidden form values
 print $q->hidden(-name=>'sessionID',-value=>$sessionID);
-print $q->hidden(-name=>'quiet',-value=>'true');
+#print $q->hidden(-name=>'quiet',-value=>'true');
 
 # main table
 print '<table border="0" cellspacing="0" cellpadding="0">'; 
@@ -341,6 +341,10 @@ sub process_form {
   
   #create the command
   my $command = $Webpuff::puff_exe;
+	# add static options
+	foreach(keys(%puffOptionStatic)){
+		$command .= "--$_=\"$puffOptionStatic{$_}\" ";
+		}
   #put the output in the directory
   $command .= "--opath=$Webpuff::home_abs/$oPath ";
   
@@ -357,7 +361,7 @@ sub process_form {
   }
    
    # concentration clouds
-   $command .= "--gridOutput=0.5x2000 -averageOutput=true -repeat 5 -gridLevels 3 ";
+#   $command .= "--gridOutput=0.5x2000 -averageOutput=true -repeat 5 -gridLevels 3 ";
    
   #without the environment variable $HOME, we need to specify a resource file.
   # the web uses the user 'nobody' which has no $HOME, so use the default

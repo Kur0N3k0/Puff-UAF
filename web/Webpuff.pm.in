@@ -4,7 +4,7 @@ require Exporter;
 use File::Basename;
 
 @ISA = qw(Exporter);
-@EXPORT = qw(%ashxpOptionDefault %puffOptionDefault %puffScrollOptionDefault $runDir);
+@EXPORT = qw(%ashxpOptionDefault %puffOptionDefault %puffScrollOptionDefault %puffOptionStatic $runDir);
 
 # assume the top install directory is one above the one we are in and
 # no trailing slash
@@ -47,6 +47,8 @@ $runDir="run";
 #$runDir="$home_web/run";
 
 # these are all default values exported to the various frames
+# these are ONLY used for options which can be changed within the gui
+# or added as 'hidden' input fields.  Use static values below otherwise
 $puffOptionDefault{ashLogMean}=-6;
 $puffOptionDefault{ashLogSdev}=1;
 $puffOptionDefault{diffuseH}=10000;
@@ -65,12 +67,20 @@ $puffOptionDefault{regionalWinds}=30;
 $puffOptionDefault{restartFile}="none";
 $puffOptionDefault{runHours}=24;
 $puffOptionDefault{saveHours}=6;
-
 # setting the default scroll options to "" will default to the first value
-# in the list
+# in the list.  Lists are populated from within runParams by reading puffrc
+# file. (plumeShape is currently static)
 $puffOptionDefault{model}="";
 $puffOptionDefault{dem}="";
 $puffOptionDefault{plumeShape}="";
+
+#static options are part of the command line no matter what changes are made
+# within the gui.
+$puffOptionStatic{quiet}="true";
+$puffOptionStatic{averageOutput}=true;
+$puffOptionStatic{gridOutput}=true;
+$puffOptionStatic{gridSize}="0.5x2000";
+$puffOptionStatic{repeat}="5";
 
 $ashxpOptionDefault{airborne}=0;
 $ashxpOptionDefault{fallout}=0;
