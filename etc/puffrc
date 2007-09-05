@@ -1,3 +1,3 @@
-model=gfs mask=YYYYMMDDHH_gfs.nc var=u,v path=$PUFFHOME/data
+model=gfs mask=YYYYMMDDHH_gfs.nc var=u,v,T path=$PUFFHOME/data
 model=nam216 mask=YYYYMMDDHH_nam216.nc var=u,v,z,T path=$PUFFHOME/data
 
