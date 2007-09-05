@@ -474,7 +474,7 @@ int run_puff (int procRank)
     
 
     // write gridded data
-    if (argument.gridOutput)
+    if (argument.computeConcentration)
     {
       std::string outFile = concFilename(argument.opath, repeat_count);
       ash.writeGriddedData(outFile, 
@@ -929,8 +929,8 @@ void write_ash (time_t ash_t, int nm_files)
    ash.write (ashFilename.c_str() );
   }
   
-  // write concentration data
-  if (argument.gridOutput)
+  // calculate concentration data
+  if (argument.computeConcentration)
   {
     ash.stashData(ash_t);
   }

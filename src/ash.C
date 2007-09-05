@@ -1135,7 +1135,9 @@ void Ash::stashData(time_t now)
 }
     
 ////////////////////////////////////////////////////////////////////////
-// write a single file of gridded data.  Things get a little confusing when
+// compute gridded data.  Only write the file if necessary, but usually happens.
+// However, -planesFile required gridded data but not the writing of the file.
+// For computing gridded data, things get a little confusing when
 // looping over all the particles and populating the concentration grids because
 // there are both 2D and 3D grids, depending on whether it is airborne particles
 // or fallout.  Thus, there are lots of 'if particle is grounded' statements
@@ -1157,28 +1159,21 @@ void Ash::writeGriddedData(
   // values, so this can get turned off.
   static bool write_abs_conc = true;
     
-  // say that we're creating/writing this file
-  if (last_in_running_average)
-  {
-    std::cout << "Writing concentration file \"" << filename << "\" ... " <<
-    std::flush;
-  }
-  
   float dHorz = 1,      // grid horizontal size
         dVert = 2000;  // grid vertical size
 
   // parse the options ( format checked earlier in puff_options.C )
   char force = '\000';	// don't be smart and check dHorz vs. dVert sizes
-  if ( argument.gridOutputOptions) 
-    sscanf(argument.gridOutputOptions,"%fx%f%c",&dHorz, &dVert, &force);
+  if ( argument.gridSize) 
+    sscanf(argument.gridSize,"%fx%f%c",&dHorz, &dVert, &force);
 
   // this dHorz and dVert could be backwards, so swap them (and warn) if we
   // think so.  dHorz is degrees and dVert is meters.  User can override this
   // by appending a '!', which 'force' checks for
   if ((dHorz > dVert) && !(force)) 
   {
-    std::cerr << "\nWARNING: swapping -gridOutput options to DX=" << dVert <<
-      " and DZ=" << dHorz << ".  Use -gridOutput=DXxDZ! to override\n";
+    std::cerr << "\nWARNING: swapping -gridSize options to DX=" << dVert <<
+      " and DZ=" << dHorz << ".  Use -gridSize=DXxDZ! to override\n";
     // swap values
     float t = dHorz; dHorz = dVert; dVert = t;
   }
@@ -1188,7 +1183,7 @@ void Ash::writeGriddedData(
   if (dHorz > 0.5)
   {
     // only warn once by making 'write_abs_conc' static
-    if (write_abs_conc) std::cerr << "\nWARNING: not calculating absolute concentration due to excessively large grid cell size.  Use -gridOutput with smaller values.\n";
+    if (write_abs_conc) std::cerr << "\nWARNING: not calculating absolute concentration due to excessively large grid cell size.  Use -gridSize with smaller values.\n";
     write_abs_conc = false;
   }
   
@@ -1254,11 +1249,11 @@ void Ash::writeGriddedData(
   // average particle size array
   float *abs_air_size = new float[cc.d3size];
   float *abs_fo_size = new float[cc.d2size];
-  // create max values
-  float max_abs_air_conc = 0;
-  float max_abs_fo_conc = 0;
-  float max_rel_air_conc = 0;
-  float max_rel_fo_conc = 0;
+  // initialize max values
+  cc.max_abs_air_conc = 0;
+  cc.max_abs_fo_conc = 0;
+  cc.max_rel_air_conc = 0;
+  cc.max_rel_fo_conc = 0;
   
   // zero these values
   for (int i = 0; i < cc.d3size; i++) rel_air_conc[i] = abs_air_conc[i] = abs_air_size[i] = 0.0;
@@ -1303,12 +1298,12 @@ void Ash::writeGriddedData(
 	if (recParticle[pIdx].grounded) 
 	{
 		rel_fo_conc[cIdx]++;
-		if (rel_fo_conc[cIdx] > max_rel_fo_conc)
-			{ max_rel_fo_conc = rel_fo_conc[cIdx]; }
+		if (rel_fo_conc[cIdx] > cc.max_rel_fo_conc)
+			{ cc.max_rel_fo_conc = rel_fo_conc[cIdx]; }
 	} else {
 		rel_air_conc[cIdx]++;
-		if (rel_air_conc[cIdx] > max_rel_air_conc)
-			{ max_rel_air_conc = rel_air_conc[cIdx]; }
+		if (rel_air_conc[cIdx] > cc.max_rel_air_conc)
+			{ cc.max_rel_air_conc = rel_air_conc[cIdx]; }
 	}
 	
         // weighted average of the particle size for both fallout and airborne
@@ -1344,13 +1339,13 @@ void Ash::writeGriddedData(
 	  
 	  // adjust maximum value for airborne particles if necessary
           if (!recParticle[pIdx].grounded && 
-	      abs_air_conc[cIdx] > max_abs_air_conc) 
-	       { max_abs_air_conc = abs_air_conc[cIdx]; }
+	      abs_air_conc[cIdx] > cc.max_abs_air_conc) 
+	       { cc.max_abs_air_conc = abs_air_conc[cIdx]; }
 	       
 	  // adjust maximum value for fallout particles if necessary
           if (recParticle[pIdx].grounded && 
-	       abs_fo_conc[cIdx] > max_abs_fo_conc) 
-	         { max_abs_fo_conc = abs_fo_conc[cIdx]; }
+	       abs_fo_conc[cIdx] > cc.max_abs_fo_conc) 
+	         { cc.max_abs_fo_conc = abs_fo_conc[cIdx]; }
 	
           // sanity check for airborne or fallout particles
 	  bool invalid_cIdx = false;
@@ -1387,7 +1382,7 @@ void Ash::writeGriddedData(
     // normalize by exp(gridLevels)
     for (int i=0; i < cc.d3size; i++)
     {
-      rel_air_conc[i] = rel_air_conc[i]/max_rel_air_conc*exp(argument.gridLevels);
+      rel_air_conc[i] = rel_air_conc[i]/cc.max_rel_air_conc*exp(argument.gridLevels);
       // assign a level between zero and gridLevels
       if (rel_air_conc[i] >= 1)
       {
@@ -1410,7 +1405,7 @@ void Ash::writeGriddedData(
     // normalize by exp(gridLevels)
     for (int i=0; i < cc.d2size; i++)
     {
-      rel_fo_conc[i] = rel_fo_conc[i]/max_rel_fo_conc*exp(argument.gridLevels);
+      rel_fo_conc[i] = rel_fo_conc[i]/cc.max_rel_fo_conc*exp(argument.gridLevels);
       // assign a level between zero and gridLevels
       if (rel_fo_conc[i] >= 1)
       {
@@ -1420,29 +1415,21 @@ void Ash::writeGriddedData(
       }
     }  // end loop over entire 3D grid
 	// adjust maximum values
-	max_rel_air_conc = argument.gridLevels;
-	max_rel_fo_conc = argument.gridLevels;
+	cc.max_rel_air_conc = argument.gridLevels;
+	cc.max_rel_fo_conc = argument.gridLevels;
   
   } // end if -gridLevels was specified
     
   averageGriddedData(abs_air_conc,
-                     rel_air_conc, 
-		     abs_fo_conc,
-		     rel_fo_conc);
+    rel_air_conc, 
+		abs_air_size,
+	  abs_fo_conc,
+	  rel_fo_conc,
+		abs_fo_size);
   
   if (last_in_running_average)
   {
-  
-  // create/clobber a netCDF file
-  NcFile ncfile(filename.c_str(), NcFile::Replace);
-  
-  // create dimension objects
-  NcDim *d_time = ncfile.add_dim((NcToken)"time"); // record dimension
-  NcDim *d_lon = ncfile.add_dim((NcToken)"lon",cc.xSize);
-  NcDim *d_lat = ncfile.add_dim((NcToken)"lat",cc.ySize);
-  NcDim *d_lev = ncfile.add_dim((NcToken)"level",cc.zSize);
-  
-  // make arrays for the dimensions that will be written to the netCDF file
+   // make arrays for the dimensions that will be written to the netCDF file
   cc.xValues = new float[cc.xSize];
   cc.yValues = new float[cc.ySize];
   cc.zValues = new float[cc.zSize];
@@ -1457,7 +1444,50 @@ void Ash::writeGriddedData(
   for (int i = 1; i < cc.zSize; i++) cc.zValues[i]=cc.zValues[i-1]+dVert;
   for (int i = 0; i < cc.tSize; i++)
          cc.tValues[i]=(long int)recTime[i];
-    
+  
+	if (argument.gridOutput)
+		writeGriddedFile(filename);
+ 
+  Planes p(argument.planesFile);
+  if (p.size() > 0) p.calculateExposure(&cc);
+  
+  delete[] cc.xValues;
+  delete[] cc.yValues;
+  delete[] cc.zValues;
+  delete[] cc.tValues;
+  
+  } // end if last_in_running_average
+  
+   delete[] rel_air_conc;
+   delete[] abs_air_conc;
+   delete[] rel_fo_conc;
+   delete[] abs_fo_conc;
+   delete[] abs_air_size;
+   delete[] abs_fo_size;
+  
+  
+  return;
+}
+//  end of Ash::writeGriddedData()
+////////////////////////////////////////////////////////////////////////
+// called to actually create and write the gridded data file.  The gridded
+// data can be calculated but not written, but only makes sense when using
+// -planesFile option but you don't want a huge gridded data file written.
+////////////////////////////////////////////////////////////////////////
+void Ash::writeGriddedFile ( std::string filename)
+{
+  std::cout << "Writing concentration file \"" << filename << "\" ... " <<
+  std::flush;
+
+	  // create/clobber a netCDF file
+  NcFile ncfile(filename.c_str(), NcFile::Replace);
+  
+  // create dimension objects
+  NcDim *d_time = ncfile.add_dim((NcToken)"time"); // record dimension
+  NcDim *d_lon = ncfile.add_dim((NcToken)"lon",cc.xSize);
+  NcDim *d_lat = ncfile.add_dim((NcToken)"lat",cc.ySize);
+  NcDim *d_lev = ncfile.add_dim((NcToken)"level",cc.zSize);
+  
   // a netCDF variable object, everything will use it
   NcVar *vp;
   
@@ -1513,7 +1543,7 @@ void Ash::writeGriddedData(
   }
   vp->add_att((NcToken)"units","none");
   vp->add_att((NcToken)"long_name","relative airborne concentration");
-  vp->add_att((NcToken)"max_value",max_rel_air_conc);
+  vp->add_att((NcToken)"max_value",cc.max_rel_air_conc);
 //  vp->add_att((NcToken)"missing_value",0.f);
 
   // add the relative fallout concentration data
@@ -1527,7 +1557,7 @@ void Ash::writeGriddedData(
   }
   vp->add_att((NcToken)"units","none");
   vp->add_att((NcToken)"long_name","relative fallout concentration");
-  vp->add_att((NcToken)"max_value",max_rel_fo_conc);
+  vp->add_att((NcToken)"max_value",cc.max_rel_fo_conc);
   vp->add_att((NcToken)"missing_value",0.f);
 
   // add the absolute airborne concentration data
@@ -1541,7 +1571,7 @@ void Ash::writeGriddedData(
   }
   vp->add_att((NcToken)"units","milligrams/m^3");
   vp->add_att((NcToken)"long_name","absolute airborne concentration");
-  vp->add_att((NcToken)"max_value",max_abs_air_conc);
+  vp->add_att((NcToken)"max_value",cc.max_abs_air_conc);
 //  vp->add_att((NcToken)"missing_value",0.f);
 
   // add the absolute fallout concentration data
@@ -1555,23 +1585,25 @@ void Ash::writeGriddedData(
   }
   vp->add_att((NcToken)"units","milligrams/m^2");
   vp->add_att((NcToken)"long_name","absolute fallout concentration");
-  vp->add_att((NcToken)"max_value",max_abs_fo_conc);
+  vp->add_att((NcToken)"max_value",cc.max_abs_fo_conc);
   vp->add_att((NcToken)"missing_value",0.f);
 
   // add the average size data
   // microns are easier to deal with
-  for (int i = 0; i < cc.d3size; i++) abs_air_size[i] = abs_air_size[i]*1e6;
-  for (int i = 0; i < cc.d2size; i++) abs_fo_size[i] = abs_fo_size[i]*1e6;
+	// removed 16-10-2006 because don't want to modify 'cc' at all.
+//  for (int i = 0; i < cc.d3size; i++) abs_air_size[i] = abs_air_size[i]*1e6;
+//  for (int i = 0; i < cc.d2size; i++) abs_fo_size[i] = abs_fo_size[i]*1e6;
   
   vp = ncfile.add_var((NcToken)"air_size", ncFloat, d_time, d_lev, d_lat, d_lon);
   // add one record at a time
   recIdx = 0;
   for (int i = 0; i < cc.tSize; i++)
   {
-    vp->put_rec(&abs_air_size[recIdx], i);
+    vp->put_rec(&cc.abs_air_size_avg[recIdx], i);
     recIdx += cc.xSize*cc.ySize*cc.zSize;
   }
-  vp->add_att((NcToken)"units","microns");
+//  vp->add_att((NcToken)"units","microns");
+  vp->add_att((NcToken)"units","meters");
   vp->add_att((NcToken)"long_name","average airborne particle diameter");
   vp->add_att((NcToken)"missing_value",0.f);
 
@@ -1580,10 +1612,11 @@ void Ash::writeGriddedData(
   recIdx = 0;
   for (int i = 0; i < cc.tSize; i++)
   {
-    vp->put_rec(&abs_fo_size[recIdx], i);
+    vp->put_rec(&cc.abs_fo_size_avg[recIdx], i);
     recIdx += cc.xSize*cc.ySize;
   }
-  vp->add_att((NcToken)"units","microns");
+//  vp->add_att((NcToken)"units","microns");
+  vp->add_att((NcToken)"units","meters");
   vp->add_att((NcToken)"long_name","average fallout particle diameter");
   vp->add_att((NcToken)"missing_value",0.f);
 
@@ -1592,31 +1625,11 @@ void Ash::writeGriddedData(
   ncfile.add_att((NcToken)"title","Puff-generated Ash Data on a Regular Grid");
   ncfile.add_att((NcToken)"history",argument.command_line.c_str());
 	ncfile.add_att((NcToken)"volcano",origName);
-  
+
   // add done
   std::cout << "done.\n" << std::flush;
-
-  Planes p(argument.planesFile);
-  if (p.size() > 0) p.calculateExposure(&cc);
-  
-  delete[] cc.xValues;
-  delete[] cc.yValues;
-  delete[] cc.zValues;
-  delete[] cc.tValues;
-  
-  } // end if last_in_running_average
-  
-   delete[] rel_air_conc;
-   delete[] abs_air_conc;
-   delete[] rel_fo_conc;
-   delete[] abs_fo_conc;
-   delete[] abs_air_size;
-   delete[] abs_fo_size;
-  
-  
-  return;
+	return;
 }
-//  end of Ash::writeGriddedData()
 ////////////////////////////////////////////////////////////////////////
 // when multiple runs are done '-repeat', average the concentration grids.
 // Each variable has a corresponding <var>_avg that is incrementally 
@@ -1626,8 +1639,10 @@ void Ash::writeGriddedData(
 void Ash::averageGriddedData (
   float *abs_air_conc,
   float *rel_air_conc, 
+	float *abs_air_size,
   float *abs_fo_conc,
-  float *rel_fo_conc
+  float *rel_fo_conc,
+	float *abs_fo_size
   )
 {
   static bool init_avg_data = true;
@@ -1640,17 +1655,21 @@ void Ash::averageGriddedData (
   {
     cc.abs_air_conc_avg = new float[cc.d3size];
     cc.rel_air_conc_avg = new float[cc.d3size];
+		cc.abs_air_size_avg = new float[cc.d3size];
     cc.abs_fo_conc_avg  = new float[cc.d2size];
     cc.rel_fo_conc_avg  = new float[cc.d2size];
+		cc.abs_fo_size_avg  = new float[cc.d2size];
     for (int i = 0; i < cc.d2size; i++) 
     {
       cc.abs_fo_conc_avg[i] = 0.0;
       cc.rel_fo_conc_avg[i] = 0.0;
+			cc.abs_fo_size_avg[i] = 0.0;
     }
     for (int i = 0; i < cc.d3size; i++)
     {
       cc.abs_air_conc_avg[i] = 0.0;
       cc.rel_air_conc_avg[i] = 0.0;
+			cc.abs_air_size_avg[i] = 0.0;
     }
     init_avg_data = false;
   }
@@ -1663,6 +1682,8 @@ void Ash::averageGriddedData (
       1/((float)wgt+1)*rel_air_conc[i];
     cc.abs_air_conc_avg[i] = (float)wgt/((float)wgt+1)*cc.abs_air_conc_avg[i] + 
       1/((float)wgt+1)*abs_air_conc[i];
+    cc.abs_air_size_avg[i] = (float)wgt/((float)wgt+1)*cc.abs_air_size_avg[i] + 
+      1/((float)wgt+1)*abs_air_size[i];
   }
 
   // average the 2D grids  
@@ -1672,6 +1693,8 @@ void Ash::averageGriddedData (
       1/((float)wgt+1)*rel_fo_conc[i];
     cc.abs_fo_conc_avg[i] = (float)wgt/((float)wgt+1)*cc.abs_fo_conc_avg[i] + 
       1/((float)wgt+1)*abs_fo_conc[i];
+    cc.abs_fo_size_avg[i] = (float)wgt/((float)wgt+1)*cc.abs_fo_size_avg[i] + 
+      1/((float)wgt+1)*abs_fo_size[i];
   }
   
   // increment the weighting factor

@@ -64,6 +64,7 @@ public:
     void quicksort();
     void setSortingProtocol(char *arg);
     void writeGriddedData(std::string eDate, bool last);
+    void writeGriddedFile(std::string filename);
 
 #ifdef PUFF_STATISTICS
     void clearStats();
@@ -112,8 +113,10 @@ private:
     int allocate();
     void averageGriddedData(float *abs_air_conc,
                             float *rel_air_conc, 
+														float *abs_air_size,
 			    float *abs_fo_conc,
-                            float *rel_fo_conc);
+                            float *rel_fo_conc,
+														float *abs_fo_size);
 
 	void rotateGrid(double *loc, float val, ID l);
 	void rotateGridPoint(double *loc, float val, ID l);

@@ -139,6 +139,8 @@ void Planes::newFlight(const struct flData* data)
 flData parseLine(char* line)
 {
   flData data;
+
+	data.fltnum=data.cname=data.origin=data.dest=data.make=NULL;
   data.empty = true; // assume data is bad at first
   char *field[10];  // there are 10 possible data fields in each line
   
@@ -242,6 +244,7 @@ void Planes::calculateExposure (CCloud *cc)
 		float exp_c = 0; // conc. exposure for stationary sites
     float e_time = 0; // time this flight is exposed, used for debugging
 		                  // when some flights have sparse data
+		double max_dose = 0; // maximum one-time concentration
     
     for (unsigned int i = 0; i < (*f).location.size()-1; i++)
     {
@@ -250,22 +253,34 @@ void Planes::calculateExposure (CCloud *cc)
 			// g/m^3 * s * m/s = g/m^2
       exp += dose*((*f).location[i+1].time-(*f).location[i].time) * (*f).location[i].speed;
       exp_c += dose*((*f).location[i+1].time-(*f).location[i].time);
+			if (dose > max_dose) { max_dose = dose; }
       e_time += (*f).location[i+1].time - (*f).location[i].time;
     }
     // only report non-zero values
 //    if (exp > 1) 
-//						exposure.insert(fs_mmap::value_type(exp, (*f).fltnum));      
-//   std::cout << (*f).fltnum << "(" << e_time << ")\n";
-		std::cout << (*f).fltnum << " => ";
 	// stationary sites have zero exp due to zero speed, but exp_c is nonzero
-	if ((exp == 0) and (exp_c != 0)) {std::cout <<exp_c<<" g*s/m^3\n";}
-	else {std::cout <<exp<< " g/m^2\n";}
+	// add units and max value to the flight number string
+	// keep exp as key so sorting occurs on that value
+		std::string fn = (*f).fltnum;
+		char *max_str = new char[10];
+		sprintf(max_str, "%1.3e",max_dose);
+		if ((exp==0) and (exp_c != 0)) 
+		{
+			fn.append(" [gs/m^3] max: ");
+			fn.append(max_str);
+			exposure.insert(fs_mmap::value_type(exp_c, fn));
+		} else {	
+			fn.append(" [g/m^2] max: ");
+			fn.append(max_str);
+			exposure.insert(fs_mmap::value_type(exp, fn));      
+		}
+//   std::cout << (*f).fltnum << "(" << e_time << ")\n";
 
    }
    // print results
    for (fs_mmap::const_iterator i = exposure.begin(); i != exposure.end(); i++)
    {
-//     std::cout << i->first << " => " << i->second << "\t" << "\n";
+     std::cout << i->first << " => " << i->second << "\n";
    }
   return;
 }
@@ -273,7 +288,6 @@ void Planes::calculateExposure (CCloud *cc)
 // delete allocated space in an flData structure
 void Planes::clearData(flData* data)
 {
-
     if (data->fltnum) free(data->fltnum);
     if (data->cname) free(data->cname);
     if (data->origin) free(data->origin);

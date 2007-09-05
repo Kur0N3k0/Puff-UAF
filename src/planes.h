@@ -37,7 +37,8 @@ struct Flight
 struct CCloud
 {
   public:
-  float *abs_air_conc_avg, *rel_air_conc_avg, *abs_fo_conc_avg, *rel_fo_conc_avg;
+  float *abs_air_conc_avg, *rel_air_conc_avg, *abs_air_size_avg, *abs_fo_conc_avg, *rel_fo_conc_avg, *abs_fo_size_avg;
+	float max_abs_air_conc, max_rel_air_conc, max_abs_fo_conc, max_rel_fo_conc;
   float *xValues, *yValues, *zValues;
   long int *tValues;
   int xSize, ySize, zSize, tSize;

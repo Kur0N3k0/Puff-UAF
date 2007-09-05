@@ -70,6 +70,7 @@ void parse_options(int argc, char **argv)
     {"gridBox",required_argument,0,GRIDBOX},
     {"gridLevels",required_argument,0,GRIDLEVELS},
     {"gridOutput",optional_argument,0,GRIDOUTPUT},
+		{"gridSize",required_argument,0,GRIDSIZE},
     {"griddedOutput",optional_argument,0,GRIDOUTPUT},
     {"help",no_argument,0,HELP},
     {"latLon",required_argument,0,LATLON},
@@ -384,19 +385,33 @@ void option_switch(int opt, const char *optarg, const struct option *opt_lng) {
       }
       break;
     case GRIDOUTPUT:
-      argument.gridOutput = true;
+		// setting true turns on computeConcentration
+      if ( (optarg) && strlen(optarg) > 0 ) {
+        if (toupper(optarg[0]) == 70) argument.gridOutput = false;
+ 	else if (toupper(optarg[0]) == 84) {
+		argument.gridOutput = true;
+		argument.computeConcentration = true;
+		} 
+ 	else 
+ 	  std::cout << "unrecognized boolean option -gridOutput=" << optarg << std::endl;
+         }  // if ( (optarg) && strlen(optarg) > 0 )
+		else {argument.gridOutput = true;}
+      break;
+    case GRIDSIZE:
       if ( (optarg) && strlen(optarg) > 0 ) {
         float a, b;  // dummy variables for the sscanf() check
 	// it is easier to assign these values later
         if (sscanf(optarg, "%fx%f", &a, &b) == 2)
 	{
-          argument.gridOutputOptions = strdup(optarg);
+          argument.gridSize = strdup(optarg);
 	} else {
-	  std::cerr << "WARNING: invalid value for option -gridOutput: \"" <<
-	    optarg << "\".  Using default values.\n";
+	  std::cerr << "ERROR: invalid value for option -gridSize: \"" <<
+	    optarg << "\". Using default values. \n";
+			exit(0);
 	}
       }
       break;
+
     case HELP:
       show_help();
       exit(0);
@@ -546,7 +561,7 @@ void option_switch(int opt, const char *optarg, const struct option *opt_lng) {
       break;
     case PLANESFILE:
       argument.planesFile.push_back(optarg);
-			argument.gridOutput = true;
+			argument.computeConcentration = true;
       break;
     case PLUMEMAX:
       if (sscanf(optarg, "%lf", &argument.plumeMax) == 0) 
@@ -785,6 +800,7 @@ void set_defaults(struct Argument *argument) {
   argument->ashLogSdev = 1;
 	argument->ashOutput = true;
   argument->averageOutput = false;
+	argument->computeConcentration = false;
   argument->dem = (char)NULL;
   argument->dem_lvl = 0;
   argument->diffuseH = 10000;
@@ -801,7 +817,7 @@ void set_defaults(struct Argument *argument) {
   argument->gridOutput = false;
   argument->gridBox = (char)NULL;
   argument->gridLevels = -1;
-  argument->gridOutputOptions = "0.5x2000";
+  argument->gridSize = "0.5x2000";
 	argument->logFile = (char)NULL;
   argument->model = "puff";
   argument->nAsh = 2000;
@@ -868,7 +884,8 @@ void show_help() {
   std::cout << "  -fileZ        filename   (string)\n";
   std::cout << "  -gridBox      x:x/y:y/z:z(string)\n";
   std::cout << "  -gridLevels   value      (integer)\n";
-  std::cout << "  -gridOutput   DXxDZ      (string) in degrees x meters\n";
+	std::cout << "  -gridOutput\n";
+  std::cout << "  -gridSize     DXxDZ      (string) in degrees x meters\n";
   std::cout << "  -logFile      filename   (string)\n";
   std::cout << "  -lonLat       XX/YY      (string) volcano location\n";
   std::cout << "  -model        value      (string)\n";
