@@ -274,7 +274,7 @@ float Grid::mean()
 	float sum = 0;
 	unsigned int icount = 0;
 	// this could be done over any dimension
-	for (int i=0; i<fgData[LON].size; i++)
+	for (unsigned int i=0; i<fgData[LON].size; i++)
 	{
 		sum += mean_at_lon(i);
 		icount++;
