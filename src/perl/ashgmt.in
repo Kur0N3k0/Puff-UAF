@@ -34,6 +34,7 @@ GetOptions(
 	"conc-limits=s"=> \$opt{conc_range},
 	"contour"			=> \$opt{contour},
 	"contours"		=> \$opt{contour},
+  "cpt=s"         => \$opt{cpt},
   "fallout"     => \$opt{fallout},
 	"fork"        => \$opt{'fork'},
   "grayscale"   => \$opt{grayscale},
@@ -52,6 +53,7 @@ GetOptions(
   "output=s"    => \$opt{output},
   "pixels=i"    => \$opt{pixels},
   "projection=s"=> \$opt{projection},
+  "save-cpt"    => \$opt{save_cpt},
 	"save-postscript"=> \$opt{save_ps},
 	"save-ps"     => \$opt{save_ps},
   "stamp!"      => \$opt{stamp},
@@ -108,7 +110,7 @@ foreach my $file (@file) {
 		# parent here
 		push @pids, $pid;
 	} elsif (defined $pid) {
-	$opt{cpt}=tmpnam();
+	$opt{cpt}=tmpnam() unless ($opt{cpt});
 	$opt{ashfile} = $file->{in};
 	$opt{output} = $file->{out};
 	$opt{timestr} = $file->{'time'} . ".";
@@ -122,7 +124,11 @@ foreach my $file (@file) {
   ps2png(\%opt);
   # clear the output file, not necessary if parallel mode
   undef($opt{output});
+	if ($opt{save_cpt}) {
+		print "saved $opt{cpt}\n";
+	} else {
 	unlink($opt{cpt});
+	}
 	exit(0) if $opt{'fork'};
 	} # end if child process
   } # end of parent loop
@@ -399,7 +405,7 @@ sub contours {
 	# make a color palette, hgt spec's can change here
 	# calculate the interval
 	my $cintv = $opt{conc_max}/$opt{num_levels};
-	`$main::makecpt_exe -T$opt{conc_min}/$opt{conc_max}/$cintv > $opt{cpt}`;
+	`$main::makecpt_exe -T$opt{conc_min}/$opt{conc_max}/$cintv > $opt{cpt}` unless (-e $opt{cpt});
 		
 	my $command = "$main::pscontour_exe $xyzfile $main::maprange -C$opt{cpt} -I -O -K >> $opt{output}";
 	# change to elipse plotting unless contours requested
@@ -921,7 +927,10 @@ sub defaults {
 	# default airborne and not fallout
 	if ($opt{airborne}) { $opt{fallout} = 0; }
 	else {$opt{airborne} = 1; }
-	$opt->{cpt} = tmpnam() unless (defined ($opt{cpt}));
+	if ($opt{cpt} and not -e $opt{cpt}) {
+		print "color pallete file \"$opt{cpt}\" does not exist\n";
+		undef $opt{cpt};
+	}
 	$opt->{conc_min} = 0.05 unless (defined ($opt{conc_min}));
 #	$opt->{conc_max} = 3 unless (defined ($opt{conc_max}));
 	$opt->{contour} = 0 unless (defined ($opt->{contour}));
@@ -1002,6 +1011,9 @@ concentration files (*conc*.nc).
 --contour
 	Use GMT pscontour routine insted of plotting dots for concentration plotting.
 
+--cpt=filename
+  Use the GMT color pallete in 'filename'.  This may be used to easily customize the color pallete by first using --save-cpt, then editing the generated file. Note that the cpt file will be deleted each time unless --save-cpt is used, even if using an existing file.
+ 
 --fallout
 	Only plot grounded particles.  This is exclusive of --airborne.
 
@@ -1050,6 +1062,9 @@ This would change the text color to red and use a 9-pixel hexagon as a marker. T
 
 --projection=mercator|polar|lambert
   Use this projection instead of the default.  If the map crosses the equator, only mercator can be used.
+
+--save-cpt
+  Save the color pallete file, which is otherwise generated and deleted each time.  This is useful for customizing the color pallete, see --cpt option above.
 
 --save-postscript
   Keep the intermediate postscript file that GMT generates.  --save-ps also works.
