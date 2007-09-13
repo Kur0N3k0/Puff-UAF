@@ -35,6 +35,7 @@ GetOptions(
 	"contour"			=> \$opt{contour},
 	"contours"		=> \$opt{contour},
   "cpt=s"         => \$opt{cpt},
+	"cpt-table=s" => \$opt{cpt_table},
   "fallout"     => \$opt{fallout},
 	"fork"        => \$opt{'fork'},
   "grayscale"   => \$opt{grayscale},
@@ -405,9 +406,12 @@ sub contours {
 	# make a color palette, hgt spec's can change here
 	# calculate the interval
 	my $cintv = $opt{conc_max}/$opt{num_levels};
-	`$main::makecpt_exe -T$opt{conc_min}/$opt{conc_max}/$cintv > $opt{cpt}` unless (-e $opt{cpt});
+	my $command = "$main::makecpt_exe -T$opt{conc_min}/$opt{conc_max}/$cintv ";
+	$command .= "-C$opt{cpt_table} " if ($opt{cpt_table});
+	print STDERR "$command > $opt{cpt}" if ($opt{verbose} and not -e $opt{cpt});
+	`$command > $opt{cpt}` unless (-e $opt{cpt});
 		
-	my $command = "$main::pscontour_exe $xyzfile $main::maprange -C$opt{cpt} -I -O -K >> $opt{output}";
+	$command = "$main::pscontour_exe $xyzfile $main::maprange -C$opt{cpt} -I -O -K >> $opt{output}";
 	# change to elipse plotting unless contours requested
   $command = "$main::psxy_exe $xyzfile $main::maprange -C$opt{cpt} -Se -O -K >> $opt{output}" unless ($opt{contour});
 	print STDERR "$command\n" if ($opt{verbose});
@@ -1013,6 +1017,9 @@ concentration files (*conc*.nc).
 
 --cpt=filename
   Use the GMT color pallete in 'filename'.  This may be used to easily customize the color pallete by first using --save-cpt, then editing the generated file. Note that the cpt file will be deleted each time unless --save-cpt is used, even if using an existing file.
+
+--cpt-table
+  Specify the GMT color table to use, default is rainbow. Append -I to reverse scale (don't forget to quote the option in that case).  See makecpt(l).
  
 --fallout
 	Only plot grounded particles.  This is exclusive of --airborne.
