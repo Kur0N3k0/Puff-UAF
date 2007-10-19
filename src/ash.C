@@ -295,17 +295,11 @@ void Ash::init_linear_column(float height, float bottom) {
 void Ash::init_expon_column(float height, float width, float bottom) {
     static float spread;
     
-    // Linear column height distribution
-    for (int i=ashNpart; i<ashN; i++) {
-	
-	
-	// Make sure it is positive
-	particle[i].z = -1.0;
-	while( particle[i].z < bottom ) {
-	    spread = 0.25*width*ran1(iseed);
-	    particle[i].z = height - double(width*expdev(iseed)) + spread;
+	// Linear column height distribution
+	for (int i=ashNpart; i<ashN; i++) {
+		particle[i].z = height-(expdev(width,iseed))/width*(height-bottom);
 	}
-    }    
+	
   return;
 }
 

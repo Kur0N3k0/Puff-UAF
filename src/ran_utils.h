@@ -5,7 +5,7 @@
 void init_seed(int& iseed, int set);
 float ran1(int &idum);
 float gasdev(int &idum);
-float expdev(int &idum);
+float expdev(float w, int &idum);
 float poidev(float xm, int &idum);
 float gammln(float xx);
 float factorial(float f);

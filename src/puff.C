@@ -802,7 +802,7 @@ int make_ash (int repeat_count)
       }
     case ('e'):{
 	ash.init_expon_column (argument.plumeMax,
-			       1000 * argument.plumeZwidth,
+			       argument.plumeZwidth,
 			       argument.plumeMin);
 	break;
       }

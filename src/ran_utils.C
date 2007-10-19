@@ -144,12 +144,17 @@ void init_seed(int& iseed, int set) {
 // This routine is also from Numerical Recipes in C, it returns
 // a exponential distribution with unit mean
 ////////////////////////////////////////////////////////////////////////////
-float expdev(int &idum) {
-    static float dum;
-    do
-	dum = ran1(idum);
-    while (dum == 0.0);
-    return -log(dum);
+float expdev(float w, int &idum) {
+	double val, val2, prob;
+
+	while (1) {
+	val2=ran1(idum);
+	prob = w*exp(-w*val2);
+	val = w*ran1(idum);
+	if (prob > val) {
+	 return val;	
+		}
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////

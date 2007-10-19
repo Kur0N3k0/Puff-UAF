@@ -17,6 +17,9 @@
 # Rorik Peterson
 # ffrap1@uaf.edu
 #
+# modifications
+# Aug 22 2007
+# less strict on the length of the time value, no longer only 8 digits
 
 use File::Basename;
 
@@ -35,18 +38,12 @@ $outfile = "$infile.$$";
 
 #extract the first time value
 $result = `$ncks_exe -H -d time,0,0 -v time $infile`;
-#assume the value is 8 digits long
-($time) = $result=~/\]=(\d{8}).*\n/;
-if (length($time) < 8) 
+($time) = $result=~/time\[0\]=(\d+)/;
+unless ($time > 0)
 {
-  die "failed to extract time value from result \"$result\"\n";
+  print"failed to extract time value from result \"$result\"\nMaybe the file is already rereferenced.\n";
+	exit;
 }
-
-# get the base_date time
-#$result = `ncdump -h $infile | grep base_date`;
-#remove newlines
-#$result=~s/\n//g;
-#($y,$m,$d) = $result=~/(\d{4}).*(\d{1}).*(\d{1}).*/;
 
 # get the year of this data.  Assume name is [uv]wnd.????.nc
 basename($infile) =~ /[uv]wnd\.(\d{4})\.nc/;
