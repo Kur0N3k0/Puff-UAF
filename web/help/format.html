@@ -1,0 +1,11 @@
+<html><head><title>Help - Image format</title></head>
+<body>
+<h1>Image Format</h1>
+The following image formats are possible:
+<ul>
+<li><b>particle(GIF)</b> - plot of individual tracer particles in GIF format using the Generic Mapping Tools (GMT) and Puff's ashgmt program.  Particles are color coded by height, and the size of each is selected with 'particle size' below.<li?
+<li><b>particle(JPG)</b> - plot of individual tracer particles in JPEG format using Puff's ashxp program.  This is faster than any other format.  Particles are color-coded by height using the 'color' protocol selected below.  The color option 'isopach' plots by concentration instead of individual particles.</li>
+<li><b>conc(blocks)</b> - Produce a concentration plot in GIF format using the Generic Mapping Tools (GMT) using large blocks. The size of the blocks <u>must</u> be specified using the 'gridOutput' option in Puff above, and cannot be altered afterwards.  A specific range can be selected using 'range[m]' above.</li>
+<li><b>conc(contours)</b> - Produce a concentration plot in GIF format using the Generic Mapping Tools (GMT) using contour lines.  Non-eliptical and other odd shaped contours may be badly resolved, so use the 'block' option instead.</li> 
+
+</body></html>
