@@ -10,6 +10,8 @@
 #include "libsrc/dmapf-c/cmapf.h"
 #endif
 
+#include <cstring>
+
 class Dem {
   private:
     int no_data_value,

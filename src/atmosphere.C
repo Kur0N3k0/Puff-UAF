@@ -201,7 +201,7 @@ int Atmosphere::make_winds ()
   // Read U and V:
   // give the U wind a variable name so the netcdf Grid reader
   // can find the right variable id
-  U.set_name((resources.getString("varU")).c_str() );
+  U.set_name((resources.getString((char*)"varU")).c_str() );
   // override this value with the command-line argument if given
   if ( argument.varU )
   {
@@ -209,7 +209,7 @@ int Atmosphere::make_winds ()
   }
 
   if ( !argument.fileU ) {
-    pUfile = resources.mostRecentFile(argument.eruptDate, "u", argument.runHours);
+    pUfile = resources.mostRecentFile(argument.eruptDate, (char*)"u", argument.runHours);
   } else {
     pUfile = argument.path;
     pUfile.append(argument.fileU);
@@ -239,7 +239,7 @@ int Atmosphere::make_winds ()
 //   }
 
   // Continue reading V, make W:
-  V.set_name((resources.getString("varV")).c_str() );
+  V.set_name((resources.getString((char*)"varV")).c_str() );
   // override this value with the command-line argument if given
   if (argument.varV)
   {
@@ -248,7 +248,7 @@ int Atmosphere::make_winds ()
 
   // if -fileV was not specified, use the resources file
   if ( !argument.fileV ) {
-    pVfile = resources.mostRecentFile(argument.eruptDate, "v", argument.runHours);
+    pVfile = resources.mostRecentFile(argument.eruptDate, (char*)"v", argument.runHours);
   } else {
     pVfile = argument.path;
     pVfile.append(argument.fileV);
@@ -273,7 +273,7 @@ int Atmosphere::make_winds ()
     std::string Tfile;
     if ( !argument.fileT ) 
     {
-      Tfile = resources.mostRecentFile(argument.eruptDate, "T", argument.runHours);
+      Tfile = resources.mostRecentFile(argument.eruptDate, (char*)"T", argument.runHours);
     } else {
       Tfile = argument.fileT;
     }
@@ -303,13 +303,13 @@ int Atmosphere::make_winds ()
 		// variable name, default 'Z'
     uniZ.set_name("Z");
 		// resource file may specify it
-  	uniZ.set_name((resources.getString("varZ")).c_str() );
+  	uniZ.set_name((resources.getString((char*)"varZ")).c_str() );
   	// override this value with the command-line argument if given
   	if ( argument.varZ ) { uniZ.set_name(argument.varZ); }
 
     std::string Zfile;
     if ( !argument.fileZ ) {
-      Zfile = resources.mostRecentFile(argument.eruptDate, "z", argument.runHours);
+      Zfile = resources.mostRecentFile(argument.eruptDate, (char*)"z", argument.runHours);
     } else {
       Zfile = argument.fileZ;
     }

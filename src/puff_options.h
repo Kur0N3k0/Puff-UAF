@@ -24,6 +24,8 @@
 #include <config.h>
 #endif // HAVE_CONFIG_H
 
+#include <cstring>
+#include <cstdlib>
 #include <string>
 #include <vector>
 

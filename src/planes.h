@@ -2,9 +2,11 @@
 #define PLANES_H
 #include <ctime> // typedef time_t
 #include <string>
+#include <cstring>
 #include <vector>
 #include <fstream>
 #include <map>
+#include <cstdlib>
 
 // each object of class Planes has a vector of 'Flight', one per flight number
 // with the same origin and destination.  Each 'Flight' has a vector of 

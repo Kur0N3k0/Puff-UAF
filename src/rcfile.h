@@ -2,6 +2,7 @@
 #define PUFF_RCFILE_H
 #define PUFF_MAX_NUM_MASKS 100
 #include <string>
+#include <cstring>
 
 class PuffRC {
   private:

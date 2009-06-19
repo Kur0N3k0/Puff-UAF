@@ -8,6 +8,9 @@
 #define MAXVOLCTEXTLEN	100
 #define MAXLINELENGTH	255
 
+#include <cstring>
+#include <cstdlib>
+
 typedef struct {
    char		name[MAXVOLCTEXTLEN + 1];
    char		location[MAXVOLCTEXTLEN + 1];

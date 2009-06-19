@@ -20,6 +20,7 @@
 
 #include <cstdlib>
 #include <string>
+#include <cstring>
 
 #ifdef HAVE_NETCDFCPP_H
 #include <netcdfcpp.h>

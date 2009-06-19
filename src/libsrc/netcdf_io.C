@@ -637,7 +637,7 @@ const double timeOffsetUsingUDUnits(NcVar *vp) {
     std::cerr << "\" which is not a valid UTUnit time unit\n";
     return (const double)NULL;
     }
-  const double offset = (reftime_unit_sct.origin) - (time_t_unit_sct.origin);
+  const double offset = (reftime_unit_sct.origin*reftime_unit_sct.factor) - (time_t_unit_sct.origin*time_t_unit_sct.factor);
 
   utTerm();	   
 	delete att;

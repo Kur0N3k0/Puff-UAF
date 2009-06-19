@@ -19,6 +19,9 @@
 
 #ifndef ASHDUMP_OPTIONS_H
 #define ASHDUMP_OPTIONS_H
+#include <cstring>
+#include <cstdlib>
+
 struct Argument {
   bool age, airborne, fallout, feet, hdr, lat, lon, stats, showHeight;
   bool showParams, showSize;

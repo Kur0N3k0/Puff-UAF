@@ -25,6 +25,8 @@
 #include <string>
 #include <list>
 #include <cmath>
+#include <cstring>
+#include <cstdlib>
 
 #ifdef HAVE_NETCDFCPP_H
 #include <netcdfcpp.h>

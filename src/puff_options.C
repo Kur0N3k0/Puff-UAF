@@ -817,9 +817,9 @@ void set_defaults(struct Argument *argument) {
   argument->gridOutput = false;
   argument->gridBox = (char)NULL;
   argument->gridLevels = -1;
-  argument->gridSize = "0.5x2000";
+  argument->gridSize = (char*)"0.5x2000";
 	argument->logFile = (char)NULL;
-  argument->model = "puff";
+  argument->model = (char*)"puff";
   argument->nAsh = 2000;
   argument->newline = false;
   argument->nmc = false;
@@ -827,14 +827,14 @@ void set_defaults(struct Argument *argument) {
   argument->noPatch = false;
   argument->opath = "./";
   argument->particleOutput = true;
-  argument->path = "";
+  argument->path = (char*)"";
   argument->phiDist = (char)NULL;
   argument->planesFile.clear();
   argument->plumeMax = 16000;
   argument->plumeMin = 0;
   argument->plumeHwidth = 0;
   argument->plumeZwidth = 3;
-  argument->plumeShape = "linear";
+  argument->plumeShape = (char*)"linear";
   argument->quiet = false;
   argument->rcfile = (char)NULL;
 	argument->regionalWinds = (double)NULL;
@@ -849,7 +849,7 @@ void set_defaults(struct Argument *argument) {
   argument->shiftWest = true;
   argument->showVolcs = false;
   argument->silent = false;
-  argument->sorted = "yes";
+  argument->sorted = (char*)"yes";
   argument->varU = (char)NULL;
   argument->varV = (char)NULL;
   argument->verbose = false;
