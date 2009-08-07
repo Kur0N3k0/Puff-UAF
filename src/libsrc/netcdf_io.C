@@ -147,7 +147,8 @@ int Grid::read_cdf(const std::string* cdf_file,
   {
     // some conventions have the time variable in "hours since ..." and the
     // reftime can be obtained from units attribute.
-    if (strstr(fgData[FRTIME].units,"hours since") != NULL)
+    if ((strstr(fgData[FRTIME].units,"hours since") != NULL) ||
+				(strstr(fgData[FRTIME].units,"seconds since") != NULL))
     {
       dp = ncfile.get_var((NcToken)fgData[FRTIME].name);
       strcpy(fgReftime,reftimeFromNcVar(dp));
@@ -177,6 +178,13 @@ int Grid::read_cdf(const std::string* cdf_file,
   // we make sure the VAR data is read in the correct order below
   shellsort(fgData[FRTIME].val, fgData[FRTIME].size);
   
+	// time data could be in seconds and not hours
+	if (strstr(fgData[FRTIME].units,"seconds") != NULL) {
+		for (int i=0; i<fgData[FRTIME].size; i++) {
+			fgData[FRTIME].val[i] = fgData[FRTIME].val[i]/3600;
+			}
+		}
+
   // we want to read data that complete covers from eruptDate until
   // (eruptDate+runHours) and discard the rest.
   // We'll convert everything to a (time_t) form,
@@ -644,7 +652,7 @@ const double timeOffsetUsingUDUnits(NcVar *vp) {
   return offset;
     
 #else
-  return (const long int)NULL;
+  return (const double)-1;
 #endif
   }
 ////////////////////////////////////////////////////////////////////////////
@@ -677,9 +685,10 @@ char *Grid::reftimeFromNcVar(NcVar *vp) {
 
   // get the time offset from the units if possible
   double offset = timeOffsetUsingUDUnits(vp);
-  // NULL returned if it failed
-  if (!offset) {
-    std::cout << std::endl << "WARNING: assuming \"time since 1992-1-1 00:00\"\n";
+  // -1 returned if it failed
+	// this needs to get changed because -1 just might be valid, but unlikely
+  if (offset == -1) {
+    std::cout << std::endl << "WARNING: assuming \"hours since 1992-1-1 00:00\"\n";
     offset = 694224000;  // seconds from 1970-1-1 to  1992-1-1
     }
   
