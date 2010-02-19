@@ -1,0 +1,22 @@
+#!/usr/bin/perl -I/home/josh/puff/web
+
+use Webpuff;
+use strict;
+
+my $httpd = "$Webpuff::home_exe/bin/mini_httpd";
+my $pidfile = "$Webpuff::pidfile";
+
+if (-e $pidfile) {
+  my $pid = `cat $pidfile`;
+  chomp $pid;
+  print "The webpuff server is already running as process $pid.  If not, remove the lock file $pidfile.\n";
+  exit(0);
+  }
+
+# -i [file] writes PID to this file
+chdir "$Webpuff::home_web" or die "failed going to \"$Webpuff::home_web\": $!\n";
+print "starting webpuff... point your browser to http://127.0.0.1:1234/login.pl\n";
+exec "$httpd -h 127.0.0.1 -p 1234 -i $pidfile -c \"*.pl\"";
+
+# failed exec goes here
+print "failed to exec $httpd: $!\n";

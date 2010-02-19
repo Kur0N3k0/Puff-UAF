@@ -1,0 +1,1101 @@
+#!/usr/bin/perl
+
+use Getopt::Long;
+use POSIX qw(tmpnam strftime sys_wait_h);
+use strict;
+
+# These paths may need to be modified, configure will attempt to fill them in
+$main::gifsicle_exe = "/usr/bin/gifsicle";
+$main::ncks_exe = "/usr/bin/ncks";
+$main::gs_exe = "/usr/bin/gs";
+$main::convert_exe = "/usr/bin/convert";
+$main::gmtset_exe = "/usr/bin/gmtset";
+$main::psbasemap_exe = "/usr/bin/psbasemap";
+$main::pscoast_exe = "/usr/bin/pscoast";
+$main::pscontour_exe = "/usr/bin/pscontour";
+$main::pstext_exe = "/usr/bin/pstext";
+$main::psxy_exe = "/usr/bin/psxy";
+$main::makecpt_exe = "/usr/bin/makecpt";
+# end of user modifications
+
+$main::version = "2.2.1";
+
+my %opt;
+
+# store the command line before parsing
+store_history();
+
+GetOptions(
+  "airborne"    => \$opt{airborne},
+	"basemap=s"   => \$opt{basemap},
+  "bgfile=s"    => \$opt{bgfile},
+  "color=s"     => \$opt{color},
+	"conc-range=s"=> \&parse_range,
+	"conc-limits=s"=> \$opt{conc_range},
+	"contour"			=> \$opt{contour},
+	"contours"		=> \$opt{contour},
+  "cpt=s"         => \$opt{cpt},
+	"cpt-table=s" => \$opt{cpt_table},
+  "fallout"     => \$opt{fallout},
+	"fork"        => \$opt{'fork'},
+  "grayscale"   => \$opt{grayscale},
+  "gridlines=s" => \$opt{gridlines},
+	"no-gridlines"=> \$opt{no_gridlines},
+	"help"				=> \&print_help,
+  "hgt-range=s" => \&parse_range,
+	"label=s"     => \&list_of_labels,
+	"label-file=s"=> sub {$opt{label_file}.= "@_[1]|";},
+	"labelfile=s" => sub {$opt{label_file}.= "@_[1]|";},
+  "latlon=s"    => \$opt{latlon},
+  "magnify=s"   => \$opt{magnify},
+  "meridian"    => \$opt{meridian},
+  "movie=s"     => \$opt{movie},
+	"num-levels=i"=> \$opt{num_levels},
+  "output=s"    => \$opt{output},
+  "pixels=i"    => \$opt{pixels},
+  "projection=s"=> \$opt{projection},
+  "save-cpt"    => \$opt{save_cpt},
+	"save-postscript"=> \$opt{save_ps},
+	"save-ps"     => \$opt{save_ps},
+  "stamp!"      => \$opt{stamp},
+	"time=s"			=> \$opt{'time'},
+	"usage"       => \&print_help,
+	"variable=s"  => \$opt{var},
+  "verbose"     => \$opt{verbose},
+	"version" => sub { print "2.2.1\n"; exit(0);}
+  );
+
+# check that the GMT utilities are all here
+check_utilities();
+
+# determine the file type
+$opt{filetype} = filetype($ARGV[0]);
+
+#set default options and do a little parameter checking
+defaults(\%opt);
+
+# make map 7 inches across, adjust with --magnify
+$main::xinch=7;
+
+# set default GMT parameters
+set_gmt_parameters();
+
+# set the bounding box and put into $opt{latlon}
+unless ($opt{latlon}) {
+  foreach my $file (@ARGV) {
+    boundingbox(\%opt, $file);
+  }
+}
+
+# open a temporary file for the basemap. We will copy it to each output file
+my $basefile = tmpnam();
+
+#open STDOUT, ">$basefile";
+$opt{output} = $basefile;
+$main::maprange = basemap(\%opt);
+#close STDOUT;
+
+# create an array of hashes of the in/out files
+my @file = fileio(@ARGV);
+
+# determine concentration range for selected times
+conc_range(\%opt, @file);
+
+# array to hold process ID's of all the children
+my @pids;
+# loop here over all 'in' files
+foreach my $file (@file) {
+	my $pid = 0;
+#	if ($pid = fork) {
+	if ($opt{'fork'} and $pid = fork) {
+		# parent here
+		push @pids, $pid;
+	} elsif (defined $pid) {
+	$opt{cpt}=tmpnam() unless ($opt{cpt});
+	$opt{ashfile} = $file->{in};
+	$opt{output} = $file->{out};
+	$opt{timestr} = $file->{'time'} . ".";
+	`cp $basefile $opt{output}`;
+  particles2(\%opt) if ($opt{filetype} eq "ash");
+	contours(\%opt) if ($opt{filetype} eq "conc");
+	add_labels(\%opt);
+  annotation(\%opt) if $opt{stamp};
+  
+	# convert to a PNG using ghostscript
+  ps2png(\%opt);
+  # clear the output file, not necessary if parallel mode
+  undef($opt{output});
+	if ($opt{save_cpt}) {
+		print "saved $opt{cpt}\n";
+	} else {
+	unlink($opt{cpt});
+	}
+	exit(0) if $opt{'fork'};
+	} # end if child process
+  } # end of parent loop
+  
+# flag for watching when child processes are all finished
+my $children = 1;
+while ($children) {
+	sleep 1; # sleep a little to not consume resources looping
+	# assume children are all finished
+	$children = 0;
+	# loop over all child PID's to see if any are still running
+	foreach (@pids) { $children = 1 unless (waitpid($_,&WNOHANG) == -1); }
+	}
+
+  # make a movie as well if necessary
+  make_movie(\%opt, \@file) if (defined($opt{movie}) ); 
+
+	# unlink the temporary basemap and color palette files
+	unlink($basefile);
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub check_utilities {
+	unless ($main::gmtset_exe and 
+			$main::gmtset_exe and
+			$main::psbasemap_exe and
+			$main::pscoast_exe and
+			$main::pscontour_exe and
+			$main::pstext_exe and
+			$main::psxy_exe and
+			$main::makecpt_exe ) {
+	print "GMT utilities are not installed or could not be found.  If GMT has been installed, specify the location of the utilities at the top of this script. They are available at http://gmt.soest.hawaii.edu\n";
+	exit(0);
+	}
+	unless ($main::ncks_exe) {
+	print "The NCO utilities are not installed or could not be found.  If NCO has been installed, specify the location of the utilities at the top of this script. They are available at http://nco.sf.net\n";
+	exit(0);
+	}
+	return;
+}
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub set_gmt_parameters {
+  
+  # these need to be set everytime since ./.gmtdefaults will be written, and
+  # then used with subsequent GMT commands.  Thus, there is a .gmtdefaults
+  # in every directory from where this program is executed.
+  my $gmtset = "$main::gmtset_exe";
+  
+  `$gmtset BASEMAP_FRAME_RGB 0/0/0`;
+  `$gmtset BASEMAP_TYPE FANCY`;
+  `$gmtset X_ORIGIN 0.5`;
+  `$gmtset Y_ORIGIN 3.0`;
+  `$gmtset UNIX_TIME_POS 0.06/0.009i`;
+  `$gmtset GLOBAL_X_SCALE 1`;
+  `$gmtset GLOBAL_Y_SCALE 1`;
+  `$gmtset PAPER_MEDIA letter`;
+  `$gmtset ANOT_FONT Helvetica`;
+	`$gmtset MEASURE_UNIT cm`;
+
+  return;
+  }
+  
+# # # # # # # # # # # # # # # # # # # # # # # #
+# determine the global concentration range for all files/times
+sub conc_range {
+
+	my $opt = shift;
+	my @files = shift;
+
+	return if (defined $opt->{conc_max} and defined $opt->{conc_min});
+
+	# local values
+	my ($cmin, $cmax);
+
+	foreach (@files) {
+		my $timestr=$_->{'time'} . ".";
+		open PIPE, "$main::ncks_exe -d time,$timestr -d level,$opt->{hgt_min},$opt->{hgt_max} -v $opt->{var} -C $_->{in} |";
+		while (<PIPE>) {
+			next unless ($_ =~ m/^time\[/);
+			$_ =~ m/$opt{var}\[\d*\]=(\d*\.?\d*)/;
+			$cmin = $1 if ($1 < $cmin);
+			$cmax = $1 if ($1 > $cmax);
+		}
+		close PIPE;
+	}
+	$opt->{conc_min} = $cmin unless (defined $opt->{conc_min});
+	$opt->{conc_max} = $cmax unless (defined $opt->{conc_max});
+	return;
+}
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub basemap {
+
+  my $opt = pop;
+  my ($lon,$lat,$latmin,$latmax,$lonmin,$lonmax,$lonv);
+  
+  if (defined $opt->{latlon}) {
+    ($latmin,$latmax,$lonmin,$lonmax) = split "/", $opt->{latlon};
+  } 
+#	open ASHFILE, "$main::ncks_exe -m $opt{ashfile} |";
+#   while (<ASHFILE>) {
+#     if ($_ =~ m/lon.*min_value.*value=(-?\d*\.?\d*)/) {
+#       $lonmin = $1 unless (defined $lonmin);
+#		}
+#     if ($_ =~ m/lon.*max_value.*value=(-?\d*\.?\d*)/) {
+#       $lonmax = $1 unless (defined $lonmax);
+#		}
+#     if ($_ =~ m/lat.*min_value.*value=(-?\d*\.?\d*)/) {
+#       $latmin = $1 unless (defined $latmin);
+#		}
+#     if ($_ =~ m/lat.*max_value.*value=(-?\d*\.?\d*)/) {
+#       $latmax = $1 unless (defined $latmax);
+#		}
+#		if ($_ =~ m/$opt{var}.*max_value.*value=(-?\d*\.?\d*)/) {
+#			$opt{conc_max} = $1 unless (defined $opt{conc_max});
+#		}
+#   }
+  
+  $lonv=($lonmax+$lonmin)/2.0;
+
+  my $range="-R$lonmin/$lonmax/$latmin/$latmax";
+  my $map="";
+	# tangent latitude depends on the N/S hemisphere
+	my $tan_lat = 90;
+	$tan_lat = -90 if ($latmax < 0);
+
+  # Use default polarstereo unless lat limits cross the equator
+  if ($latmin*$latmax < 0) {$map="-JM${main::xinch}i";}
+  else {$map="-JS$lonv/$tan_lat/${main::xinch}i";}
+  
+  # allow user to specify mercator anywhere 
+  if ($opt->{projection} =~ m/mercator/) {
+    $map="-JM${main::xinch}i";
+  }
+  
+  # allow polarstereo unless crosses the equator
+  if ( ($opt->{projection} =~ m/polar/) and ($latmin*$latmax > 0)) {
+    $map="-JS$lonv/$tan_lat/${main::xinch}i";
+  }
+
+  # allow lambert unless crosses the equator
+  if ( ($opt->{projection} =~ m/lambert/) and ($latmin*$latmax > 0)) {
+    $map="-JA$lonv/$tan_lat/${main::xinch}i";
+  }
+
+	# user map specify extra GMT options like -I
+	my $xtra_opts = "";
+	# --basemap option overrides defaults
+	if (defined $opt->{basemap}) {
+		# get a working copy since we'll dismantle it
+		my $optmap = $opt{basemap};
+		if ($optmap =~ m/(-J\S+)/) { $map = $1; }
+		else { die_basemap($optmap);}
+		if ($optmap =~ m/(-R\S+)/) { $range = $1; }
+		else { die_basemap($optmap);}
+		while ($optmap =~ m/(-[a-zA-IK-QS-Z]\S+)/) { 
+			$xtra_opts .= "$1 "; 
+			$optmap=~s/$1//;
+			}
+	}
+	
+  # set the gridlines using -B
+  # the format specifies the lines labeled and the ones drawn, and each
+  # boundary that they are labeled on.  To label the x-direction every 20
+  # degrees with gridlines every 10, and label the y direction every 10 degrees
+  # with gridlines every 5, use -B20g10/10g5EN.  The 'x' specification is 
+  # separated from the 'y' with the '/'.  The 'g' inside
+  # means these are degree specifications, in contrast to tick marks.
+  # 'EN' means label the east and north boundaries.
+  # see psbasemap(1) for more info on this option.
+  
+  # the --gridlines option is DX, DX:TX or DX:TXxDY:TY
+  # where DX is degree interval in the 'x' direction
+  #       TX is the thickness of the gridline in the 'x' directions
+  # and same for the 'y' direction
+  $opt{gridlines} =~ m/(\d+):?(\d*)x?(\d*):?(\d*)/;
+  my $dx = $1;
+  # make the y-direction grid spacing the same as the x unless specified
+  my $dy = $3;
+  $dy = $dx if (length $dy == 0);
+  # make the line thickness '2' unless specified (ignore $4)
+  my $pen_width = $2;
+  $pen_width = 2 unless (length $pen_width > 0);
+  `gmtset GRID_PEN ${pen_width}p`;
+  # label every-other gridline
+  my $xlabel = $dx*2;
+  my $ylabel = $dy*2;
+	# put labels on more sparcely spaced axis
+	my $en = "EN";
+	if (abs($latmax) > abs($latmin)) { $en="ES";}
+	my $gridlines = "-B${xlabel}g${dx}/${ylabel}g${dy}${en}";
+	$gridlines = "" if $opt{no_gridlines};
+
+  # debugging output
+	# -P portrait option would go here if used
+  my $command = "$main::pscoast_exe $range $map -W1 -G150 $xtra_opts $gridlines -Df -K > $opt{output}";
+  print STDERR "$command\n" if $opt{verbose};
+  
+#  print STDOUT `$command`;
+  `$command`;
+  return "$range $map";
+  } 
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub die_basemap {
+	my $opt = shift;
+	die "bad usage: \"--basemap=$opt\"\n.  Usage should be '--basemap=-R... -J...'";
+	return;
+}
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub contours {
+	my $opt = pop;
+
+#	keep track of the local maximum value since it may be less than
+# that specified in $opt{conc_max} and the color palette should use
+# this value
+#	my $max_conc = 0;
+
+	# grab meta data from netCDF file for min/max conc. values
+	open ASHFILE, "$main::ncks_exe -m $opt{ashfile} |";
+   while (<ASHFILE>) {
+		if ($_ =~ m/$opt{var}.*max_value.*value = (-?\d*\.?\d*)/) {
+			$opt{conc_max} = $1 unless (defined $opt{conc_max});
+		}
+	}
+
+	# grid locations and values for the hash of concentrations
+	my ($x, $y, $z, $v);
+	my $var = $opt{var};
+
+	# change to fallout variable if necessary
+	$var = "rel_fallout_conc" if ($opt{fallout});
+	# put values in a hash of hashes
+	my %conc;
+	open PIPE, "$main::ncks_exe -d time,$opt{timestr} -d level,$opt{hgt_min},$opt{hgt_max} -v $var -C $opt{ashfile} |";
+	while (<PIPE>){
+		next unless ($_ =~ m/^time\[/);
+		#$_ =~ m/level\[\d+\]=(-?\d*\.?\d*) lat\[\d+\]=(-?\d*\.?\d*) lon\[\d*\]=(\d*\.?\d*) $var\[\d*\]=(\d*\.?\d*)/;
+		$_ =~ m/lat\[\d+\]=(-?\d*\.?\d*) lon\[\d*\]=(-?\d*\.?\d*) $var\[\d*\]=(\d*\.?\d*)/;
+		#$z=$1; $y=$2; $x=$3; $v=$4;
+		$y=$1; $x=$2; $v=$3;
+		next if ($v < $opt{conc_min});
+#		next if ($v > $opt{conc_max});
+		if (defined ($conc{$x}{$y})) {$conc{$x}{$y}+=$v;}
+		else {$conc{$x}{$y} = $v;}
+		# saturate at $opt{conc_max}
+		$conc{$x}{$y} = $opt{conc_max} if ($conc{$x}{$y} > $opt{conc_max});
+		# track the maximum value for creating the color table
+		# This may be less than $opt{conc_max} (but not more)
+#		$max_conc = $v if ($v > $max_conc);
+	}
+	close PIPE;
+
+	# get elipse size
+	my $elsz = elipse_size($main::maprange, $opt{ashfile});
+
+	my $xyzfile = tmpnam();
+	open XYZFILE, ">$xyzfile";
+
+	for $x (keys %conc) {
+		for $y (keys %{$conc{$x}}){
+			if ($opt{contours}) {
+				print XYZFILE "$x $y $conc{$x}{$y}\n";
+			} else {
+				print XYZFILE "$x $y $conc{$x}{$y} $elsz\n";
+				}
+			}
+	}
+
+	close XYZFILE;
+
+	# if xyzfile is empty, exit
+	if (scalar %conc == 0) {
+	  print STDERR "no ash in selected region when writing \"$opt{output}\"\n";
+		return;
+		}
+
+	# make a color palette, hgt spec's can change here
+	# calculate the interval
+	my $cintv = $opt{conc_max}/$opt{num_levels};
+	my $command = "$main::makecpt_exe -T$opt{conc_min}/$opt{conc_max}/$cintv ";
+	$command .= "-C$opt{cpt_table} " if ($opt{cpt_table});
+	print STDERR "$command > $opt{cpt}" if ($opt{verbose} and not -e $opt{cpt});
+	`$command > $opt{cpt}` unless (-e $opt{cpt});
+		
+	$command = "$main::pscontour_exe $xyzfile $main::maprange -C$opt{cpt} -I -O -K >> $opt{output}";
+	# change to elipse plotting unless contours requested
+  $command = "$main::psxy_exe $xyzfile $main::maprange -C$opt{cpt} -Se -O -K >> $opt{output}" unless ($opt{contour});
+	print STDERR "$command\n" if ($opt{verbose});
+	`$command`;
+
+	unlink($xyzfile);
+	return;
+}
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub elipse_size {
+	my $mr = $_[0];
+	my $ncfile = $_[1];
+
+# maprange should already be in this format even if --basemap
+# was specified.
+	$mr =~ m[-R(.+)/(.+)/(.+)/(-?\d*\.?\d*)(r?) -J.*(\d+[ci])];
+  my $ln1=$1;my $ln2=$2;
+  my $lt1=$3;my $lt2=$4;
+	my $sz=$6;
+	if ($5) {
+		$ln2=$3; $lt1=$2;
+		}
+
+#  put sz in centimeters
+	$sz =~ /(\d+)(.)/;
+	$sz = $1;
+	$sz .* 2.54 if ($2 =~ m/i/);
+
+# get 'cm/degree'
+	my $dcmx = $sz/($ln2-$ln1);	
+	my $dcmy = $sz/($lt2-$lt1);	
+
+# get grid spacing from ashfile
+	my (@x, @y);
+	open PIPE, "$main::ncks_exe -v lat -d lat,0,1 $ncfile|";
+	while (<PIPE>) {
+	$y[1] = $1 if ($_ =~ m/lat\[0\]=(-?\d*\.?\d*)/);
+	$y[2] = $1 if ($_ =~ m/lat\[1\]=(-?\d*\.?\d*)/);
+	}
+	close PIPE;
+
+	open PIPE, "$main::ncks_exe -v lon -d lon,0,1 $ncfile|";
+	while (<PIPE>) {
+	$x[1] = $1 if ($_ =~ m/lon\[0\]=(-?\d*\.?\d*)/);
+	$x[2] = $1 if ($_ =~ m/lon\[1\]=(-?\d*\.?\d*)/);
+	}
+	close PIPE;
+
+	# create the elipse size
+	my @e;
+	$e[1] = $dcmx*($x[2]-$x[1]);
+	$e[2] = $dcmy*($y[2]-$y[1]);
+	
+	return "0 $e[1] $e[2]";
+	}
+
+
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub particles2 {
+
+  my $opt = pop;
+  
+	# parse the height limits
+	my %lim;
+
+	$opt{latlon} =~ m/(-?\d*\.?\d*)\/(-?\d*\.?\d*)\/(-?\d*\.?\d*)\/(-?\d*\.?\d*)/;
+	$lim{latmin} = $1;
+	$lim{latmax} = $2;
+	$lim{lonmin} = $3;
+	$lim{lonmax} = $4;
+
+	# array of hashes 
+	my %part;
+	foreach my $l qw(lon lat hgt exists grounded) {
+	open PIPE, "$main::ncks_exe -v $l --units $opt{ashfile} |";
+	while (<PIPE>) {
+		next unless ($_ =~ m/nash\[\d+\] $l\[\d+\]=(-?\d*\.?\d*)/);
+		push @{$part{$l}}, $1 ;
+		}
+	}
+
+  # if data is crossing the merdian, things are more difficult.
+	# User must specify a negative and positive lon pair (i.e. -20/20)
+	# so GMT produces the correct map.  Puff lon is always 0-360, so 
+	# manually check each lon value to see if it might be in the new +/-
+	# range. For lon>180 particles, see if 360-lon is OK.  Don't need to
+	# check 0<lon<180 because their lon values will be OK.
+	foreach my $i (0..scalar @{$part{lon}}-1){
+	if ($opt{meridian}) {
+		if (($part{lon}[$i] > 180) and ($part{lon}[$i]-360 < $lim{lonmin}))
+			{$part{exists}[$i] = 0;}
+		if (($part{lon}[$i] < 180) and ($part{lon}[$i] > $lim{lonmax}))
+			{$part{exists}[$i] = 0;}
+	} else {
+		$part{exists}[$i] = 0 if ($part{lon}[$i] < $lim{lonmin});
+		$part{exists}[$i] = 0 if ($part{lon}[$i] > $lim{lonmax});
+	}
+	}
+
+	# filter by unmarking the 'exists' flag
+	foreach my $i (0..scalar @{$part{lon}}-1){
+		$part{exists}[$i] = 0 if ($part{hgt}[$i] < $opt{hgt_min});
+		$part{exists}[$i] = 0 if ($part{hgt}[$i] > $opt{hgt_max});
+#		$part{exists}[$i] = 0 if ($part{lon}[$i] < $lim{lonmin});
+#		$part{exists}[$i] = 0 if ($part{lon}[$i] > $lim{lonmax});
+		$part{exists}[$i] = 0 if ($part{lat}[$i] < $lim{latmin});
+		$part{exists}[$i] = 0 if ($part{lat}[$i] > $lim{latmax});
+		$part{exists}[$i] = 0 if ($part{grounded}[$i] and $opt{airborne});
+		$part{exists}[$i] = 0 if (!$part{grounded}[$i] and $opt{fallout});
+		}
+
+	# make a color palette, hgt spec's can change here
+	`$main::makecpt_exe -T$opt{hgt_min}/$opt{hgt_max}/8 > $opt{cpt}`;
+
+	my $xyfile = tmpnam();
+	open XYFILE, ">$xyfile";
+	for (0..scalar @{$part{lon}}-1) { 
+		next unless ($part{exists}[$_]);
+		print XYFILE "$part{lon}[$_] $part{lat}[$_] $part{hgt}[$_] 0.1\n";
+		}
+	close XYFILE;
+
+    `$main::psxy_exe $xyfile $main::maprange -C$opt{cpt} -Sc$opt{pixels}p -O -K >> $opt{output}`;
+
+	unlink($xyfile); 
+
+	# mark the volcano location
+	my ($olon, $olat, $ret);
+	$ret = `$main::ncks_exe -C -v origin_lon $opt{ashfile}`;
+	$ret =~ m/origin_lon = (\d+\.\d+)/;
+	$olon = $1;
+	$ret = `$main::ncks_exe -C -v origin_lat $opt{ashfile}`;
+	$ret =~ m/origin_lat = (\d+\.\d+)/;
+	$olat = $1;
+	if (defined $olon and defined $olat) {
+		my $cmd = "echo \"$olon $olat\" | $main::psxy_exe $main::maprange -O -K -Sa10p -G0 >> $opt{output}";
+		print "$cmd\n" if ($opt{verbose});
+	`$cmd`;
+	}
+
+	return;
+}
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub annotation {
+  my $opt = pop;
+  my %param;
+  
+  my %params;
+  $param{edate} = "200209250000";
+  
+	open ASHHEADER,"$main::ncks_exe -M $opt{ashfile} |";
+  while (<ASHHEADER>) {
+    if ($_ =~ m/volcano.*value = (\D+)/) {
+      $param{volcname} = $1;
+    }
+    if ($_ =~ m/date_time.*value = (\d+)/) {
+      $param{datetime} = $1;
+    }
+  }
+  close ASHHEADER;
+	# if datetime doesn't exist, try and get it from the output filename
+	if (not defined ($param{datetime})) {
+		$opt{output} =~ m/(\d{12})_conc\d*.ps/;
+		$param{datetime} = $1;
+		}
+
+  # substitute underscores with spaces
+  $param{volcname} =~ s/"_"/" "/;
+  # remove newline
+  chomp $param{volcname};
+	ucfirst($param{volcname});
+
+  # make time/date and eruption time more readable
+  for ($param{datetime}, $param{edate}) {
+    if ($_ =~ m/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/) {
+      $_ = "$1 $2 $3 $4:$5";
+    }
+  }
+
+  #create an annotation region
+  my $yinch = 0.5;
+  my $xinch = $main::xinch;
+  my $amap = "-JX$xinch"."i/$yinch"."i";
+  my $arange = "-R0/$xinch/0/$yinch";
+  # -Y adds 2.0 cm at the bottom for adding an annotation region
+  `$main::psbasemap_exe $amap $arange -BWESN -Y-3.0c -O -K >> $opt{output}`;
+
+  # the text strings
+  # format is x y size angle fontnumber justify text
+  `echo \"0.10 0.30 12 0 0 1 $param{volcname}\" | $main::pstext_exe $amap $arange -O -K >> $opt{output}`;
+	`echo \"0.10 0.10 12 0 0 1 $param{datetime}\" | $main::pstext_exe $amap $arange -O -K >> $opt{output}`;
+
+	if ($opt{filetype} eq "ash") { particle_colorbar( "$amap $arange", \%opt) };
+	if ($opt{filetype} eq "conc") { conc_colorbar( "$amap $arange", \%opt) };
+
+
+#fixme:
+$param{model} = "$main::version";
+my $xl = $main::xinch - 0.5;
+`echo \"$xl .25 12 0 0 1\" $param{model} | $main::pstext_exe $amap $arange -O >> $opt{output}`;
+
+  return ;
+}
+
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub conc_colorbar {
+	my $amap = shift;
+	my $opt = shift;
+
+	my $x0 = 2.80;
+
+	# print "minimum" text
+	`echo $x0 0.1 12 0 0 3 'low' | $main::pstext_exe $amap -O -K >> $opt{output}`;
+
+	for (my $i = 0; $i < $opt{num_levels}; $i++) {
+		my $c = $opt{conc_min}+($i+0.5)/$opt{num_levels}*($opt{conc_max}-$opt{conc_min});
+		`echo $x0 0.35 $c | $main::psxy_exe $amap -Sb0.5ib0.25i -C$opt{cpt} -O -K >> $opt{output}`; 
+		$x0+=0.5;
+		}
+	# print "maxmimum" text
+	`echo $x0 0.1 12 0 0 3 'high' | $main::pstext_exe $amap -O -K >> $opt{output}`;
+	return;
+		}
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub particle_colorbar {
+
+	my $amap = shift;
+  my $opt = shift;
+
+# create hgt level text strings
+	my @hgt;
+	for (my $i = 0; $i < $opt{num_levels}+1; $i++) {
+		my $hgt = $opt{hgt_min} + $i/$opt{num_levels}*($opt{hgt_max}-$opt{hgt_min});
+		push @hgt, $hgt;
+		}
+
+  # print the color bar
+  my $x0=2.80;
+
+for (my $i=0; $i<$opt{num_levels}; $i++) {
+	`echo $x0 0.35 $hgt[$i] | $main::psxy_exe $amap -Sb0.2b0.25 -C$opt{cpt} -O -K >> $opt{output}`;
+	$x0 += 0.1;
+  # label the color bar in kilometers every 3rd time
+	if ($i % 3 == 0) {
+		$hgt[$i] = int($hgt[$i]/1000);
+		# label the left edge of the bar
+		my $xl = $x0-.2;
+		`echo $xl 0.1 12 0 0 1 $hgt[$i] | $main::pstext_exe $amap -O -K >> $opt{output}`;
+		}
+  }
+	# place the last label
+	{
+	my $xl = $x0-0.1;
+	my $hgt = int($hgt[$opt{num_levels}]/1000);
+	`echo $xl 0.1 12 0 0 1 \"$hgt km\" | $main::pstext_exe $amap -O -K >> $opt{output}`;
+	}
+  
+	return;
+	}
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub ps2png {
+	my $opt = shift;
+
+	# exit if ghostscript was not found
+	unless ($main::gs_exe) {
+		print STDERR "Cannot create a PNG image from the postscript because ghostscript 'gs' is not installed or was not found.  The path must be specified at the top of this script\n";
+		return;
+	}
+	my $psfile = $opt->{output};
+	(my $pngfile = $psfile) =~ s/.ps$/.png/;
+	my $mag = 100*($opt->{magnify});
+	
+
+	# convert the postscript to PNG using gs.  Magnification is done with the resolution
+	# flag.  The whitespace is trimmed using convert
+	print STDERR "$pngfile exists, overwriting.\n" if (-e $pngfile);
+	my $command = "$main::gs_exe -sDEVICE=png256 -sOutputFile=$pngfile -r$mag $psfile";
+	print STDERR "$command\n" if $opt{verbose};
+
+  open PIPE, "|$command > /dev/null";
+	print PIPE "\nquit\n";
+	close PIPE;
+	# Without 'convert', leave the PNG as is.
+	unless ($main::convert_exe) {
+		print STDERR "The PNG file cannot be trimmed and rotated because Imagemagick 'convert' is not installed or could not be found.  The path must be specified at the top of this script\n";
+		return;
+	}
+	# trim and rotate the PNG file.
+	$command = "$main::convert_exe -comment '$opt{history}' -trim -rotate 90 +repage $pngfile $pngfile > /dev/null";
+	print STDERR "$command\n" if $opt{verbose};
+	`$command`;
+	# if we are making a movie, make a GIF also
+	if (defined($opt->{movie}) ) {
+	  (my $gif = $pngfile) =~ s/.png$/.gif/;
+		$command = "$main::convert_exe $pngfile $gif";
+		print $command if $opt{verbose};
+		`$command`;
+		}
+	# remove postscript files
+	if (not $opt{save_ps}) { `rm -rf $opt{output}` };
+
+	return;
+	}
+# # # # # # # # # # # # # # # # # # # # # # # #
+# find the minimum bounding box for each file and set $opt->{latlon} to it
+sub boundingbox {
+
+  my $opt = shift;
+  my $file = shift;
+  
+  my ($lon,$lat,$latmin,$latmax,$lonmin,$lonmax);
+	# extra border (in degrees)
+	my $br = 1;
+  
+# if the user specified --latlon, we never get here, so opt{latlon} is 
+# defined only if it was set in an earlier call to this subroutine due
+# to processing multiple files 
+  if (defined $opt->{latlon}) {
+    ($latmin,$latmax,$lonmin,$lonmax) = split "/", $opt->{latlon};
+  }  else {
+    $lonmin = 360.0;
+    $lonmax = 0;
+    $latmin = 90.0;
+    $latmax = -90.0;
+  }
+  
+  my $command = "$main::ncks_exe -m $file";
+  print STDERR "$command\n" if ($opt->{verbose});
+  
+	open ASHFILE, "$main::ncks_exe -m $file |";
+   while (<ASHFILE>) {
+     if ($_ =~ m/lon.*min_value.*value = (-?\d*\.?\d*)/) {
+       $lonmin = $1 - $br if ($1 < $lonmin);
+		}
+     if ($_ =~ m/lon.*max_value.*value = (-?\d*\.?\d*)/) {
+       $lonmax = $1 + $br if ($1 > $lonmax);
+		}
+     if ($_ =~ m/lat.*min_value.*value = (-?\d*\.?\d*)/) {
+       $latmin = $1 - $br if ($1 < 	$latmin);
+		}
+     if ($_ =~ m/lat.*max_value.*value = (-?\d*\.?\d*)/) {
+       $latmax = $1 +$br if ($1 > $latmax);
+		}
+    }
+  
+  if ($opt->{verbose}) {
+    print STDERR "$file: lt1/lt2/ln1/ln2 = $latmin/$latmax/$lonmin/$lonmax\n";
+  }
+  
+  $opt->{latlon} = "$latmin/$latmax/$lonmin/$lonmax";
+  return;
+}
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub make_movie {
+
+	unless ($main::gifsicle_exe) {
+		print STDERR "The 'gifsicle' program is required to create a movie and is not installed or could not be found.  The location must be specified at the top of this script.  It is available at http://www.icdf.org/gifsicle\n";
+		return;
+	}
+  my $opt = shift;
+  my $fileref = shift;
+#	my @file = @$fileref;
+	my @file;
+
+	foreach (@$fileref){
+		$_->{out} =~ s/ps$/gif/;
+	  push @file, $_->{out};
+	}
+  
+ my $movie = $opt->{movie};
+  my $command = "$main::gifsicle_exe --loop=forever --delay=50 --colors=128 ";
+  foreach (@file) {
+		$command .= "$_ ";
+  }
+  
+  $command .= " > $movie";
+  
+  print "$command\n" if ($opt{verbose});
+  `$command`;
+  
+  return;
+}
+# # # # # # # # # # # # # # # # # # # # # # # #
+# labels given on the command line with --label=x,y,text are written in 12-pt
+# font, with an optional marker given after the text.
+# With the --label-file option, the font name, size, rotation, and centering
+# must be specified and therefore can be changed.  The text color and marker
+# can be specified using OPTION -G.. -S.. on a line within the file.
+sub add_labels {
+	my $opt = shift;
+	
+	my ($pen, $color);
+	return unless ($opt{label} or $opt{label_file});
+	my @labels = split /\|/, $opt{label};
+	foreach (@labels) {
+		$_ =~ m/(\d*\.?\d*),(\d*\.?\d*),(\w+),?(S?.*)/;
+		`echo \"$1 $2 12 0 0 1 $3\" | $main::pstext_exe $main::maprange -O -K >> $opt{output}`;
+		if (length ($4) > 0) {
+		`echo \"$1 $2\" | $main::psxy_exe $main::maprange -O -K -$4 -G0 >> $opt{output}`;
+		}
+		
+		}
+	return unless ($opt{label_file});
+	@labels = split /\|/, $opt{label_file};
+	foreach (@labels) {
+  # default pen and color
+	$color = "-G0"; # black
+	$pen = "-Sc4p"; # 4-pixel circle
+		open LFILE, "<$_" or print "WARNING: failed to open label file \"$_\" for reading\n";
+		while (<LFILE>) {
+		# could be OPTION line
+		if ($_ =~ m/^OPTION/) {
+			$color = $1 if ($_ =~ m/(-G\S+)/);
+			$pen = $1 if ($_ =~ m/(-S\S+)/);
+			next;
+			}
+		chomp $_;
+		`echo \"$_\" | $main::pstext_exe $main::maprange $color -O -K >> $opt{output}`;
+		# put a marker
+		my @v=split /\s/, $_;
+		`echo \"$v[0] $v[1]\" | $main::psxy_exe $main::maprange $pen $color -O -K >> $opt{output}`;
+		}
+	}
+	return;
+			
+	}
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub filetype {
+	my $infile = pop;
+
+	if ($infile =~ m/cdf$/)
+	{
+		return "ash";
+	}
+	if ($infile =~ m/nc$/)
+	{
+		return "conc";
+	}
+	return "unknown";
+}
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub fileio {
+	my @infile = @_;
+	my @file;
+	# file out counter
+	my $fo=0;
+	my ($tmin, $tmax) = split /[,:\/]/, $opt{'time'};
+	# check time limits for syntax
+	foreach ($tmin, $tmax) {
+		if ($_ and not $_ =~ m/^\d{12}$/) {
+			die "bad option \"--time=$opt{time}\"\nShould be --time=YYYYmmDDHHMM:[YYYYMMDDHHMM]\n";
+		}}
+
+	for my $fi (0 .. scalar @infile -1) {
+		# cdf files
+		if ($infile[$fi] =~ m/cdf$/) {
+			$file[$fo]{in} = $infile[$fi];
+			($file[$fo]{out} = $infile[$fi]) =~ s/cdf$/ps/;
+			$fo++;
+			}
+		if ($infile[$_] =~ m/nc$/) {
+			# create multiple output files	
+			# add the numeric suffix if appropriate
+			$infile[$fi] =~ /conc(\d*).nc/;
+			my $nsuf = $1;
+			open PIPE, "$main::ncks_exe -C --units -v time $infile[$fi]| ";
+			while (<PIPE>) {
+				next unless ($_ =~ m/time\[\d+\]=(\d+)/);
+				my $time_t = $1;
+				my $date = strftime("%Y%m%d%H%M",gmtime($time_t));
+				next if ($tmin and $tmin > $date);
+				next if ($tmax and $tmax < $date);
+				$file[$fo]{out}=strftime("%Y%m%d%H%M_conc$nsuf.ps",gmtime($time_t));
+				$file[$fo]{in}=$infile[$fi];
+				$file[$fo]{'time'}=$time_t;
+				$fo++;
+				}	
+			}
+		}
+	return @file;
+}
+
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub parse_range {
+
+	my $val = pop;
+	my $v = pop;
+	$v =~ s/-range//;
+
+	return unless (defined $v and defined $val);
+	$val =~ m/(-?\d*\.?\d*)\/(-?\d*\.?\d*)/;
+	return unless (defined $1 and defined $2);
+	$opt{"${v}_min"} = $1;
+	$opt{"${v}_max"} = $2;
+	# ncks requires a decimal to discriminate index values for quantities
+	$opt{"${v}_min"} .= "." unless ($opt{"${v}_min"} =~ m/\./);
+	$opt{"${v}_max"} .= "." unless ($opt{"${v}_max"} =~ m/\./);
+	return;
+}
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub list_of_labels {
+	my $label = pop;
+	$label =~ m/(\d*\.?\d*),(\d*\.?\d*),(\D+)/;
+	unless ($1 and $2 and $3) {
+		print "ERROR: --label=\"$label\"\nformat is --label=lon,lat,string\n";
+		return;
+	}
+	$opt{label} .= "$label|";
+	return;
+}
+# # # # # # # # # # # # # # # # # # # # # # # #
+# set default values for options not already set.  Listed in alphabetical
+# order
+sub defaults {
+  my $opt = pop;
+  
+	# default airborne and not fallout
+	if ($opt{airborne}) { $opt{fallout} = 0; }
+	else {$opt{airborne} = 1; }
+	if ($opt{cpt} and not -e $opt{cpt}) {
+		print "color pallete file \"$opt{cpt}\" does not exist\n";
+		undef $opt{cpt};
+	}
+	$opt->{conc_min} = 0.05 unless (defined ($opt{conc_min}));
+#	$opt->{conc_max} = 3 unless (defined ($opt{conc_max}));
+	$opt->{contour} = 0 unless (defined ($opt->{contour}));
+	$opt->{fallout} = 0 unless (defined ($opt->{fallout}));
+	$opt->{'fork'} = 0 unless (defined ($opt->{'fork'}));
+	# default airborne and not fallout
+	if ($opt{fallout}) { $opt{airborne} = 0; }
+	else {$opt{fallout} = 0; }
+  $opt->{gridlines} = 10 unless (defined ($opt->{gridlines} ));
+	$opt->{hgt_max} = "16000.0" unless (defined($opt->{hgt_max}));
+	$opt->{hgt_min} = "0.0" unless (defined($opt->{hgt_min}));
+  $opt->{magnify} = 1 unless (defined ($opt->{magnify} ));
+	if ($opt{merdian} and not $opt{latlon}) {
+		print "WARNING: the --meridian option should only be used with the --latlon option and mapping may be incorrect\n"; }
+	if (not defined $opt{num_levels}) {
+		$opt->{num_levels} = 3 if ($opt{filetype} eq 'conc');
+		$opt->{num_levels} = 24 if ($opt{filetype} eq 'ash');
+		}
+  $opt->{pixels} = 2 unless (defined ($opt->{pixels} ));
+	# save the intermemdiate postscript if PNG is not being created
+	$opt->{save_ps} = 1 unless ($main::gs_exe);
+  $opt->{stamp} = 1 unless (defined ($opt->{stamp} ));
+	$opt->{var} = "rel_air_conc" unless (defined ($opt->{var} ));
+  $opt->{verbose} = 0 unless (defined ($opt->{verbose} ));
+  
+  # check for, and clear, unsupported projections
+  if ( defined ($opt->{projection} ) ) {
+    unless ($opt->{projection} =~ m/polar|lambert|mercator/) {
+      print STDERR "unsupported projection \"$opt->{projection}\"\n";
+      undef($opt->{projection});
+    }
+  }
+
+  return;
+}
+
+# # # # # # # # # # # # # # # # # # # # # # # #
+# only store options, not file names, otherwise large file globs
+# may exceed the maximum length
+sub store_history {
+
+# file count
+my $fc = 0;
+
+	my $hist = "$0 ";
+	foreach(@ARGV){
+		if ($_ =~ m/cdf$|nc$/) {
+			$fc++;
+		} else {
+		  $hist .= "$_ " 
+		}
+	}
+
+	$opt{history} = "$hist <$fc file(s)>" ;
+	return;
+} 
+# # # # # # # # # # # # # # # # # # # # # # # #
+sub print_help {
+
+print << "EOF";
+usage: ashgmt [options] <file(s)>
+
+The file or file list may be either particle files (*ash*.cdf) or
+concentration files (*conc*.nc).  
+
+--airborne
+	display only airborne particles (default)
+
+--basemap="-R... -J..."
+	specify a custom GMT basemap.  This string should include both the projection (-J) and range (-R) flags, and needs to be quoted since there is a space between the two.  Example: "-R205/220/50/65 -JS210/90/7i".  You can see the default basemap using the --verbose option.  Other 'pscoast' options like -I or -G can also be added to this option, and will supercede any defaults.
+
+--conc-range=min/max
+	specify the concentration range.
+
+--conc-limits=min/max
+	Specify the limits of the color bar, overriding the default range.  Often used in conjunction with the --conc-range to override the default range setting.
+
+--contour
+	Use GMT pscontour routine insted of plotting dots for concentration plotting.
+
+--cpt=filename
+  Use the GMT color pallete in 'filename'.  This may be used to easily customize the color pallete by first using --save-cpt, then editing the generated file. Note that the cpt file will be deleted each time unless --save-cpt is used, even if using an existing file.
+
+--cpt-table
+  Specify the GMT color table to use, default is rainbow. Append -I to reverse scale (don't forget to quote the option in that case).  See makecpt(l).
+ 
+--fallout
+	Only plot grounded particles.  This is exclusive of --airborne.
+
+--fork
+	Use perls fork() to process each ash file as a child process.  This can speed up processing of large numbers of files on multiprocessor machines.
+
+--gridlines=DX[[:TX]/DY[:TY]]
+  Grid line spacing in degrees.  X and Y directions can be different.  The  thickness specification TX and TY is ignored.
+
+--no-gridlines
+  Do not draw gridlines
+
+--help
+  Print usage information and exit.
+
+--hgt-range=min/max
+  Only plot particles or calculate concentration for this range (in meters).
+
+--label=lon,lat,string[,S...]
+	Put a text string to the lower-right of this location.  If the location is outside the bounding box, it is ignored.  This option can be specified more than once, and several labels can be concatenated with the pipe "|" character. An optional marker can also be plotted using the -S... marker as described in psxy.  For example, Sa10p plots a 10-pixel star.  See also --label-file for more control over text size, orientation, and color.
+
+--label-file=filename
+	Specify a file containing 1 or more labels.  The format of the file is the same as GMTs pstext, which is a space-delimited line containing 
+x y fontsize rotation fontnumber justify text 
+This option can be specified more than once.  Locations outside the bounding box are ignored. Default pen color is black, and a 4-pixel circle at the location.  This can be changed by setting either/both options by putting a line above the label such as
+OPTION -G255/0/0 -Sh9p
+This would change the text color to red and use a 9-pixel hexagon as a marker. The color and marker remain the same until another OPTION line is encountered or EOF, when the defaults are restored.
+
+--latlon=latmin/latmax/lonmin/lonmax
+  Draw a map of this range, overriding default behavior which is a map that includes all particles.
+
+--magnify=amount
+  Magnify the image this amount, default is 1, doubling is 2.
+
+--meridian
+	Use this option when data crosses the meridian.  Also use --latlon to explicitly set the bounding box, using a negative and positive degrees east pair.  Without these options, ashgmt has difficulty determining an appropriate bounding box and many particles may not be mapped.
+
+--movie=file
+  Create an animated GIF image with name 'file'.  This requires ImageMagick 'convert' and 'gifsicle'.
+
+--num-levels=number
+  Use this number of levels in the concentration plot.  Ignored for particle maps.
+
+--pixels=number
+  Draw particles this number pixels in diameter (approximately).
+
+--projection=mercator|polar|lambert
+  Use this projection instead of the default.  If the map crosses the equator, only mercator can be used.
+
+--save-cpt
+  Save the color pallete file, which is otherwise generated and deleted each time.  This is useful for customizing the color pallete, see --cpt option above.
+
+--save-postscript
+  Keep the intermediate postscript file that GMT generates.  --save-ps also works.
+
+--stamp
+  Print a time stamp on this image.  --no-stamp does the opposite.
+
+--time=YYYYmmDDhhMM[:YYYYmmDDhhMM]
+  Only produce maps for this time range from the concentration file. If only the first date/time is specified, all times from then onward are processed. For only a single frame, use the same time for both start and finish.
+
+--usage
+	Print usage information and exit.
+
+--variable=var
+  Plot the data in this variable instead of the default (no yet implemented).
+
+--verbose
+  Print to STDERR all the GMT commands (and others) being used.  This is helpful for fine-tuning the basemap or lat/long range from the default.
+
+--version
+	Print the version number and exit.
+
+EOF
+
+exit(0);
+return;
+}

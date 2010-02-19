@@ -1,0 +1,3 @@
+particle.o: particle.C particle.h
+
+particle.h:
